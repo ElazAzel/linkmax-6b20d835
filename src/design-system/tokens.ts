@@ -50,7 +50,7 @@ export interface ColorScheme {
   chart: [HslTriplet, HslTriplet, HslTriplet, HslTriplet, HslTriplet];
 }
 
-export const brand = {
+const brand = {
   ink: '0 0% 12.1569%',
   paper: '0 0% 95.2941%',
   blue: '202.562 100% 47.451%',
@@ -157,7 +157,7 @@ export function shadows(scheme: 'light' | 'dark'): Record<string, string> {
 }
 
 /** Spacing rhythm used in DESIGN.md (Tailwind's 4px scale covers it). */
-export const spacing = [4, 8, 12, 16, 20, 24, 32, 40, 56] as const;
+const spacing = [4, 8, 12, 16, 20, 24, 32, 40, 56] as const;
 
 /** Minimum touch target on mobile. */
-export const touchTarget = '44px';
+const touchTarget = '44px';

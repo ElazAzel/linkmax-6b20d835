@@ -11,7 +11,7 @@ export interface EmailSequence {
   updated_at: string;
 }
 
-export interface SequenceStep {
+interface SequenceStep {
   id: string;
   sequence_id: string;
   template_id: string;

@@ -24,7 +24,7 @@ export function isMissingSchemaError(error: unknown): boolean {
 }
 
 /** Thrown by services whose backing tables/RPCs are not deployed yet. */
-export class FeatureUnavailableError extends Error {
+class FeatureUnavailableError extends Error {
   constructor(public readonly feature: string) {
     super(`feature_unavailable:${feature}`);
     this.name = 'FeatureUnavailableError';

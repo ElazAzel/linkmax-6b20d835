@@ -25,7 +25,7 @@ export interface ZoneBooking {
   viewer_formatted_time?: string;
 }
 
-export const zoneBookingsKeys = {
+const zoneBookingsKeys = {
   all: (zoneId: string) => ['zone-bookings', zoneId] as const,
 };
 

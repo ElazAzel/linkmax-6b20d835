@@ -37,7 +37,7 @@ declare global {
 // in index.html — saves ~100KB of third-party JS on every page load.
 let turnstileScriptPromise: Promise<void> | null = null;
 
-export function loadTurnstileScript(): Promise<void> {
+function loadTurnstileScript(): Promise<void> {
     if (typeof window === 'undefined') return Promise.resolve();
     if (window.turnstile) return Promise.resolve();
     if (turnstileScriptPromise) return turnstileScriptPromise;
@@ -127,7 +127,7 @@ export const TurnstileWidget = forwardRef<HTMLDivElement, TurnstileWidgetProps>(
 /**
  * Hook for managing Turnstile token state
  */
-export function useTurnstile() {
+function useTurnstile() {
     const [token, setToken] = useState<string | null>(null);
     const widgetRef = useRef<string | null>(null);
 

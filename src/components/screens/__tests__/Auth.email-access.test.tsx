@@ -17,7 +17,7 @@ vi.mock('@/components/translation/LanguageSwitcher', () => ({ LanguageSwitcher: 
 vi.mock('@/components/seo/StaticSEOHead', () => ({ StaticSEOHead: () => null }));
 vi.mock('@/lib/utils/url-helpers', () => ({ getAppDomain: () => 'https://linkmax.invalid' }));
 
-import Auth from '../Auth';
+import { Auth } from '../Auth';
 
 beforeEach(() => { cleanup(); vi.clearAllMocks(); });
 

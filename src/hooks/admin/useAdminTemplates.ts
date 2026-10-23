@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { TemplateCategoryKey } from '@/lib/templateCategories';
 
-export interface AdminTemplateData {
+interface AdminTemplateData {
     id: string;
     name: string;
     description?: string;

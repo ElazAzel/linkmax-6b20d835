@@ -24,23 +24,23 @@ const WEBHOOK_API_SCOPES = [
   'webhooks:manage',
 ] as const;
 
-export const WEBHOOK_RETRY_DELAYS_SECONDS = [60, 300, 900, 3600, 14400] as const;
+const WEBHOOK_RETRY_DELAYS_SECONDS = [60, 300, 900, 3600, 14400] as const;
 
-export type WebhookEventType = typeof WEBHOOK_EVENT_TYPES[number];
-export type WebhookApiScope = typeof WEBHOOK_API_SCOPES[number];
+type WebhookEventType = typeof WEBHOOK_EVENT_TYPES[number];
+type WebhookApiScope = typeof WEBHOOK_API_SCOPES[number];
 
-export interface WebhookUrlValidationResult {
+interface WebhookUrlValidationResult {
   valid: boolean;
   reason?: 'missing' | 'invalid_url' | 'https_required' | 'private_network_blocked';
 }
 
-export interface WebhookSignatureResult {
+interface WebhookSignatureResult {
   timestamp: string;
   signature: string;
   signedPayload: string;
 }
 
-export interface WebhookHeaderInput {
+interface WebhookHeaderInput {
   eventType: WebhookEventType;
   eventId: string;
   deliveryId: string;

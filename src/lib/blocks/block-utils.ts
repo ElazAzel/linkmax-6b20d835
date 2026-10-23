@@ -7,12 +7,12 @@ import type { Block } from '@/types/page';
 import { logger } from '@/lib/utils/logger';
 import { openExternal } from '@/lib/blocks/safe-href';
 
-export type ButtonStyle = 'default' | 'rounded' | 'pill';
-export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
+type ButtonStyle = 'default' | 'rounded' | 'pill';
+type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
 
-export type ImageOverlay = 'none' | 'light' | 'dark' | 'custom';
+type ImageOverlay = 'none' | 'light' | 'dark' | 'custom';
 
-export interface BackgroundConfig {
+interface BackgroundConfig {
   type: 'solid' | 'gradient' | 'image';
   value: string;
   gradientAngle?: number;
@@ -87,7 +87,7 @@ export function getBackgroundStyle(background?: BackgroundConfig): React.CSSProp
  * Safely open URL in new tab with security attributes
  * Uses sendBeacon for tracking to ensure it completes before navigation
  */
-export function openUrlSafely(url: string, trackingCallback?: () => void): void {
+function openUrlSafely(url: string, trackingCallback?: () => void): void {
   // Call tracking first - it uses async but we don't wait
   if (trackingCallback) {
     trackingCallback();
@@ -99,7 +99,7 @@ export function openUrlSafely(url: string, trackingCallback?: () => void): void 
  * Common block click handler factory
  * Ensures tracking is called before URL navigation
  */
-export function createBlockClickHandler(
+function createBlockClickHandler(
   url?: string,
   onClick?: () => void
 ): (e?: React.MouseEvent) => void {
@@ -139,7 +139,7 @@ export function generateBlockId(type: string): string {
  * Create a stable key for a row of blocks based on their IDs
  * This ensures React reconciliation works correctly when blocks move between rows
  */
-export function createRowKey(blocks: Block[]): string {
+function createRowKey(blocks: Block[]): string {
   return blocks.map(b => b.id).join('::');
 }
 
@@ -147,7 +147,7 @@ export function createRowKey(blocks: Block[]): string {
  * Validate blocks array for integrity
  * Returns list of issues found
  */
-export function validateBlocksIntegrity(blocks: Block[]): { valid: boolean; issues: string[] } {
+function validateBlocksIntegrity(blocks: Block[]): { valid: boolean; issues: string[] } {
   const issues: string[] = [];
   const seenIds = new Set<string>();
 
@@ -181,7 +181,7 @@ export function validateBlocksIntegrity(blocks: Block[]): { valid: boolean; issu
  * Ensure all blocks have valid IDs
  * Creates new IDs for blocks missing them (should never happen in practice)
  */
-export function ensureBlockIds(blocks: Block[]): Block[] {
+function ensureBlockIds(blocks: Block[]): Block[] {
   return blocks.map((block, index) => {
     if (block.id) return block;
 
@@ -198,7 +198,7 @@ export function ensureBlockIds(blocks: Block[]): Block[] {
  * Deduplicate blocks by ID (keeps first occurrence)
  * Logs warnings for any duplicates found
  */
-export function deduplicateBlocks(blocks: Block[]): Block[] {
+function deduplicateBlocks(blocks: Block[]): Block[] {
   const seenIds = new Set<string>();
   const result: Block[] = [];
 
@@ -218,7 +218,7 @@ export function deduplicateBlocks(blocks: Block[]): Block[] {
  * Reorder blocks safely using array move logic
  * Returns new array, does not mutate input
  */
-export function reorderBlocks<T>(
+function reorderBlocks<T>(
   items: T[],
   fromIndex: number,
   toIndex: number
@@ -232,7 +232,7 @@ export function reorderBlocks<T>(
 /**
  * Check if blocks array has changed (shallow comparison by IDs and order)
  */
-export function blocksOrderChanged(oldBlocks: Block[], newBlocks: Block[]): boolean {
+function blocksOrderChanged(oldBlocks: Block[], newBlocks: Block[]): boolean {
   if (oldBlocks.length !== newBlocks.length) return true;
 
   for (let i = 0; i < oldBlocks.length; i++) {

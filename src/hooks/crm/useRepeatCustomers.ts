@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { supabase } from '@/platform/supabase/client';
 import { useState, useEffect } from 'react';
 
-export interface RepeatCustomer {
+interface RepeatCustomer {
   phone?: string;
   email?: string;
   name: string;

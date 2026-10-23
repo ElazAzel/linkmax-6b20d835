@@ -35,7 +35,7 @@ const USERNAME_REGEX = /^[a-z0-9_-]+$/;
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 30;
 
-export interface UsernameValidationResult {
+interface UsernameValidationResult {
   valid: boolean;
   error?: string;
 }
@@ -127,11 +127,11 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
  * "Inbound" = leads + bookings + event registrations created by end-customers.
  * Scope: per owner user_id, per calendar month (UTC).
  */
-export const CRM_FREE_INBOUND_LIMIT = 50;
+const CRM_FREE_INBOUND_LIMIT = 50;
 
-export type PremiumTier = AppPremiumTier;
+type PremiumTier = AppPremiumTier;
 
-export interface FreemiumLimits {
+interface FreemiumLimits {
   maxBlocks: number;
   maxAIPageGenerationsPerMonth: number;
   canUseAnalytics: boolean;
@@ -205,7 +205,7 @@ export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): F
 /**
  * Get tier display name
  */
-export function getTierDisplayName(tier: PremiumTier): string {
+function getTierDisplayName(tier: PremiumTier): string {
   return getContractTierDisplayName(tier);
 }
 
@@ -213,6 +213,6 @@ export function getTierDisplayName(tier: PremiumTier): string {
  * Get commission rate based on tier (per ADR 0026)
  * Starter: 7%, Pro: 1%, Business: 0%
  */
-export function getTierCommissionRate(tier: PremiumTier): number {
+function getTierCommissionRate(tier: PremiumTier): number {
   return getContractTierCommissionRate(tier);
 }

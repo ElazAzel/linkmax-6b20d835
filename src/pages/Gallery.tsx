@@ -1,2 +1,2 @@
-import Gallery from '@/components/screens/Gallery';
+import { Gallery } from '@/components/screens/Gallery';
 export default Gallery;

@@ -5,7 +5,7 @@ import { isBlockShownToVisitors } from '@/lib/blocks/block-visibility';
 
 export type ContactPlatform = 'whatsapp' | 'telegram' | 'phone';
 
-export interface PageContact {
+interface PageContact {
   platform: ContactPlatform;
   /** Ready-to-open link with the owner's own prefilled message, if any. */
   href: string;

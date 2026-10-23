@@ -82,17 +82,8 @@ vi.mock('@/components/landing/kx/KxSections', () => ({
 
 vi.mock('@/components/seo/SEOMetaEnhancer', () => ({ SEOMetaEnhancer: () => <div /> }));
 vi.mock('@/components/seo/GEOTagging', () => ({ GEOTagging: () => <div /> }));
-vi.mock('@/components/seo/AEOOptimizer', () => ({ AEOOptimizer: () => <div /> }));
 vi.mock('@/components/seo/AISearchOptimizer', () => ({ AISearchOptimizer: () => <div /> }));
-vi.mock('@/components/landing/v2/LogoTicker', () => ({ LogoTicker: () => <div /> }));
-vi.mock('@/components/landing/v2/BentoGridSection', () => ({ BentoGridSection: () => <div /> }));
-vi.mock('@/components/landing/v2/InteractiveDemo', () => ({ InteractiveDemo: () => <div /> }));
-vi.mock('@/components/landing/v2/Testimonials', () => ({ Testimonials: () => <div /> }));
-vi.mock('@/components/landing/v2/PricingAurora', () => ({ PricingAurora: () => <div /> }));
 vi.mock('@/components/landing/v2/PremiumFooter', () => ({ PremiumFooter: () => <div /> }));
-vi.mock('@/components/landing/v2/BottomCTA', () => ({ BottomCTA: () => <div /> }));
-vi.mock('@/components/landing/v2/GrainOverlay', () => ({ GrainOverlay: () => <div /> }));
-vi.mock('@/components/landing/v2/LiquidCursor', () => ({ LiquidCursor: () => <div /> }));
 vi.mock('@/components/ui/CanvasBackground', () => ({ CanvasBackground: () => <div /> }));
 
 describe('Index (Landing Page)', () => {

@@ -6,7 +6,7 @@ import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Circle from 'lucide-react/dist/esm/icons/circle';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
-export interface SmartCta {
+interface SmartCta {
   label: string;
   onClick?: () => void;
   href?: string;
@@ -14,13 +14,13 @@ export interface SmartCta {
   icon?: ComponentType<{ className?: string }>;
 }
 
-export interface SmartChecklistItem {
+interface SmartChecklistItem {
   label: string;
   done?: boolean;
   hint?: string;
 }
 
-export interface SmartEmptyStateProps {
+interface SmartEmptyStateProps {
   icon?: ComponentType<{ className?: string }>;
   iconBg?: string; // tailwind class
   eyebrow?: string;

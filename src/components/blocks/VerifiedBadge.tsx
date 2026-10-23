@@ -103,14 +103,14 @@ export const VerifiedBadge = memo(function VerifiedBadge({
 });
 
 // Legacy support for old API
-export interface LegacyVerifiedBadgeProps {
+interface LegacyVerifiedBadgeProps {
   type?: 'platform' | 'premium';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   showTooltip?: boolean;
 }
 
-export const LegacyVerifiedBadge = memo(function LegacyVerifiedBadge({
+const LegacyVerifiedBadge = memo(function LegacyVerifiedBadge({
   type = 'platform',
   size = 'md',
   className,

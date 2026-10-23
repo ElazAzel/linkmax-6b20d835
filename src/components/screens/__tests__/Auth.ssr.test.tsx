@@ -16,7 +16,7 @@ vi.mock('@/hooks/user/useAuth', () => ({
 }));
 vi.mock('@/lib/utils/url-helpers', () => ({ getAppDomain: () => 'https://ssr.linkmax.invalid' }));
 
-import Auth from '../Auth';
+import { Auth } from '../Auth';
 
 afterEach(() => {
   vi.unstubAllGlobals();

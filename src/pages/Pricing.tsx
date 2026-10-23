@@ -1,2 +1,2 @@
-import Pricing from '@/components/screens/Pricing';
+import { Pricing } from '@/components/screens/Pricing';
 export default Pricing;

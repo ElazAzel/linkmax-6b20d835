@@ -23,7 +23,7 @@ export interface ZoneConversation {
   unread_count?: number;
 }
 
-export interface ZoneMessage {
+interface ZoneMessage {
   id: string;
   conversation_id: string;
   zone_id: string;
@@ -36,7 +36,7 @@ export interface ZoneMessage {
 }
 
 // ─── Query Keys ───
-export const zoneInboxKeys = {
+const zoneInboxKeys = {
   conversations: (zoneId: string) => ['zone-conversations', zoneId] as const,
   messages: (conversationId: string) => ['zone-messages', conversationId] as const,
 };

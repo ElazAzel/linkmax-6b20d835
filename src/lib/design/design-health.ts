@@ -82,7 +82,7 @@ function longestMonotoneRun(blocks: Block[]): number {
   return best;
 }
 
-export interface DesignHealthOptions {
+interface DesignHealthOptions {
   /** Page theme — enables the Phase 10 contrast check. */
   theme?: Partial<PageTheme> | null;
 }

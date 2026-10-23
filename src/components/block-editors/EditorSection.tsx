@@ -286,7 +286,7 @@ interface EditorToggleProps {
   icon?: ReactNode;
 }
 
-export const EditorToggle = memo(function EditorToggle({
+const EditorToggle = memo(function EditorToggle({
   label,
   description,
   checked,

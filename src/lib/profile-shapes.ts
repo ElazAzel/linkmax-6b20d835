@@ -6,12 +6,12 @@
  *  - Profile badges (city / status / emoji / custom)
  */
 
-export type AvatarShape = 'circle' | 'squircle' | 'hexagon' | 'blob' | 'sticker';
-export type StatusRing = 'none' | 'online' | 'busy' | 'away' | 'offline' | 'live';
-export type CoverPattern = 'none' | 'dots' | 'grid' | 'waves' | 'noise' | 'topo' | 'mesh';
-export type CoverHeightExt = 'small' | 'medium' | 'large' | 'xl';
+type AvatarShape = 'circle' | 'squircle' | 'hexagon' | 'blob' | 'sticker';
+type StatusRing = 'none' | 'online' | 'busy' | 'away' | 'offline' | 'live';
+type CoverPattern = 'none' | 'dots' | 'grid' | 'waves' | 'noise' | 'topo' | 'mesh';
+type CoverHeightExt = 'small' | 'medium' | 'large' | 'xl';
 
-export interface ProfileBadge {
+interface ProfileBadge {
   id: string;
   kind?: 'city' | 'status' | 'emoji' | 'custom';
   icon?: string; // lucide icon name (optional)
@@ -20,7 +20,7 @@ export interface ProfileBadge {
   color?: string; // token key or hex
 }
 
-export const AVATAR_SHAPES: { value: AvatarShape; label: string; isPro: boolean }[] = [
+const AVATAR_SHAPES: { value: AvatarShape; label: string; isPro: boolean }[] = [
   { value: 'circle', label: 'Круг', isPro: false },
   { value: 'squircle', label: 'Скругл.', isPro: false },
   { value: 'hexagon', label: 'Гексагон', isPro: true },
@@ -58,7 +58,7 @@ export function getAvatarShapeStyle(shape: AvatarShape | undefined): React.CSSPr
   }
 }
 
-export const STATUS_RINGS: {
+const STATUS_RINGS: {
   value: StatusRing;
   label: string;
   color: string;
@@ -77,7 +77,7 @@ export function getStatusRingConfig(status: StatusRing | undefined) {
 }
 
 /** SVG-pattern → data URI for repeatable backgrounds. Color follows currentColor. */
-export const COVER_PATTERNS: { value: CoverPattern; label: string; svg: string | null }[] = [
+const COVER_PATTERNS: { value: CoverPattern; label: string; svg: string | null }[] = [
   { value: 'none', label: 'Нет', svg: null },
   {
     value: 'dots',

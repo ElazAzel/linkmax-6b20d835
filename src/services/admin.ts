@@ -1,6 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 
-export interface AdminDailyStats {
+interface AdminDailyStats {
     date: string;
     users: number;
     pages: number;
@@ -12,31 +12,31 @@ export interface AdminDailyStats {
     collabs: number;
 }
 
-export interface AdminUserStatus {
+interface AdminUserStatus {
     name: string;
     value: number;
     color: string;
 }
 
-export interface AdminEventTypeStats {
+interface AdminEventTypeStats {
     name: string;
     count: number;
     color: string;
 }
 
-export interface AdminSocialStats {
+interface AdminSocialStats {
     name: string;
     total: number;
     accepted: number;
 }
 
-export interface AdminBlockTypeStats {
+interface AdminBlockTypeStats {
     name: string;
     count: number;
     color: string;
 }
 
-export interface Partner {
+interface Partner {
     id: string;
     name: string;
     logo_url: string;
@@ -55,7 +55,7 @@ export interface PartnerFormData {
     is_active: boolean;
 }
 
-export interface AdminDashboardAggregates {
+interface AdminDashboardAggregates {
     dailyGrowth: AdminDailyStats[];
     userDistribution: AdminUserStatus[];
     eventDistribution: AdminEventTypeStats[];

@@ -369,7 +369,7 @@ function buildSummary(params: SummaryParams): string {
 /**
  * Generate structured Answer Block HTML for noscript fallback
  */
-export function generateAnswerBlockHtml(data: AnswerBlockData, language: 'ru' | 'en' | 'kk'): string {
+function generateAnswerBlockHtml(data: AnswerBlockData, language: 'ru' | 'en' | 'kk'): string {
   const t = TRANSLATIONS[language] ?? TRANSLATIONS.ru;
 
   return `

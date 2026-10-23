@@ -27,7 +27,7 @@ const AUTOMATION_MEMBER_COLUMNS =
   'id, zone_id, trigger_type, action_type, is_active, created_at, updated_at';
 
 // ─── Query Keys ───
-export const zoneAutomationsKeys = {
+const zoneAutomationsKeys = {
   all: (zoneId: string) => ['zone-automations', zoneId] as const,
 };
 

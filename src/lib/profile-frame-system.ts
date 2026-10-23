@@ -19,7 +19,7 @@ export type NameAnimationType =
   | 'glitch'
   | 'rainbow-slow';
 
-export interface FrameOption {
+interface FrameOption {
   value: ProfileFrameStyle;
   label: string;
   labelKey: string;
@@ -29,7 +29,7 @@ export interface FrameOption {
   category: 'basic' | 'gradient' | 'neon' | 'animated' | 'special';
 }
 
-export interface NameAnimationOption {
+interface NameAnimationOption {
   value: NameAnimationType;
   label: string;
   labelKey: string;
@@ -37,7 +37,7 @@ export interface NameAnimationOption {
 }
 
 // 5 FREE frames (no animation)
-export const FREE_FRAMES: ProfileFrameStyle[] = [
+const FREE_FRAMES: ProfileFrameStyle[] = [
   'none',
   'default', 
   'solid',
@@ -46,7 +46,7 @@ export const FREE_FRAMES: ProfileFrameStyle[] = [
 ];
 
 // All PRO frames (including animated ones)
-export const PRO_FRAMES: ProfileFrameStyle[] = [
+const PRO_FRAMES: ProfileFrameStyle[] = [
   'dotted',
   'gradient',
   'gradient-sunset',
@@ -67,7 +67,7 @@ export const PRO_FRAMES: ProfileFrameStyle[] = [
 ];
 
 // Complete frame options list with metadata
-export const FRAME_OPTIONS: FrameOption[] = [
+const FRAME_OPTIONS: FrameOption[] = [
   // Basic frames (FREE)
   { value: 'none', label: 'Без рамки', labelKey: 'frames.none', isPro: false, isAnimated: false, category: 'basic' },
   { value: 'default', label: 'По умолчанию', labelKey: 'frames.default', isPro: false, isAnimated: false, category: 'basic' },
@@ -102,7 +102,7 @@ export const FRAME_OPTIONS: FrameOption[] = [
 ];
 
 // Name animation options (all PRO except 'none')
-export const NAME_ANIMATION_OPTIONS: NameAnimationOption[] = [
+const NAME_ANIMATION_OPTIONS: NameAnimationOption[] = [
   { value: 'none', label: 'Без анимации', labelKey: 'nameAnimation.none', isPro: false },
   { value: 'typing', label: 'Печатная машинка', labelKey: 'nameAnimation.typing', isPro: true },
   { value: 'wave', label: 'Волна', labelKey: 'nameAnimation.wave', isPro: true },
@@ -122,28 +122,28 @@ export const NAME_ANIMATION_OPTIONS: NameAnimationOption[] = [
 
 // ============= Helper Functions =============
 
-export function isFramePro(frame: ProfileFrameStyle): boolean {
+function isFramePro(frame: ProfileFrameStyle): boolean {
   return PRO_FRAMES.includes(frame);
 }
 
-export function isFrameAnimated(frame: ProfileFrameStyle): boolean {
+function isFrameAnimated(frame: ProfileFrameStyle): boolean {
   const frameOption = FRAME_OPTIONS.find(f => f.value === frame);
   return frameOption?.isAnimated ?? false;
 }
 
-export function isNameAnimationPro(animation: NameAnimationType): boolean {
+function isNameAnimationPro(animation: NameAnimationType): boolean {
   return animation !== 'none';
 }
 
-export function getFramesByCategory(category: FrameOption['category']): FrameOption[] {
+function getFramesByCategory(category: FrameOption['category']): FrameOption[] {
   return FRAME_OPTIONS.filter(f => f.category === category);
 }
 
-export function getFreeFrames(): FrameOption[] {
+function getFreeFrames(): FrameOption[] {
   return FRAME_OPTIONS.filter(f => !f.isPro);
 }
 
-export function getProFrames(): FrameOption[] {
+function getProFrames(): FrameOption[] {
   return FRAME_OPTIONS.filter(f => f.isPro);
 }
 

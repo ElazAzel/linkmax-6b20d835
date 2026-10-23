@@ -9,7 +9,7 @@ import type { AppPremiumTier } from '@/domain/billing/tiers';
 /**
  * Page record from database
  */
-export interface DbPage {
+interface DbPage {
   id: string;
   user_id: string;
   slug: string;
@@ -28,7 +28,7 @@ export interface DbPage {
 /**
  * Block record from database
  */
-export interface DbBlock {
+interface DbBlock {
   id: string;
   page_id: string;
   type: string;
@@ -45,7 +45,7 @@ export interface DbBlock {
 /**
  * User profile record from database
  */
-export interface DbUserProfile {
+interface DbUserProfile {
   id: string;
   username: string | null;
   display_name: string | null;
@@ -61,7 +61,7 @@ export interface DbUserProfile {
 /**
  * Analytics event record from database
  */
-export interface DbAnalyticsEvent {
+interface DbAnalyticsEvent {
   id: string;
   page_id: string | null;
   block_id: string | null;
@@ -73,7 +73,7 @@ export interface DbAnalyticsEvent {
 /**
  * SEO metadata structure
  */
-export interface PageSeoMeta {
+interface PageSeoMeta {
   title: string;
   description: string;
   keywords: string[];
@@ -93,18 +93,18 @@ export interface ApiResult<T> {
  * Save page operation result
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface SavePageResult extends ApiResult<DbPage> {}
+interface SavePageResult extends ApiResult<DbPage> {}
 
 /**
  * Load page operation result
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LoadPageResult extends ApiResult<PageData> {}
+interface LoadPageResult extends ApiResult<PageData> {}
 
 /**
  * Load user page result with chatbot context
  */
-export interface LoadUserPageResult {
+interface LoadUserPageResult {
   data: PageData | null;
   chatbotContext: string | null;
   error: Error | null;
@@ -113,7 +113,7 @@ export interface LoadUserPageResult {
 /**
  * Publish page result
  */
-export interface PublishPageResult {
+interface PublishPageResult {
   slug: string | null;
   error: Error | null;
 }
@@ -134,7 +134,7 @@ export interface PremiumStatusResult {
 /**
  * Input for upsert_user_page RPC function
  */
-export interface UpsertUserPageInput {
+interface UpsertUserPageInput {
   p_user_id: string;
   p_slug: string;
   p_title: string;
@@ -148,7 +148,7 @@ export interface UpsertUserPageInput {
 /**
  * Input for save_page_blocks RPC function
  */
-export interface SavePageBlocksInput {
+interface SavePageBlocksInput {
   p_page_id: string;
   p_blocks: Array<{
     type: string;
@@ -164,7 +164,7 @@ export interface SavePageBlocksInput {
 /**
  * Input for generate_unique_slug RPC function
  */
-export interface GenerateUniqueSlugInput {
+interface GenerateUniqueSlugInput {
   base_slug: string;
 }
 
@@ -173,7 +173,7 @@ export interface GenerateUniqueSlugInput {
 /**
  * Wrap any error into a standard Error object
  */
-export function normalizeError(error: unknown): Error {
+function normalizeError(error: unknown): Error {
   if (error instanceof Error) {
     return error;
   }
@@ -189,13 +189,13 @@ export function normalizeError(error: unknown): Error {
 /**
  * Create a successful API result
  */
-export function createSuccessResult<T>(data: T): ApiResult<T> {
+function createSuccessResult<T>(data: T): ApiResult<T> {
   return { data, error: null };
 }
 
 /**
  * Create an error API result
  */
-export function createErrorResult<T>(error: unknown): ApiResult<T> {
+function createErrorResult<T>(error: unknown): ApiResult<T> {
   return { data: null, error: normalizeError(error) };
 }

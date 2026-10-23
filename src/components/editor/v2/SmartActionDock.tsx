@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { hapticLight, hapticSelection } from '@/platform/native/haptics';
 
-export interface SmartActionDockProps {
+interface SmartActionDockProps {
   onAddBlock: () => void;
   onAIImprove?: () => void;
   onCustomize?: () => void;

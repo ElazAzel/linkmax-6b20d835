@@ -3,7 +3,7 @@ import { buildHubMeta, findHubCity, findHubNiche, type HubLang } from './expert-
 import { safeJsonLd } from './public-page-seo';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
-export interface DirectoryParams { tag?: string; city?: string }
+interface DirectoryParams { tag?: string; city?: string }
 export interface ExpertDirectorySnapshot { experts: ExpertDirectoryProfile[]; fallbackExperts: ExpertDirectoryProfile[] }
 
 export async function loadExpertDirectory(params: DirectoryParams, search: URLSearchParams): Promise<ExpertDirectorySnapshot> {

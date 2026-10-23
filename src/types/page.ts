@@ -53,7 +53,7 @@ export interface PageTheme {
   };
 }
 
-export interface PageMetrics {
+interface PageMetrics {
   googleAnalytics?: string;
   facebookPixel?: string;
   yandexMetrika?: string;

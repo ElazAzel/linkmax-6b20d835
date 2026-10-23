@@ -3,10 +3,10 @@ import { supabase } from '@/platform/supabase/client';
 import type { ZoneTask, TaskStatus, TaskPriority, ZoneTaskChecklistItem } from '@/types/zones';
 import type { Json } from '@/platform/supabase/types';
 
-export type { TaskStatus, TaskPriority, ZoneTask };
+export type { TaskStatus, ZoneTask };
 
 // ─── Query Keys ───
-export const zoneTasksKeys = {
+const zoneTasksKeys = {
   all: (zoneId: string) => ['zone-tasks', zoneId] as const,
   checklist: (zoneId: string, taskId: string) => ['zone-task-checklist', zoneId, taskId] as const,
   comments: (zoneId: string, taskId: string) => ['zone-task-comments', zoneId, taskId] as const,

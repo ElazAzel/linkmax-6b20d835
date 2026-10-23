@@ -4,7 +4,7 @@
  * link gets the right icon without the owner picking it from a list.
  */
 
-export interface SocialPlatform {
+interface SocialPlatform {
   id: string;
   label: string;
   /** Hostnames (without www.) or URL schemes that belong to the platform. */

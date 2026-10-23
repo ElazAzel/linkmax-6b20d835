@@ -6,7 +6,7 @@ export type AppPremiumTier = (typeof APP_PREMIUM_TIERS)[number];
 
 type TierKey = AppPremiumTier | DatabasePremiumTier;
 
-export const TIER_LEVELS = {
+const TIER_LEVELS = {
   free: 0,
   identity: 0,
   starter: 1,
@@ -14,7 +14,7 @@ export const TIER_LEVELS = {
   business: 3,
 } as const satisfies Record<TierKey, number>;
 
-export const TIER_LABELS = {
+const TIER_LABELS = {
   free: 'Identity',
   identity: 'Identity',
   starter: 'Starter',
@@ -22,13 +22,13 @@ export const TIER_LABELS = {
   business: 'Business',
 } as const satisfies Record<TierKey, string>;
 
-export const TIER_COMMISSION_RATES = BILLING_CATALOG.commissionRates satisfies Record<TierKey, number>;
+const TIER_COMMISSION_RATES = BILLING_CATALOG.commissionRates satisfies Record<TierKey, number>;
 
-export function isDatabasePremiumTier(tier: unknown): tier is DatabasePremiumTier {
+function isDatabasePremiumTier(tier: unknown): tier is DatabasePremiumTier {
   return typeof tier === 'string' && DATABASE_PREMIUM_TIERS.includes(tier as DatabasePremiumTier);
 }
 
-export function isAppPremiumTier(tier: unknown): tier is AppPremiumTier {
+function isAppPremiumTier(tier: unknown): tier is AppPremiumTier {
   return typeof tier === 'string' && APP_PREMIUM_TIERS.includes(tier as AppPremiumTier);
 }
 

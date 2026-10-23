@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { ZoneInvoice, ZoneInvoiceItem } from '@/types/zones';
 
-export type { ZoneInvoice, ZoneInvoiceItem };
+
 
 // ─── Query Keys ───
-export const zoneInvoicesKeys = {
+const zoneInvoicesKeys = {
   all: (zoneId: string) => ['zone-invoices', zoneId] as const,
   items: (zoneId: string, invoiceId: string) => ['zone-invoice-items', zoneId, invoiceId] as const,
 };

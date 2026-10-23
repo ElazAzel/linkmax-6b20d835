@@ -158,7 +158,7 @@ export async function setWinningVariant(
  * Track an impression (view) for an experiment variant.
  * Called when a visitor sees a specific variant of an A/B test.
  */
-export async function trackImpression(
+async function trackImpression(
     experimentId: string,
     variantId: string,
     visitorId?: string
@@ -186,7 +186,7 @@ export async function trackImpression(
  * Track a conversion event for an experiment variant.
  * Called when a visitor performs the desired action (click, signup, purchase).
  */
-export async function trackConversion(
+async function trackConversion(
     experimentId: string,
     variantId: string,
     conversionType: string = 'click',
@@ -215,7 +215,7 @@ export async function trackConversion(
 /**
  * Get experiment stats: impressions and conversions per variant.
  */
-export async function getExperimentStats(experimentId: string) {
+async function getExperimentStats(experimentId: string) {
     try {
         const { data, error } = await supabase
             .from('experiment_events')

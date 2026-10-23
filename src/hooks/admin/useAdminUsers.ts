@@ -182,6 +182,6 @@ export function useToggleVerification() {
 }
 
 // Keep legacy export for backward compat
-export function useTogglePremium() {
+function useTogglePremium() {
   return useSetUserTier();
 }

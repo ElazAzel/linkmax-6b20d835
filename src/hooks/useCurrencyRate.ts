@@ -15,7 +15,7 @@ export const FIXED_PRICES_KZT: Record<BillingPeriodMonths, number> = {
     12: getProPrice(12).monthlyKzt
 };
 
-export function getMonthlyPriceKzt(period: BillingPeriodMonths): number {
+function getMonthlyPriceKzt(period: BillingPeriodMonths): number {
     return getProPrice(period).monthlyKzt;
 }
 
@@ -45,6 +45,6 @@ export function useCurrencyRate() {
     });
 }
 
-export function convertUsdToKzt(usdAmount: number, rate: number): number {
+function convertUsdToKzt(usdAmount: number, rate: number): number {
     return Math.round(usdAmount * rate);
 }

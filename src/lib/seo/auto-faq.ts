@@ -8,7 +8,7 @@
 import type { Block, PricingBlock, BookingBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 
-export interface AutoFAQItem {
+interface AutoFAQItem {
   question: string;
   answer: string;
 }

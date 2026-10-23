@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils/utils';
 
 type IconProp = ReactNode | ComponentType<{ className?: string }>;
 
-export interface EmptyStateProps {
+interface EmptyStateProps {
   title: string;
   description?: string;
   /** Lucide icon component or a ready element. Defaults to an inbox. */

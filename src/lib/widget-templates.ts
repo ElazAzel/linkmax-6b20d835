@@ -977,10 +977,10 @@ setInterval(() => { showTestimonial((currentTs + 1) % testimonials.length); }, 5
   },
 ];
 
-export function getWidgetsByCategory(category: keyof typeof WIDGET_CATEGORIES): WidgetTemplate[] {
+function getWidgetsByCategory(category: keyof typeof WIDGET_CATEGORIES): WidgetTemplate[] {
   return HARDCODED_WIDGET_TEMPLATES.filter(w => w.category === category);
 }
 
-export function getWidgetById(id: string): WidgetTemplate | undefined {
+function getWidgetById(id: string): WidgetTemplate | undefined {
   return HARDCODED_WIDGET_TEMPLATES.find(w => w.id === id);
 }

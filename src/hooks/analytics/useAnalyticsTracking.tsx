@@ -19,7 +19,7 @@ interface UseAnalyticsTrackingOptions {
   enabled?: boolean;
 }
 
-export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTrackingOptions) {
+function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTrackingOptions) {
   const hasTrackedView = useRef(false);
   const trackedPageId = useRef<string | undefined>(undefined);
 

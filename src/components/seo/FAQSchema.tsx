@@ -51,5 +51,3 @@ export function FAQSchema({ id = 'faq-schema', faqItems }: FAQSchemaProps) {
 
     return null;
 }
-
-export default FAQSchema;

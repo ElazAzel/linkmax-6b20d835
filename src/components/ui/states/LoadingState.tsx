@@ -3,7 +3,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils/utils';
 
-export interface LoadingStateProps {
+interface LoadingStateProps {
   message?: string;
   /** Prefer a skeleton shaped like the content that is loading. */
   variant?: 'spinner' | 'skeleton-list' | 'skeleton-cards';

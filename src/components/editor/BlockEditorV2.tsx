@@ -378,5 +378,3 @@ export function BlockEditorV2({
         </>
     );
 }
-
-export default BlockEditorV2;

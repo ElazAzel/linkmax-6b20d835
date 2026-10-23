@@ -6,7 +6,7 @@
  * background (the single most common "my page looks broken" complaint).
  */
 
-export interface Rgb {
+interface Rgb {
   r: number;
   g: number;
   b: number;
@@ -59,7 +59,7 @@ export function parseColor(input?: string | null): Rgb | null {
   return null;
 }
 
-export function hslToRgb(h: number, s: number, l: number): Rgb {
+function hslToRgb(h: number, s: number, l: number): Rgb {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const hp = (((h % 360) + 360) % 360) / 60;
   const x = c * (1 - Math.abs((hp % 2) - 1));
@@ -85,7 +85,7 @@ function channel(v: number): number {
   return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
 }
 
-export function relativeLuminance({ r, g, b }: Rgb): number {
+function relativeLuminance({ r, g, b }: Rgb): number {
   return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
 }
 

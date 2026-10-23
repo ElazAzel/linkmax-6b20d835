@@ -4,7 +4,7 @@
  */
 import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
-export type EditorAnalyticsAction =
+type EditorAnalyticsAction =
   | 'block_added'
   | 'block_deleted'
   | 'block_duplicated'
@@ -58,7 +58,7 @@ export type EditorAnalyticsAction =
   | 'autosave_batch_flushed'
   | 'history_compressed';
 
-export interface EditorAnalyticsMeta {
+interface EditorAnalyticsMeta {
   blockType?: string;
   blockId?: string;
   position?: number;
@@ -108,7 +108,7 @@ export function trackEditorAction(
 /**
  * Create a timing tracker for measuring flow durations
  */
-export function createFlowTimer(flowName: string) {
+function createFlowTimer(flowName: string) {
   const start = Date.now();
   return {
     end: (meta?: EditorAnalyticsMeta) => {

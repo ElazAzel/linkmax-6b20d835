@@ -20,7 +20,7 @@ export const createTemplateBlock = (type: string, overrides: Record<string, unkn
 };
 
 // Placeholder images from Unsplash (free to use)
-export const PLACEHOLDER_IMAGES = {
+const PLACEHOLDER_IMAGES = {
     barber: [
         'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=600&fit=crop',
         'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=600&fit=crop',

@@ -129,7 +129,7 @@ export function usePublishPageMutation(userId: string | undefined) {
   });
 }
 // Utility to prefetch public page (useful for link hovers)
-export function usePrefetchPublicPage() {
+function usePrefetchPublicPage() {
   const queryClient = useQueryClient();
 
   return (slug: string) => {

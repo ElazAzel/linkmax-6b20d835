@@ -46,5 +46,3 @@ export function useMonthlyInboundCount(
 
   return count;
 }
-
-export default useMonthlyInboundCount;

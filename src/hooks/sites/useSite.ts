@@ -26,7 +26,7 @@ import {
 } from '@/services/sites';
 import type { Site } from '@/types/site';
 
-export const siteKeys = {
+const siteKeys = {
   mySite: (userId: string) => ['site', 'my', userId] as const,
   pages: (siteId: string) => ['site', 'pages', siteId] as const,
 };
@@ -49,7 +49,7 @@ export function useSitePages(siteId: string | undefined) {
   });
 }
 
-export function useUpdateSite(siteId: string | undefined) {
+function useUpdateSite(siteId: string | undefined) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (patch: Parameters<typeof updateSite>[1]) => {
@@ -108,9 +108,9 @@ export function useUpdateSubPage(siteId: string | undefined) {
 }
 
 // Re-export for direct use
-export { getMySite } from '@/services/sites';
 
-export const sitePagesStatsKey = (siteId: string, days: number) =>
+
+const sitePagesStatsKey = (siteId: string, days: number) =>
   ['site', 'pages-stats', siteId, days] as const;
 
 export function useSitePagesStats(siteId: string | undefined, days = 30) {
@@ -135,7 +135,7 @@ export function useApplySiteTemplate(siteId: string | undefined, userId: string 
   });
 }
 
-export const pageSettingsKey = (pageId: string) => ['page', 'settings', pageId] as const;
+const pageSettingsKey = (pageId: string) => ['page', 'settings', pageId] as const;
 
 export function usePageSettings(pageId: string | undefined) {
   return useQuery({

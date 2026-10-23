@@ -116,7 +116,7 @@ export const isAnimatedFrame = (frameStyle: FrameStyle): boolean => {
 };
 
 // Avatar icon options using Lucide icons
-export const AVATAR_ICON_OPTIONS = [
+const AVATAR_ICON_OPTIONS = [
   { value: '', label: 'No Icon' },
   { value: 'crown', label: 'Crown' },
   { value: 'star', label: 'Star' },
@@ -152,7 +152,7 @@ export const AVATAR_ICON_OPTIONS = [
 ] as const;
 
 // Verification icon color options
-export const VERIFICATION_COLOR_OPTIONS = [
+const VERIFICATION_COLOR_OPTIONS = [
   { value: 'blue', label: 'Blue', color: '#3b82f6' },
   { value: 'green', label: 'Green', color: '#22c55e' },
   { value: 'gold', label: 'Gold', color: '#eab308' },
@@ -163,7 +163,7 @@ export const VERIFICATION_COLOR_OPTIONS = [
 ] as const;
 
 // Verification icon position options
-export const VERIFICATION_POSITION_OPTIONS = [
+const VERIFICATION_POSITION_OPTIONS = [
   { value: 'top-right', label: 'Top Right' },
   { value: 'top-left', label: 'Top Left' },
   { value: 'bottom-right', label: 'Bottom Right' },

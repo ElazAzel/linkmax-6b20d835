@@ -15,7 +15,7 @@ export type SectionPresetId =
   | 'contact'
   | 'cta';
 
-export interface SectionPreset {
+interface SectionPreset {
   id: SectionPresetId;
   labelKey: string;
   labelFallback: string;

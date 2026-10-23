@@ -4,7 +4,7 @@
  * two lists stay equal.
  */
 export const MCP_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
-export type McpLanguage = typeof MCP_LANGUAGES[number];
+type McpLanguage = typeof MCP_LANGUAGES[number];
 
 const LANGUAGE_SET = new Set<string>(MCP_LANGUAGES);
 

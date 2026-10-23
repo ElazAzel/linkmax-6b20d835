@@ -16,7 +16,7 @@ import { getBlockEditingConfig, type BlockEditingConfig } from './block-editing'
 
 // ============= Manifest Types =============
 
-export interface BlockRendererProps {
+interface BlockRendererProps {
   block: any;
   isPreview?: boolean;
   pageOwnerId?: string;
@@ -27,15 +27,15 @@ export interface BlockRendererProps {
   onPlatformClick?: () => void;
 }
 
-export interface BlockEditorComponentProps {
+interface BlockEditorComponentProps {
   formData: any;
   onChange: (updates: any) => void;
   onComplete?: () => void;
 }
 
-export type BlockCategory = 'basic' | 'media' | 'interactive' | 'commerce' | 'social' | 'advanced';
+type BlockCategory = 'basic' | 'media' | 'interactive' | 'commerce' | 'social' | 'advanced';
 
-export interface BlockManifestEntry {
+interface BlockManifestEntry {
   editing: BlockEditingConfig;
   type: BlockType;
   category: BlockCategory;
@@ -413,33 +413,33 @@ export function isBlockPremium(type: BlockType): boolean {
 }
 
 /** Check if a block type is free */
-export function isBlockFree(type: BlockType): boolean {
+function isBlockFree(type: BlockType): boolean {
   return !isBlockPremium(type);
 }
 
 /** Get all block types by category */
-export function getBlockTypesByCategory(category: BlockCategory): BlockType[] {
+function getBlockTypesByCategory(category: BlockCategory): BlockType[] {
   return (Object.values(BLOCK_MANIFEST) as BlockManifestEntry[])
     .filter(e => e.category === category)
     .map(e => e.type);
 }
 
 /** Get all free block types */
-export function getFreeBlockTypes(): BlockType[] {
+function getFreeBlockTypes(): BlockType[] {
   return (Object.values(BLOCK_MANIFEST) as BlockManifestEntry[])
     .filter(e => !e.isPremium)
     .map(e => e.type);
 }
 
 /** Get all premium block types */
-export function getPremiumBlockTypes(): BlockType[] {
+function getPremiumBlockTypes(): BlockType[] {
   return (Object.values(BLOCK_MANIFEST) as BlockManifestEntry[])
     .filter(e => e.isPremium)
     .map(e => e.type);
 }
 
 /** Get all block types */
-export function getAllBlockTypes(): BlockType[] {
+function getAllBlockTypes(): BlockType[] {
   return Object.keys(BLOCK_MANIFEST) as BlockType[];
 }
 

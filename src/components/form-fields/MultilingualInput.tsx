@@ -65,7 +65,7 @@ const ALL_LANGUAGES: Record<LocaleCode, { name: string; flag: string }> = {
 const DEFAULT_LANGUAGE_CODES: LocaleCode[] = ['en', 'ru', 'kk'];
 
 /** The interface language, unless the text exists only in another language. */
-export function pickPrimaryLanguage(value: MultilingualString | I18nText | undefined, uiLanguage: LocaleCode): LocaleCode {
+function pickPrimaryLanguage(value: MultilingualString | I18nText | undefined, uiLanguage: LocaleCode): LocaleCode {
   const filled = Object.keys(value || {}).filter(k => (value as I18nText)[k]?.trim());
   if (filled.length === 0 || filled.includes(uiLanguage)) return uiLanguage;
   return filled[0];

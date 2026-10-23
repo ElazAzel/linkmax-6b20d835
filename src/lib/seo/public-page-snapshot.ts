@@ -16,7 +16,7 @@ export type PublicPageData = PageData & {
   serviceSlugs?: ServiceSlugsMap | null;
 };
 
-export type PublicPageSnapshot =
+type PublicPageSnapshot =
   | { status: 'ok'; page: PublicPageData }
   | { status: 'missing' }
   | { status: 'error' };
@@ -80,7 +80,7 @@ export function snapshotBlocks(rows: SnapshotBlockRow[] | null | undefined): Blo
   return ensureBlockIds(blocks);
 }
 
-export function snapshotRowToPageData(row: SnapshotPageRow): PublicPageData {
+function snapshotRowToPageData(row: SnapshotPageRow): PublicPageData {
   return {
     id: row.id,
     userId: row.user_id,

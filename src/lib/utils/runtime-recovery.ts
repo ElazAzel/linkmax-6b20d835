@@ -13,8 +13,8 @@ const BUILD_CACHE_KEY_PREFIXES = [
 
 const BUILD_CACHE_NAME_PREFIXES = ['lnkmx-', 'linkmax-', 'vite-'] as const;
 
-export type RecoveryReason = 'window.error' | 'unhandledrejection';
-export type RecoveryOutcome =
+type RecoveryReason = 'window.error' | 'unhandledrejection';
+type RecoveryOutcome =
   | 'skipped_already_attempted'
   | 'reloaded_after_cleanup'
   | 'reloaded_without_cache_api'

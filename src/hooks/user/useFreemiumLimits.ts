@@ -4,25 +4,25 @@ import type { AppPremiumTier } from '@/domain/billing/tiers';
 
 // Block tiers based on pricing plans (Free + Pro only)
 // booking + form moved to FREE to enable core thesis: social traffic → booking → prepayment
-export const FREE_BLOCKS = [
+const FREE_BLOCKS = [
   'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq',
   'booking', 'form'
 ] as const;
 
-export const PRO_BLOCKS = [
+const PRO_BLOCKS = [
   'video', 'carousel', 'pricing', 'product', 'catalog', 'custom_code',
   'before_after', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout', 'event'
 ] as const;
 
 // Business blocks merged into Pro
-export const PRO_EXTENDED_BLOCKS = [
+const PRO_EXTENDED_BLOCKS = [
   'download', 'countdown', 'community'
 ] as const;
 
 export type FreeTier = AppPremiumTier;
 
 // Feature flags for each tier
-export interface TierFeatures {
+interface TierFeatures {
   maxBlocks: number;
   maxAIPageGenerationsPerMonth: number; // AI page builder generations
   showWatermark: boolean;
@@ -71,7 +71,7 @@ export const FREE_LIMITS: TierFeatures = {
 };
 
 // Pro tier includes ALL premium features (AI capped at 10/mo)
-export const PRO_LIMITS: TierFeatures = {
+const PRO_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
   maxAIPageGenerationsPerMonth: 10,
   showWatermark: false,
@@ -96,13 +96,13 @@ export const PRO_LIMITS: TierFeatures = {
 };
 
 // Business tier = Pro + Business Zone access
-export const BUSINESS_LIMITS: TierFeatures = {
+const BUSINESS_LIMITS: TierFeatures = {
   ...PRO_LIMITS,
   canUseBusinessZone: true,
 };
 
 // Helper to get block tier
-export function getBlockTier(blockType: string): FreeTier {
+function getBlockTier(blockType: string): FreeTier {
   if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'identity';
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   if ((PRO_EXTENDED_BLOCKS as readonly string[]).includes(blockType)) return 'pro';

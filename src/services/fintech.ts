@@ -36,7 +36,7 @@ export interface WalletOverview {
     pendingGMV: number;
 }
 
-export type PayoutMethod = {
+type PayoutMethod = {
     type: 'card' | 'bank' | 'crypto' | string;
     value: string;
     details?: Record<string, unknown>;
@@ -47,7 +47,7 @@ const DEFAULT_TAKE_RATE = getTierCommissionRate('starter');
 /**
  * Get commission rate for a user based on their tier
  */
-export async function getUserCommissionRate(userId: string): Promise<number> {
+async function getUserCommissionRate(userId: string): Promise<number> {
     try {
         const { data, error } = await supabase
             .from('user_profiles')

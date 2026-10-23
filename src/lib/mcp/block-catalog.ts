@@ -5,7 +5,7 @@
  */
 export type BlockSize = 'small' | 'wide' | 'tall' | 'large';
 
-export interface CatalogEntry {
+interface CatalogEntry {
   type: string;
   purpose: string;
   required: string[];

@@ -80,10 +80,4 @@ function BlockSkeleton({ className }: { className?: string }) {
   );
 }
 
-export {
-  Skeleton,
-  CardSkeleton,
-  ListItemSkeleton,
-  ProfileSkeleton,
-  BlockSkeleton
-};
+export { Skeleton };

@@ -14,16 +14,16 @@ const REVIEW_REQUEST_STATUSES = ['pending', 'used', 'expired', 'revoked'] as con
 export type ReviewStatus = typeof REVIEW_STATUSES[number];
 export type ReviewSource = typeof REVIEW_SOURCES[number];
 export type ReviewVerificationStatus = typeof REVIEW_VERIFICATION_STATUSES[number];
-export type ReviewRequestStatus = typeof REVIEW_REQUEST_STATUSES[number];
+type ReviewRequestStatus = typeof REVIEW_REQUEST_STATUSES[number];
 export type ReviewRating = 1 | 2 | 3 | 4 | 5;
 
-export interface ReviewSummaryInput {
+interface ReviewSummaryInput {
   rating: number;
   status: ReviewStatus;
   publishedAt?: string | null;
 }
 
-export interface ReviewSummary {
+interface ReviewSummary {
   publishedCount: number;
   averageRating: number | null;
   ratingBreakdown: Record<ReviewRating, number>;
@@ -41,7 +41,7 @@ export interface PublicReviewRecord {
   isFeatured: boolean;
 }
 
-export interface PublicPageReviewSnapshot {
+interface PublicPageReviewSnapshot {
   summary: ReviewSummary;
   reviews: PublicReviewRecord[];
 }
@@ -72,13 +72,13 @@ export interface OwnerReviewRecord {
   hiddenAt: string | null;
 }
 
-export interface FetchOwnerReviewsInput {
+interface FetchOwnerReviewsInput {
   ownerId: string;
   statuses?: ReviewStatus[];
   limit?: number;
 }
 
-export interface OwnerReviewStats {
+interface OwnerReviewStats {
   total: number;
   pending: number;
   published: number;
@@ -87,7 +87,7 @@ export interface OwnerReviewStats {
   flagged: number;
 }
 
-export interface CreateReviewForBookingInput {
+interface CreateReviewForBookingInput {
   bookingId: string;
   rating: ReviewRating;
   body?: string | null;
@@ -97,19 +97,19 @@ export interface CreateReviewForBookingInput {
   metadata?: Record<string, unknown>;
 }
 
-export interface ModerateReviewInput {
+interface ModerateReviewInput {
   reviewId: string;
   status: Exclude<ReviewStatus, 'pending'>;
   reason?: string | null;
 }
 
-export interface CreateBookingReviewRequestInput {
+interface CreateBookingReviewRequestInput {
   bookingId: string;
   expiresIn?: string;
   metadata?: Record<string, unknown>;
 }
 
-export interface SubmitReviewRequestInput {
+interface SubmitReviewRequestInput {
   token: string;
   rating: ReviewRating;
   body?: string | null;
@@ -119,7 +119,7 @@ export interface SubmitReviewRequestInput {
   metadata?: Record<string, unknown>;
 }
 
-export interface ReviewRpcResult {
+interface ReviewRpcResult {
   success: boolean;
   error?: string;
   review?: {
@@ -511,7 +511,7 @@ export function parseReviewRequestRpcResult(data: Json | null): ReviewRequestRpc
   };
 }
 
-export async function createReviewForBooking(input: CreateReviewForBookingInput): Promise<ReviewRpcResult> {
+async function createReviewForBooking(input: CreateReviewForBookingInput): Promise<ReviewRpcResult> {
   const body = normalizeReviewText(input.body, 2000);
   const title = normalizeReviewText(input.title, 160);
   const reviewerDisplayName = normalizeReviewText(input.reviewerDisplayName, 120);

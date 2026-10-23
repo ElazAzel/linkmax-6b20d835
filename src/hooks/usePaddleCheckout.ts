@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/user/useAuth";
 import { toast } from "sonner";
 import { normalizeBillingPromoCode } from "@/domain/billing/recovery";
 
-export interface OpenCheckoutOptions {
+interface OpenCheckoutOptions {
   priceId: "pro_monthly" | "pro_yearly";
   successUrl?: string;
   discountCode?: string | null;

@@ -444,5 +444,3 @@ export const EventCheckin = memo(function EventCheckin() {
     </ScreenErrorBoundary>
   );
 });
-
-export default EventCheckin;

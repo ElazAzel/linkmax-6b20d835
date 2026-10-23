@@ -1,8 +1,8 @@
 import { supabase } from '@/platform/supabase/client';
 
-export type PaymentProvider = 'kaspi' | 'robokassa' | 'stripe';
+type PaymentProvider = 'kaspi' | 'robokassa' | 'stripe';
 
-export interface PaymentOrder {
+interface PaymentOrder {
     id: string;
     zoneId: string;
     amount: number;
@@ -13,7 +13,7 @@ export interface PaymentOrder {
     createdAt: string;
 }
 
-export interface PaymentSession {
+interface PaymentSession {
     orderId: string;
     paymentUrl: string;
     provider: PaymentProvider;

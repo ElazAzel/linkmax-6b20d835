@@ -3,7 +3,7 @@ import { logger } from '@/lib/utils/logger';
 
 export type OrganizationRole = 'owner' | 'admin' | 'editor' | 'viewer';
 
-export type InviteMemberError =
+type InviteMemberError =
     | 'not_authenticated'
     | 'invalid_role'
     | 'forbidden'

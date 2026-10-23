@@ -3,7 +3,7 @@ import type { ToolContext, ToolHandlerResult } from "@lovable.dev/mcp-js";
 import { isDraft, loadDraft, type PageDraft } from "./draft";
 import { databaseError, getAuthenticatedContext, isToolError, toolError } from "./utils";
 
-export interface PageContext {
+interface PageContext {
   supabase: SupabaseClient;
   userId: string;
   draft: PageDraft;

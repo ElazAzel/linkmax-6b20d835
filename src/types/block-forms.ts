@@ -8,7 +8,7 @@ export interface BlockFormData {
   [key: string]: unknown;
 }
 
-export interface ValidationOptions {
+interface ValidationOptions {
   min?: number;
   max?: number;
 }
@@ -134,6 +134,6 @@ export interface CatalogBlockData extends BlockFormData {
 }
 
 // Type guard helpers
-export const isArrayItem = (item: unknown): item is { [key: string]: unknown } => {
+const isArrayItem = (item: unknown): item is { [key: string]: unknown } => {
   return typeof item === 'object' && item !== null;
 };

@@ -1153,4 +1153,3 @@ export const Auth = memo(function Auth() {
     </>
   );
 });
-export default Auth;

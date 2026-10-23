@@ -532,4 +532,3 @@ export const Experts = memo(function Experts({ initialData }: { initialData?: Ex
     </>
   );
 });
-export default Experts;

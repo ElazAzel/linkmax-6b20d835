@@ -6,7 +6,7 @@
  */
 import { isNetworkError, extractStatus } from './retry-policy';
 
-export type BackendState = 'ok' | 'degraded' | 'down';
+type BackendState = 'ok' | 'degraded' | 'down';
 
 interface HealthSnapshot {
   state: BackendState;
@@ -117,4 +117,3 @@ export function resetBackendHealth() {
   snapshot = { state: 'ok', failures: 0, lastFailureAt: null, lastRecoveryAt: null };
   emit();
 }
-

@@ -112,6 +112,6 @@ export function getNichePack(niche?: string): NichePack {
   return PACKS[pageNiche] || GENERAL_PACK;
 }
 
-export function getAllNichePacks(): Record<string, NichePack> {
+function getAllNichePacks(): Record<string, NichePack> {
   return { ...PACKS, general: GENERAL_PACK };
 }

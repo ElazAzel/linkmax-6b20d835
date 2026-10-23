@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 
-export type LegalDocumentKind = 'terms' | 'privacy' | 'payment';
-export type LegalLanguage = 'ru' | 'en' | 'kk';
-export type LegalContentVariant = 'page' | 'modal';
+type LegalDocumentKind = 'terms' | 'privacy' | 'payment';
+type LegalLanguage = 'ru' | 'en' | 'kk';
+type LegalContentVariant = 'page' | 'modal';
 
-export const LEGAL_EFFECTIVE_DATE = '20.04.2026';
-export const LEGAL_VERSION = '2.0';
+const LEGAL_EFFECTIVE_DATE = '20.04.2026';
+const LEGAL_VERSION = '2.0';
 
 export const COMPANY_DETAILS = {
   name: 'ИП LinkMax',

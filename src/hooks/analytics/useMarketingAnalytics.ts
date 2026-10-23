@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 import { logger } from '@/lib/utils/logger';
 import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
-export type MarketingEventType =
+type MarketingEventType =
   | 'landing_view'
   | 'hero_primary_cta_click'
   | 'hero_secondary_cta_click'

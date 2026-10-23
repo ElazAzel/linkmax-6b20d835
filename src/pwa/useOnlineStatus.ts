@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from 'react';
 
-export interface OnlineStatus {
+interface OnlineStatus {
   isOnline: boolean;
   /** Время (ms epoch) последнего перехода в offline. null если ещё ни разу не падали. */
   lastOfflineAt: number | null;

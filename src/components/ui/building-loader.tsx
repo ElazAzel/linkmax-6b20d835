@@ -136,5 +136,3 @@ export const BuildingLoader = ({
     </div>
   );
 };
-
-export default BuildingLoader;

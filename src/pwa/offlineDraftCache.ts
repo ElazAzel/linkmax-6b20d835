@@ -91,7 +91,7 @@ export function loadDraft<T>(pageId: string): { data: T; savedAt: number } | nul
   }
 }
 
-export function clearDraft(pageId: string): void {
+function clearDraft(pageId: string): void {
   const storage = safeStorage();
   if (!storage || !pageId) return;
   try {
@@ -101,7 +101,7 @@ export function clearDraft(pageId: string): void {
   }
 }
 
-export function clearAllDrafts(): void {
+function clearAllDrafts(): void {
   const storage = safeStorage();
   if (!storage) return;
   const toRemove: string[] = [];

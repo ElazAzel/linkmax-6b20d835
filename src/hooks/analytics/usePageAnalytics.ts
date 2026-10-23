@@ -14,7 +14,7 @@ const chartLocale = () => {
   return lang.startsWith('kk') ? kk : lang.startsWith('en') ? enUS : ru;
 };
 
-export interface AnalyticsEvent {
+interface AnalyticsEvent {
   id: string;
   page_id: string;
   block_id: string | null;
@@ -95,7 +95,7 @@ export interface DeviceBreakdown {
   desktop: number;
 }
 
-export type TimePeriod = '7d' | '30d' | '90d' | 'all';
+type TimePeriod = '7d' | '30d' | '90d' | 'all';
 
 function getMetaString(metadata: Record<string, unknown> | null | undefined, ...keys: string[]): string | undefined {
   for (const key of keys) {

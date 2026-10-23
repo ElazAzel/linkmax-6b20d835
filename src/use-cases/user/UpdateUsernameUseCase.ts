@@ -7,12 +7,12 @@ import { validateUsername, normalizeUsername } from '@/domain/entities/User';
 import { getUserRepository } from '@/repositories/implementations/SupabaseUserRepository';
 import type { IUserRepository } from '@/repositories/interfaces/IUserRepository';
 
-export interface UpdateUsernameInput {
+interface UpdateUsernameInput {
   userId: string;
   username: string;
 }
 
-export interface UpdateUsernameOutput {
+interface UpdateUsernameOutput {
   username: string;
 }
 
@@ -65,7 +65,7 @@ export class UpdateUsernameUseCase {
 }
 
 // Factory function for easier testing
-export function createUpdateUsernameUseCase(
+function createUpdateUsernameUseCase(
   userRepository?: IUserRepository
 ): UpdateUsernameUseCase {
   return new UpdateUsernameUseCase(userRepository);
@@ -74,7 +74,7 @@ export function createUpdateUsernameUseCase(
 // Singleton instance
 let instance: UpdateUsernameUseCase | null = null;
 
-export function getUpdateUsernameUseCase(): UpdateUsernameUseCase {
+function getUpdateUsernameUseCase(): UpdateUsernameUseCase {
   if (!instance) {
     instance = new UpdateUsernameUseCase();
   }

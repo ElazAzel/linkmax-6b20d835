@@ -12,7 +12,7 @@ interface SkeletonCardProps {
   className?: string;
 }
 
-export const SkeletonCard = memo(function SkeletonCard({ 
+const SkeletonCard = memo(function SkeletonCard({
   variant = 'page',
   className 
 }: SkeletonCardProps) {
@@ -82,7 +82,7 @@ export const SkeletonGalleryGrid = memo(function SkeletonGalleryGrid() {
   );
 });
 
-export const SkeletonBlockList = memo(function SkeletonBlockList({ count = 4 }: { count?: number }) {
+const SkeletonBlockList = memo(function SkeletonBlockList({ count = 4 }: { count?: number }) {
   return (
     <div className="space-y-2">
       {Array.from({ length: count }).map((_, i) => (
@@ -92,7 +92,7 @@ export const SkeletonBlockList = memo(function SkeletonBlockList({ count = 4 }: 
   );
 });
 
-export const SkeletonStats = memo(function SkeletonStats() {
+const SkeletonStats = memo(function SkeletonStats() {
   return (
     <div className="grid grid-cols-3 gap-2">
       {Array.from({ length: 3 }).map((_, i) => (

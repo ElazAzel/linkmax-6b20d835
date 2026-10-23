@@ -19,7 +19,7 @@ export function normalizeSeoLanguage(value: unknown): SeoLanguage {
   return code === 'en' ? 'en' : code === 'kk' || code === 'kz' ? 'kk' : 'ru';
 }
 
-export interface PublicPageSeo {
+interface PublicPageSeo {
   profile: ExtractedProfile;
   qualityGate: QualityGateResult;
   meta: GeneratedMeta;

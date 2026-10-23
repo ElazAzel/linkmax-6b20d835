@@ -6,7 +6,7 @@
 
 export type PlanCycle = 'monthly' | 'yearly';
 
-export interface ZonePlan {
+interface ZonePlan {
   code: string;
   memberLimit: number;
   monthlyPrice: number; // KZT
@@ -23,7 +23,7 @@ export const ZONE_PLANS: ZonePlan[] = [
   { code: 'business_unl', memberLimit: 999999, monthlyPrice: 182700, yearlyPrice: 1461600 },
 ];
 
-export function getPlanCode(baseCode: string, cycle: PlanCycle): string {
+function getPlanCode(baseCode: string, cycle: PlanCycle): string {
   return `${baseCode}_${cycle === 'monthly' ? 'm' : 'y'}`;
 }
 
@@ -45,8 +45,8 @@ export type ZoneMemberStatus = 'active' | 'suspended';
 export type ZoneInviteStatus = 'pending' | 'accepted' | 'expired' | 'revoked';
 export type DealStatus = 'open' | 'won' | 'lost';
 export type InvoiceStatus = 'created' | 'paid' | 'failed' | 'expired';
-export type ConversationStatus = 'open' | 'closed' | 'archived';
-export type MessageDirection = 'inbound' | 'outbound';
+type ConversationStatus = 'open' | 'closed' | 'archived';
+type MessageDirection = 'inbound' | 'outbound';
 export type DocumentStatus = 'draft' | 'signed' | 'sent' | 'archived';
 
 export interface Zone {
@@ -105,7 +105,7 @@ export interface ZoneStaff {
   updated_at: string;
 }
 
-export interface ZoneStaffAvailability {
+interface ZoneStaffAvailability {
   id: string;
   staff_id: string;
   day_of_week: number;
@@ -325,7 +325,7 @@ export interface ZoneTaskChecklistItem {
   created_at: string;
 }
 
-export interface ZoneTaskComment {
+interface ZoneTaskComment {
   id: string;
   zone_id: string;
   task_id: string;
@@ -375,7 +375,7 @@ export interface ZoneDocument {
 
 // ============ Zone Context ============
 
-export interface ZoneContextValue {
+interface ZoneContextValue {
   currentZone: Zone | null;
   zones: Zone[];
   loading: boolean;

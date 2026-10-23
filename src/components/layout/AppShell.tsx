@@ -215,5 +215,3 @@ export const AppShell = () => {
     </HelmetProvider>
   );
 };
-
-export default AppShell;

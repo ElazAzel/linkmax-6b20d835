@@ -26,7 +26,7 @@ const mapEventBlockToRecord = (block: EventBlock, pageId: string, ownerId: strin
   settings_json: (block.settings || {}) as unknown as Json,
 });
 
-export async function syncEventBlock(block: EventBlock, pageId?: string, ownerId?: string) {
+async function syncEventBlock(block: EventBlock, pageId?: string, ownerId?: string) {
   if (!pageId || !ownerId || !block.eventId) {
     logger.warn('syncEventBlock: missing pageId, ownerId, or eventId', { context: 'events' });
     return;
@@ -45,7 +45,7 @@ export async function syncEventBlock(block: EventBlock, pageId?: string, ownerId
   }
 }
 
-export async function deleteEventBlock(eventId?: string, ownerId?: string) {
+async function deleteEventBlock(eventId?: string, ownerId?: string) {
   if (!eventId || !ownerId) return;
   try {
     const { error } = await supabase.from('events').delete().eq('id', eventId).eq('owner_id', ownerId);
@@ -60,7 +60,7 @@ export async function deleteEventBlock(eventId?: string, ownerId?: string) {
 /**
  * Fetch event by ID for public display
  */
-export async function getPublicEvent(eventId: string) {
+async function getPublicEvent(eventId: string) {
   const { data, error } = await supabase
     .from('events')
     .select('*')

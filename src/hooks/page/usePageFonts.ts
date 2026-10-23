@@ -31,7 +31,7 @@ export function primaryFamily(stack: string | undefined): string | null {
   return match ? match[1] : null;
 }
 
-export function googleFontsHref(family: string): string | null {
+function googleFontsHref(family: string): string | null {
   if (!GOOGLE_FONT_WEIGHTS[family]) return null;
   return `/fonts/${encodeURIComponent(family).replace(/%20/g, '+')}/font.css`;
 }

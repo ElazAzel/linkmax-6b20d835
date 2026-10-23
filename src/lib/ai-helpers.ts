@@ -8,23 +8,23 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { humanizeDeep, humanizeText } from '@/lib/text/humanizer-ru';
 
-export interface MagicTitleInput {
+interface MagicTitleInput {
   url: string;
 }
 
-export interface SalesCopyInput {
+interface SalesCopyInput {
   productName: string;
   price: string | number;
   currency?: string;
 }
 
-export interface SEOInput {
+interface SEOInput {
   name: string;
   bio?: string;
   links?: string[];
 }
 
-export interface AIBuilderInput {
+interface AIBuilderInput {
   description: string;
 }
 
@@ -97,7 +97,7 @@ export async function generateSalesCopy(input: SalesCopyInput): Promise<string> 
 /**
  * Generate SEO meta tags
  */
-export async function generateSEO(input: SEOInput): Promise<any> {
+async function generateSEO(input: SEOInput): Promise<any> {
   try {
     const result = await generateAIContent<SEOInput>('seo', input);
     toast.success('SEO meta tags generated!');
@@ -111,7 +111,7 @@ export async function generateSEO(input: SEOInput): Promise<any> {
 /**
  * Generate complete page layout
  */
-export async function generatePageLayout(description: string): Promise<any> {
+async function generatePageLayout(description: string): Promise<any> {
   if (!description) {
     toast.error('Please describe your page');
     throw new Error('Description is required');

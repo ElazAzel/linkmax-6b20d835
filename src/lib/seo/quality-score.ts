@@ -37,7 +37,7 @@ export interface QualityBreakdown {
 }
 
 /** Labels for exclusion reasons — creator-facing, concise Russian */
-export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
+const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
   missing_name: 'Укажите имя или название',
   missing_avatar: 'Загрузите фото профиля',
   missing_bio: 'Добавьте описание (от 50 символов)',

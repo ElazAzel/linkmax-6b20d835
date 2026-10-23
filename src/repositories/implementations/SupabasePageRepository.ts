@@ -70,7 +70,7 @@ function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string
 
 // ============= Implementation =============
 
-export class SupabasePageRepository implements IPageRepository {
+class SupabasePageRepository implements IPageRepository {
   async getUserSlug(userId: string): Promise<Result<string, Error>> {
     return tryCatchAsync(async () => {
       // Try to get username from profile

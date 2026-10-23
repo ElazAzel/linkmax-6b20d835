@@ -12,7 +12,7 @@ import type { PageTheme } from '@/types/page';
 import { getThemePreset, THEME_PRESETS } from '@/lib/appearance/presets';
 import { PAGE_RECIPES, getPageRecipe, type PageRecipe } from '@/lib/design/art-direction';
 
-export interface DesignKit {
+interface DesignKit {
   id: string;
   labelKey: string;
   labelFallback: string;
@@ -26,7 +26,7 @@ export interface DesignKit {
   isPremium: boolean;
 }
 
-export const DESIGN_KITS: DesignKit[] = [
+const DESIGN_KITS: DesignKit[] = [
   {
     id: 'studio-paper',
     labelKey: 'design.kit.studioPaper',
@@ -89,7 +89,7 @@ export const DESIGN_KITS: DesignKit[] = [
   },
 ];
 
-export function getDesignKit(id?: string | null): DesignKit | undefined {
+function getDesignKit(id?: string | null): DesignKit | undefined {
   return DESIGN_KITS.find((k) => k.id === id);
 }
 
@@ -98,7 +98,7 @@ export function getKitsForTier(isPremium: boolean): DesignKit[] {
   return isPremium ? DESIGN_KITS : [...DESIGN_KITS].sort((a, b) => Number(a.isPremium) - Number(b.isPremium));
 }
 
-export interface ResolvedDesignKit {
+interface ResolvedDesignKit {
   kit: DesignKit;
   recipe: PageRecipe;
   theme: Partial<PageTheme>;

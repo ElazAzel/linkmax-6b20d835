@@ -23,7 +23,7 @@ export interface PageFields {
   favicon_url?: string | null;
 }
 
-export interface OpsResult {
+interface OpsResult {
   snapshot: DraftSnapshot;
   changes: string[];
   warnings: string[];

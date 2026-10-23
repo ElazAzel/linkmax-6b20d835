@@ -1,5 +1,5 @@
 /** Bundled stock photography for clearly identified example pages and templates. */
-export const DEMO_MEDIA = {
+const DEMO_MEDIA = {
   beautyPortrait: '/demo/beauty-portrait.webp',
   nails: '/demo/nails.webp',
   studio: '/demo/studio.webp',

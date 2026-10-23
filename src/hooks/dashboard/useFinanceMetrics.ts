@@ -3,7 +3,7 @@ import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { logger } from '@/lib/utils/logger';
 
-export interface FinanceMetrics {
+interface FinanceMetrics {
   totalRevenue: number;
   netProfit: number;
   feesPaid: number;

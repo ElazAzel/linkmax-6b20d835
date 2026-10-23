@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 
-export interface AdminAnalyticsEvent {
+interface AdminAnalyticsEvent {
   id: string;
   event_type: string;
   page_id: string;

@@ -20,9 +20,9 @@ interface TermsOfServiceModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export { COMPANY_DETAILS };
 
-export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalProps) {
+
+function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalProps) {
   const { t, i18n } = useTranslation();
   const language = normalizeLegalLanguage(i18n.language);
 

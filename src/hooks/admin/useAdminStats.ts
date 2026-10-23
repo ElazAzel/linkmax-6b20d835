@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 
-export interface PlatformStats {
+interface PlatformStats {
   totalUsers: number;
   totalPages: number;
   publishedPages: number;

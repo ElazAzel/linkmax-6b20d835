@@ -533,7 +533,7 @@ export const THEME_PRESETS: ThemePreset[] = [
 
 // ============= Gradient presets =============
 
-export interface GradientPreset {
+interface GradientPreset {
   id: string;
   name: string;
   css: string; // used directly as backgroundColor: linear-gradient(...)
@@ -561,7 +561,7 @@ export const GRADIENT_PRESETS: GradientPreset[] = [
 
 export type PatternId = 'dots' | 'grid' | 'waves' | 'noise' | 'topo' | 'mesh';
 
-export interface PatternPreset {
+interface PatternPreset {
   id: PatternId;
   name: string;
   isPremium: boolean;
@@ -579,7 +579,7 @@ export const PATTERN_PRESETS: PatternPreset[] = [
 
 // ============= Font pairs =============
 
-export interface FontPairPreset {
+interface FontPairPreset {
   id: string;
   name: string;
   heading: string;
@@ -606,7 +606,7 @@ export const FONT_PAIR_PRESETS: FontPairPreset[] = [
 
 // ============= Block shape / shadow / hover / divider =============
 
-export interface Preset<T extends string> {
+interface Preset<T extends string> {
   id: T;
   name: string;
   isPremium: boolean;

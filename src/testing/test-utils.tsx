@@ -24,7 +24,7 @@ import { createContext, useContext } from 'react';
 
 const TestAuthContext = createContext(mockAuthValue);
 
-export function MockAuthProvider({ 
+function MockAuthProvider({
   children, 
   value = mockAuthValue 
 }: { 
@@ -39,10 +39,10 @@ export function MockAuthProvider({
 }
 
 // Re-export the mock hook for tests to use
-export const useMockAuth = () => useContext(TestAuthContext);
+const useMockAuth = () => useContext(TestAuthContext);
 
 // Create test query client
-export function createTestQueryClient() {
+function createTestQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -57,7 +57,7 @@ interface AllProvidersProps {
   authValue?: typeof mockAuthValue;
 }
 
-export function AllProviders({ children, authValue }: AllProvidersProps) {
+function AllProviders({ children, authValue }: AllProvidersProps) {
   const queryClient = createTestQueryClient();
   
   return (
@@ -90,7 +90,7 @@ export function renderWithProviders(
 export { mockAuthValue };
 
 // Mock editor history factory
-export function createMockEditorHistory(overrides = {}) {
+function createMockEditorHistory(overrides = {}) {
   return {
     currentBlocks: [],
     history: [],

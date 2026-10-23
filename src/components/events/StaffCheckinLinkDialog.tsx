@@ -160,5 +160,3 @@ export const StaffCheckinLinkDialog = memo(function StaffCheckinLinkDialog({
     </Dialog>
   );
 });
-
-export default StaffCheckinLinkDialog;

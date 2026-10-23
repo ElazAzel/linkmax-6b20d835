@@ -3,7 +3,7 @@ import { supabase } from '@/platform/supabase/client';
 import { subDays, startOfDay, eachDayOfInterval, eachHourOfInterval, startOfHour, format } from 'date-fns';
 import { AnalyticsFilters } from '@/components/admin/AnalyticsFilterPanel';
 
-export interface DailyEventData {
+interface DailyEventData {
   date: string;
   views: number;
   clicks: number;
@@ -12,13 +12,13 @@ export interface DailyEventData {
   visitors: number;
 }
 
-export interface HourlyEventData {
+interface HourlyEventData {
   hour: string;
   views: number;
   clicks: number;
 }
 
-export interface AnalyticsData {
+interface AnalyticsData {
   totalViews: number;
   totalClicks: number;
   totalShares: number;

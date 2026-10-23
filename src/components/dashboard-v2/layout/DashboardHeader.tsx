@@ -24,7 +24,7 @@ import Menu from 'lucide-react/dist/esm/icons/menu';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { cn } from '@/lib/utils/utils';
 
-export interface DashboardHeaderProps {
+interface DashboardHeaderProps {
   /** Open mobile sidebar / nav drawer */
   onMenuClick?: () => void;
   /** Active sub-tab label rendered next to title */

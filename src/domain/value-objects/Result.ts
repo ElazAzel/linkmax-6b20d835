@@ -80,7 +80,7 @@ export function flatMap<T, U, E>(
 /**
  * Map over a failure result
  */
-export function mapError<T, E, F>(
+function mapError<T, E, F>(
   result: Result<T, E>,
   fn: (error: E) => F
 ): Result<T, F> {
@@ -118,7 +118,7 @@ export function getOrThrow<T, E>(result: Result<T, E>): T {
 /**
  * Wrap a promise in a Result
  */
-export async function fromPromise<T>(
+async function fromPromise<T>(
   promise: Promise<T>
 ): Promise<Result<T, Error>> {
   try {
@@ -150,7 +150,7 @@ export function combine<T, E>(results: Result<T, E>[]): Result<T[], E> {
 /**
  * Normalize any error to Error type
  */
-export function normalizeError(error: unknown): Error {
+function normalizeError(error: unknown): Error {
   if (error instanceof Error) {
     return error;
   }

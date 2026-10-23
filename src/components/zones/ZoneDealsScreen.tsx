@@ -976,5 +976,3 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     </div>
   );
 });
-
-export default ZoneDealsScreen;

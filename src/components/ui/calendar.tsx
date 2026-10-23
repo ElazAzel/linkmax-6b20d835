@@ -6,7 +6,7 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils/utils";
 import { buttonVariants } from "@/components/ui/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 // react-day-picker v9 API (class keys renamed from v8; same visual result).
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {

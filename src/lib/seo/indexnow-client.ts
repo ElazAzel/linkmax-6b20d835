@@ -11,10 +11,10 @@ import { supabase } from '@/platform/supabase/client';
 const lastSentMap = new Map<string, number>();
 const THROTTLE_MS = 5 * 60 * 1000; // 5 minutes
 
-export type IndexNowResult = 'sent' | 'throttled' | 'not_indexable' | 'no_slug' | 'error' | 'no_changes';
+type IndexNowResult = 'sent' | 'throttled' | 'not_indexable' | 'no_slug' | 'error' | 'no_changes';
 
 /** Shape of a single service_slugs entry */
-export interface ServiceSlugEntryRaw {
+interface ServiceSlugEntryRaw {
   slug: string;
   state: string;
   title: string;
@@ -22,7 +22,7 @@ export interface ServiceSlugEntryRaw {
 
 // ─── Child Diff Engine ───────────────────────────────────────────────
 
-export type ChildTransition =
+type ChildTransition =
   | 'new_active'
   | 'restored'
   | 'thin_to_active'
@@ -32,7 +32,7 @@ export type ChildTransition =
   | 'slug_changed'
   | 'unchanged_other';
 
-export interface ChildDiffResult {
+interface ChildDiffResult {
   itemId: string;
   slug: string;
   transition: ChildTransition;
@@ -43,7 +43,7 @@ export interface ChildDiffResult {
  * Pure function: computes deterministic transitions between old and new service_slugs snapshots.
  * Keyed by itemId for stable identity across renames.
  */
-export function computeChildDiff(
+function computeChildDiff(
   oldSlugs: Record<string, ServiceSlugEntryRaw> | null | undefined,
   newSlugs: Record<string, ServiceSlugEntryRaw> | null | undefined,
 ): ChildDiffResult[] {
@@ -129,7 +129,7 @@ interface ChildEntry {
  * @param previousServiceSlugs - snapshot from previous save (null on first save = submit all active)
  * @param currentServiceSlugs - snapshot from current save
  */
-export async function notifyIndexNow(
+async function notifyIndexNow(
   slug: string | undefined,
   qualityScore: number,
   isPublished: boolean,

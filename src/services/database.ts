@@ -4,30 +4,17 @@
  */
 
 // Page operations
-export {
-  savePage,
-  loadPageBySlug,
-  loadPageByCustomDomain,
-  loadUserPage,
-  publishPage,
-} from '@/services/pages';
+export { savePage, loadPageBySlug, loadPageByCustomDomain, loadUserPage } from '@/services/pages';
 
 // Analytics
-export { trackEvent, trackPageView, trackBlockClick, trackShare } from '@/services/analytics';
+
 
 // Re-export types
-export type { DbPage, DbBlock, SavePageResult, LoadPageResult, LoadUserPageResult } from '@/services/pages';
+
 
 // User operations
-export {
-  loadUserProfile,
-  updateUsername,
-  checkPremiumStatus,
-  checkUsernameAvailability,
-  validateUsername,
-} from '@/services/user';
 
-export type { UserProfile, UpdateUsernameResult } from '@/services/user';
+
+
 
 // Default data factory
-export { createDefaultPageData, createDefaultProfileBlock, DEFAULT_THEME, DEFAULT_SEO } from '@/lib/constants';

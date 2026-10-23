@@ -55,14 +55,14 @@ export function getSections(blocks: Block[]): DerivedSection[] {
 /**
  * Get blocks belonging to a section
  */
-export function getSectionBlocks(blocks: Block[], sectionId: string): Block[] {
+function getSectionBlocks(blocks: Block[], sectionId: string): Block[] {
   return blocks.filter(b => (b as any).sectionId === sectionId);
 }
 
 /**
  * Generate a unique section ID
  */
-export function generateSectionId(): string {
+function generateSectionId(): string {
   return `section-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
@@ -110,7 +110,7 @@ export function dissolveSection(blocks: Block[], sectionId: string): Block[] {
 /**
  * Merge two sections into one (keeps first section's ID)
  */
-export function mergeSections(
+function mergeSections(
   blocks: Block[],
   keepSectionId: string,
   mergeSectionId: string
@@ -127,7 +127,7 @@ export function mergeSections(
  * Move all blocks of a section up/down by one position
  * relative to adjacent non-section blocks or other sections
  */
-export function moveSection(
+function moveSection(
   blocks: Block[],
   sectionId: string,
   direction: 'up' | 'down'
@@ -208,7 +208,7 @@ export function deleteSection(blocks: Block[], sectionId: string): Block[] {
 /**
  * Remove a single block from its section (keep block, clear sectionId)
  */
-export function extractFromSection(blocks: Block[], blockId: string): Block[] {
+function extractFromSection(blocks: Block[], blockId: string): Block[] {
   return blocks.map(b => {
     if (b.id === blockId) {
       const { sectionId: _, ...rest } = b as any;
@@ -221,7 +221,7 @@ export function extractFromSection(blocks: Block[], blockId: string): Block[] {
 /**
  * Get the section ID for a block (if any)
  */
-export function getBlockSectionId(block: Block): string | undefined {
+function getBlockSectionId(block: Block): string | undefined {
   return (block as any).sectionId;
 }
 

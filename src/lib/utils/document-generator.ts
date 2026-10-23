@@ -68,7 +68,7 @@ export const AVAILABLE_VARIABLES = [
 
 // =============== Variable Extraction ===============
 
-export function extractVariablesFromContact(contact: ZoneContact | null | undefined): Partial<DocumentVariables> {
+function extractVariablesFromContact(contact: ZoneContact | null | undefined): Partial<DocumentVariables> {
   if (!contact) return {};
   
   return {
@@ -81,7 +81,7 @@ export function extractVariablesFromContact(contact: ZoneContact | null | undefi
   };
 }
 
-export function extractVariablesFromDeal(deal: ZoneDeal | null | undefined): Partial<DocumentVariables> {
+function extractVariablesFromDeal(deal: ZoneDeal | null | undefined): Partial<DocumentVariables> {
   if (!deal) return {};
   
   const amount = deal.value_amount 
@@ -157,7 +157,7 @@ export function findUnreplacedVariables(content: string): string[] {
 
 // =============== Document Number Generation ===============
 
-export function generateDocumentNumber(prefix = 'DOC'): string {
+function generateDocumentNumber(prefix = 'DOC'): string {
   const year = new Date().getFullYear();
   const random = Math.random().toString(36).substring(2, 6).toUpperCase();
   return `${prefix}-${year}-${random}`;
@@ -165,7 +165,7 @@ export function generateDocumentNumber(prefix = 'DOC'): string {
 
 // =============== PDF Generation ===============
 
-export interface PDFOptions {
+interface PDFOptions {
   title?: string;
   filename?: string;
   pageSize?: 'a4' | 'letter';
@@ -176,7 +176,7 @@ export interface PDFOptions {
 /**
  * Generate PDF from HTML content
  */
-export async function generatePDFFromHTML(
+async function generatePDFFromHTML(
   htmlContent: string,
   options: PDFOptions = {}
 ): Promise<Blob> {

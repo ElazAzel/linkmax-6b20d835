@@ -3,10 +3,10 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { Block, PageTheme } from '@/types/page';
 import { createBlock } from '@/lib/blocks/block-factory';
-import logger from '@/lib/utils/logger';
+import { logger } from '@/lib/utils/logger';
 import { storage } from '@/lib/storage';
 
-export type AIGeneratorType = 'magic-title' | 'sales-copy' | 'seo' | 'ai-builder';
+type AIGeneratorType = 'magic-title' | 'sales-copy' | 'seo' | 'ai-builder';
 
 /** AI-generated block structure before normalization */
 interface AIBlockData {

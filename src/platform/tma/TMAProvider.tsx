@@ -95,7 +95,7 @@ export const TMAProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   );
 };
 
-export const useTMA = () => {
+const useTMA = () => {
   const context = useContext(TMAContext);
   if (context === undefined) {
     // Fallback for non-TMA environments to prevent crashes

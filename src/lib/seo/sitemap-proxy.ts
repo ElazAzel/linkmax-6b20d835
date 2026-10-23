@@ -3,7 +3,7 @@
  * accepts sitemaps on the site's own host, and Google trusts them more there;
  * the XML is still built by the generate-sitemap edge function.
  */
-export type ProxiedSitemap = 'sitemap-profiles' | 'sitemap-experts' | 'sitemap-events';
+type ProxiedSitemap = 'sitemap-profiles' | 'sitemap-experts' | 'sitemap-events';
 
 export async function proxySitemap(name: ProxiedSitemap): Promise<Response> {
   const baseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;

@@ -9,13 +9,13 @@
  * детерминированно, без обращения к моделям.
  */
 
-export interface MarkerHit {
+interface MarkerHit {
   category: string;
   marker: string;
   count: number;
 }
 
-export interface HumanizeReport {
+interface HumanizeReport {
   hardBans: MarkerHit[];
   markers: MarkerHit[];
   /** 0..100, где 100 — «читается как живой русский текст». */
@@ -25,14 +25,14 @@ export interface HumanizeReport {
   wordCount: number;
 }
 
-export interface HumanizeResult extends HumanizeReport {
+interface HumanizeResult extends HumanizeReport {
   text: string;
   /** Правила, которые реально сработали. */
   applied: string[];
 }
 
 /** 20 жёстких банов. Любое попадание считается провалом аудита. */
-export const HARD_BANS: ReadonlyArray<readonly [string, RegExp]> = [
+const HARD_BANS: ReadonlyArray<readonly [string, RegExp]> = [
   ['Не просто X, а Y', /\bне\s+просто\b[^.!?]{1,40}?\bа\b/gi],
   ['Не только X, но и Y', /\bне\s+только\b[^.!?]{1,40}?\bно\s+и\b/gi],
   ['В современном мире', /\bв\s+современном\s+мире\b/gi],
@@ -58,7 +58,7 @@ export const HARD_BANS: ReadonlyArray<readonly [string, RegExp]> = [
 ];
 
 /** Лексические категории быстрого сканера (мягкие маркеры). */
-export const SCANNER: Readonly<Record<string, readonly RegExp[]>> = {
+const SCANNER: Readonly<Record<string, readonly RegExp[]>> = {
   Канцелярит: [
     /осуществлени[а-яё]*/gi,
     /реализаци[а-яё]*/gi,
@@ -142,7 +142,7 @@ const REWRITES: ReadonlyArray<readonly [string, RegExp, string]> = [
 ];
 
 /** Инструкция для системных промптов: пишем сразу по-человечески. */
-export const HUMANIZER_RU_PROMPT = `
+const HUMANIZER_RU_PROMPT = `
 ЧЕЛОВЕЧНОСТЬ РУССКОГО ТЕКСТА (обязательно):
 - Запрещены: «в современном мире», «стоит отметить», «важно понимать», «данный/данная», «является», «играет ключевую роль», «таким образом», «подводя итог», «в связи с этим», «комплексный подход», «раскрыть потенциал», «вывести на новый уровень», «открывает новые возможности», «не просто X, а Y», «не только X, но и Y», «в условиях ...», «погрузимся».
 - Без канцелярита: вместо «осуществление внедрения» - «внедряем»; вместо «в рамках/в целях/посредством/в соответствии с» - «в/чтобы/через/по».
@@ -154,7 +154,7 @@ export const HUMANIZER_RU_PROMPT = `
 const RU_RE = /[а-яё]/i;
 
 /** Есть ли в тексте русские буквы (иначе очеловечивание не применяем). */
-export function isRussian(text: string): boolean {
+function isRussian(text: string): boolean {
   return RU_RE.test(text);
 }
 
@@ -176,7 +176,7 @@ function sentences(text: string): string[] {
 }
 
 /** Коэффициент вариации длин предложений. У живого текста обычно > 0.45. */
-export function burstiness(text: string): number {
+function burstiness(text: string): number {
   const lens = sentences(text).map((s) => s.split(/\s+/).length);
   if (lens.length < 2) return 0;
   const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
@@ -186,7 +186,7 @@ export function burstiness(text: string): number {
 }
 
 /** Аудит без правок: что именно выдаёт машину. */
-export function auditRu(text: string): HumanizeReport {
+function auditRu(text: string): HumanizeReport {
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
   const hardBans: MarkerHit[] = [];
   for (const [name, re] of HARD_BANS) {
@@ -216,7 +216,7 @@ export function auditRu(text: string): HumanizeReport {
  * Очеловечивает русский текст детерминированными заменами и возвращает аудит
  * итогового варианта. Не трогает текст без русских букв.
  */
-export function humanizeRu(input: string): HumanizeResult {
+function humanizeRu(input: string): HumanizeResult {
   const original = typeof input === 'string' ? input : '';
   if (!original.trim() || !isRussian(original)) {
     return { text: original, applied: [], ...auditRu(original) };

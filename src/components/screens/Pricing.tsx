@@ -222,4 +222,3 @@ export const Pricing = memo(function Pricing() {
     </>
   );
 });
-export default Pricing;

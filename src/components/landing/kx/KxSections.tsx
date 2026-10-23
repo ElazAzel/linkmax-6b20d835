@@ -208,7 +208,7 @@ export function KxPricing({ onStart, onPricing }: { onStart: () => void; onPrici
 
 /* ---------- FAQ ---------- */
 
-export function useKxFaq() {
+function useKxFaq() {
   const { t } = useTranslation();
   return getLandingFaq(t);
 }

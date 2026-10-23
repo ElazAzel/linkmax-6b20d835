@@ -6,7 +6,7 @@ import { supabase } from '@/platform/supabase/client';
 import type { ZoneProduct } from '@/types/zones';
 
 // ─── Query Keys ───
-export const zoneProductsKeys = {
+const zoneProductsKeys = {
     all: (zoneId: string) => ['zone-products', zoneId] as const,
 };
 

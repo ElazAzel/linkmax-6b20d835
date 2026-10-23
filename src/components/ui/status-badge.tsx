@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/utils';
  * Status pill (DESIGN.md → Badge и статусы): dot + word, soft tinted
  * background. Colour is never the only signal — the label is always shown.
  */
-export type StatusTone = 'success' | 'warning' | 'info' | 'destructive' | 'neutral' | 'accent';
+type StatusTone = 'success' | 'warning' | 'info' | 'destructive' | 'neutral' | 'accent';
 
 const TONE_CLASSES: Record<StatusTone, string> = {
   success: 'bg-success/12 text-success',
@@ -18,7 +18,7 @@ const TONE_CLASSES: Record<StatusTone, string> = {
 };
 
 /** Presets for page/save states shown across the dashboard. */
-export type StatusType = 'draft' | 'published' | 'new' | 'error' | 'saving' | 'success';
+type StatusType = 'draft' | 'published' | 'new' | 'error' | 'saving' | 'success';
 
 const PRESETS: Record<StatusType, { tone: StatusTone; labelKey: string; defaultLabel: string }> = {
   draft: { tone: 'warning', labelKey: 'dashboard.status.draft', defaultLabel: 'Черновик' },

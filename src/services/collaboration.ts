@@ -2,7 +2,7 @@ import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
 
-export type CollabStatus = 'pending' | 'accepted' | 'rejected';
+type CollabStatus = 'pending' | 'accepted' | 'rejected';
 
 export interface Collaboration {
   id: string;
@@ -407,7 +407,7 @@ export async function deleteTeam(teamId: string): Promise<boolean> {
 }
 
 // Remove member from team (owner only)
-export async function removeMemberFromTeam(
+async function removeMemberFromTeam(
   teamId: string,
   memberId: string
 ): Promise<{ success: boolean; error?: string }> {
@@ -481,7 +481,7 @@ export async function generateTeamInviteCode(teamId: string): Promise<string | n
 }
 
 // Reset invite code (owner/admin only via secure RPC)
-export async function resetTeamInviteCode(teamId: string): Promise<string | null> {
+async function resetTeamInviteCode(teamId: string): Promise<string | null> {
   const { data, error } = await supabase
     .rpc('rotate_team_invite_code' as never, { p_team_id: teamId } as never);
 
@@ -558,7 +558,7 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
 }
 
 // Get team by invite code (for preview)
-export async function getTeamByInviteCode(inviteCode: string): Promise<Team | null> {
+async function getTeamByInviteCode(inviteCode: string): Promise<Team | null> {
   const { data: teams, error } = await supabase
     .rpc('get_team_by_invite_code', { p_code: inviteCode });
 
@@ -623,7 +623,7 @@ export async function getMyShoutouts(): Promise<Shoutout[]> {
   })) || [];
 }
 
-export async function getShoutoutsForUser(userId: string): Promise<Shoutout[]> {
+async function getShoutoutsForUser(userId: string): Promise<Shoutout[]> {
   const { data, error } = await supabase
     .from('shoutouts')
     .select('*')
@@ -660,7 +660,7 @@ export async function deleteShoutout(shoutoutId: string): Promise<boolean> {
 export { searchUsers } from '@/services/userSearch';
 // Re-export with niche by default for collaboration context
 import { searchUsers as _searchUsersBase } from '@/services/userSearch';
-export async function searchUsersWithNiche(query: string) {
+async function searchUsersWithNiche(query: string) {
   return _searchUsersBase(query, { includeNiche: true });
 }
 

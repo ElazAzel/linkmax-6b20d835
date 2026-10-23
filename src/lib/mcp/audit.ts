@@ -8,9 +8,9 @@ import { findTranslationGaps } from "./translations";
  * Deterministic page review. Every finding names the evidence it is based on
  * and the tool that fixes it, so the agent can act instead of guessing.
  */
-export type Severity = "high" | "medium" | "low";
+type Severity = "high" | "medium" | "low";
 
-export interface Finding {
+interface Finding {
   code: string;
   area: "content" | "conversion" | "seo" | "languages" | "publishing" | "traffic";
   message: string;
@@ -18,7 +18,7 @@ export interface Finding {
   severity?: Severity;
 }
 
-export interface AuditReport {
+interface AuditReport {
   score: number;
   strengths: Finding[];
   weaknesses: Finding[];

@@ -216,7 +216,7 @@ export const BLOCK_PRESETS: BlockPreset[] = [
 /**
  * Find presets matching a search query
  */
-export function searchPresets(query: string): BlockPreset[] {
+function searchPresets(query: string): BlockPreset[] {
   if (!query) return BLOCK_PRESETS;
   const q = query.toLowerCase();
   return BLOCK_PRESETS.filter(

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { isFeatureSchemaMissing, noteFeatureSchemaError, isMissingSchemaError, resetFeatureSchemaState } from '@/lib/resilience/missing-schema';
 
-export interface WidgetTemplate {
+interface WidgetTemplate {
     id: string;
     name: string;
     nameRu: string;

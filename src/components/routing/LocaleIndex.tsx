@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Index from '@/pages/Index';
 import { changeLanguageLoaded } from '@/i18n/config';
 
-export type HomeLocale = 'ru' | 'en' | 'kk' | 'uz';
+type HomeLocale = 'ru' | 'en' | 'kk' | 'uz';
 
 /**
  * Renders the homepage for the locale routes (/ru, /en, /kk, /uz).

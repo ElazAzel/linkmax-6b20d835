@@ -18,7 +18,7 @@ export interface DeletedBlockInfo {
 /**
  * Standard props contract for all block editors
  */
-export interface BlockEditorProps<T extends Block = Block> {
+interface BlockEditorProps<T extends Block = Block> {
   block: T;
   onChange: (updates: Partial<T>) => void;
   onDelete?: () => void;
@@ -28,7 +28,7 @@ export interface BlockEditorProps<T extends Block = Block> {
 /**
  * Base props for block editor form components (used by withBlockEditor HOC)
  */
-export interface BaseBlockEditorFormProps {
+interface BaseBlockEditorFormProps {
   formData: Record<string, unknown>;
   onChange: (updates: Record<string, unknown>) => void;
 }
@@ -36,7 +36,7 @@ export interface BaseBlockEditorFormProps {
 /**
  * Block editor options for HOC configuration
  */
-export interface BlockEditorOptions {
+interface BlockEditorOptions {
   isPremium?: boolean;
   description?: string;
   hint?: string;
@@ -55,7 +55,7 @@ export interface BlockInsertResult {
 /**
  * Block operation result (generic)
  */
-export interface BlockOperationResult {
+interface BlockOperationResult {
   success: boolean;
   error?: string;
 }
@@ -63,7 +63,7 @@ export interface BlockOperationResult {
 /**
  * Block registry entry for extensibility
  */
-export interface BlockRegistryEntry {
+interface BlockRegistryEntry {
   type: BlockType;
   label: string;
   icon: string;

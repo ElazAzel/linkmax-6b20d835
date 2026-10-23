@@ -9,7 +9,7 @@ import type { Block } from '@/types/page';
  * - If additive (Cmd/Ctrl+click): add/remove from current selection
  * - If not additive: replace selection with this block
  */
-export function toggleSelection(
+function toggleSelection(
   current: Set<string>,
   blockId: string,
   additive: boolean
@@ -55,14 +55,14 @@ export function selectRange(
 /**
  * Get all blocks that can be selected (excludes profile)
  */
-export function getSelectableBlocks(blocks: Block[]): Block[] {
+function getSelectableBlocks(blocks: Block[]): Block[] {
   return blocks.filter(b => b.type !== 'profile');
 }
 
 /**
  * Check if a selection is valid
  */
-export function isValidSelection(ids: Set<string>, blocks: Block[]): boolean {
+function isValidSelection(ids: Set<string>, blocks: Block[]): boolean {
   const blockIds = new Set(blocks.map(b => b.id));
   for (const id of ids) {
     if (!blockIds.has(id)) return false;
@@ -106,7 +106,7 @@ export function getNextBlockId(
 /**
  * Get all block IDs of a specific type
  */
-export function selectByType(blocks: Block[], blockType: string): Set<string> {
+function selectByType(blocks: Block[], blockType: string): Set<string> {
   return new Set(
     blocks
       .filter(b => b.type === blockType && b.type !== 'profile')
@@ -124,7 +124,7 @@ export function selectAll(blocks: Block[]): Set<string> {
 /**
  * Get the anchor block for range selection (last selected single block)
  */
-export function getSelectionAnchor(
+function getSelectionAnchor(
   blocks: Block[],
   selectedIds: Set<string>
 ): string | null {

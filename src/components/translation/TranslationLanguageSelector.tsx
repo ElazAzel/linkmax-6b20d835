@@ -64,7 +64,7 @@ export const TRANSLATION_LANGUAGES: { code: LocaleCode; name: string; flag: stri
 ];
 
 // Detect browser language
-export function detectBrowserLanguage(): LocaleCode {
+function detectBrowserLanguage(): LocaleCode {
   const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
   const langCode = browserLang.split('-')[0].toLowerCase();
 

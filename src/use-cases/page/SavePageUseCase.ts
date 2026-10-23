@@ -8,13 +8,13 @@ import type { IPageRepository } from '@/repositories/interfaces/IPageRepository'
 import type { PageData, Block } from '@/types/page';
 import type { Page } from '@/domain/entities/Page';
 
-export interface SavePageInput {
+interface SavePageInput {
   pageData: PageData;
   userId: string;
   chatbotContext?: string;
 }
 
-export interface SavePageOutput {
+interface SavePageOutput {
   pageId: string;
   slug: string;
 }
@@ -67,7 +67,7 @@ export class SavePageUseCase {
 }
 
 // Factory function for easier testing
-export function createSavePageUseCase(
+function createSavePageUseCase(
   pageRepository?: IPageRepository
 ): SavePageUseCase {
   return new SavePageUseCase(pageRepository);
@@ -76,7 +76,7 @@ export function createSavePageUseCase(
 // Singleton instance
 let instance: SavePageUseCase | null = null;
 
-export function getSavePageUseCase(): SavePageUseCase {
+function getSavePageUseCase(): SavePageUseCase {
   if (!instance) {
     instance = new SavePageUseCase();
   }

@@ -7,7 +7,7 @@
  */
 import type { Block, BlockType } from '@/types/page';
 
-export interface TransformResult {
+interface TransformResult {
   success: boolean;
   newBlock: Block;
   transferredFields: string[];
@@ -44,7 +44,7 @@ const TRANSFORM_MAP: Partial<Record<BlockType, TransformMapping>> = {
 /**
  * Check if a block type can be transformed to another
  */
-export function canTransform(fromType: BlockType, toType: BlockType): boolean {
+function canTransform(fromType: BlockType, toType: BlockType): boolean {
   const mapping = TRANSFORM_MAP[fromType];
   return mapping?.targets.includes(toType) ?? false;
 }
@@ -115,7 +115,7 @@ export function transformBlock(block: Block, toType: BlockType): TransformResult
 /**
  * Check if a transform is safe (no data loss) or lossy
  */
-export function isLossyTransform(fromType: BlockType, toType: BlockType): boolean {
+function isLossyTransform(fromType: BlockType, toType: BlockType): boolean {
   const mapping = TRANSFORM_MAP[fromType];
   return (mapping?.lossyFields.length ?? 0) > 0;
 }

@@ -536,5 +536,3 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
     </div>
   );
 });
-
-export default ZoneSettingsScreen;

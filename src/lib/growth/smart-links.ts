@@ -46,7 +46,7 @@ export interface SmartLink {
   updated_at: string;
 }
 
-export interface CreateSmartLinkInput {
+interface CreateSmartLinkInput {
   slug: string;
   target_url: string;
   page_id?: string | null;

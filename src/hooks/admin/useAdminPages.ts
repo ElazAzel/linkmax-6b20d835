@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 
-export interface AdminPageData {
+interface AdminPageData {
   id: string;
   slug: string;
   title: string | null;

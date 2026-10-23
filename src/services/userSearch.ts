@@ -5,7 +5,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
-export interface UserSearchResult {
+interface UserSearchResult {
   id: string;
   username: string | null;
   display_name: string | null;

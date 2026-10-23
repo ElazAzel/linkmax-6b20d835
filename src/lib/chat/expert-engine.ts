@@ -6,9 +6,9 @@ import { Block } from '@/types/blocks';
  * so the public chat never spends AI tokens.
  */
 
-export type ExpertSource = 'faq' | 'pricing' | 'about' | 'contact' | 'booking' | 'product' | 'content' | 'system';
+type ExpertSource = 'faq' | 'pricing' | 'about' | 'contact' | 'booking' | 'product' | 'content' | 'system';
 
-export interface ExpertEngineMessage {
+interface ExpertEngineMessage {
   id?: string;
   role: 'user' | 'assistant';
   content: string;

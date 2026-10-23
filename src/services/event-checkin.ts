@@ -20,11 +20,11 @@ export interface CheckinEventContext {
   };
 }
 
-export type CheckinContextResult =
+type CheckinContextResult =
   | { ok: true; context: CheckinEventContext }
   | { ok: false; code: 'invalid_token' | 'unknown' };
 
-export type CheckinScanResult =
+type CheckinScanResult =
   | { ok: true; attendeeName: string | null; checkedIn: number }
   | {
       ok: false;

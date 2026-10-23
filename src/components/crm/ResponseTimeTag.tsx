@@ -13,9 +13,9 @@ interface ResponseTimeTagProps {
   className?: string;
 }
 
-export type UrgencyLevel = 'fresh' | 'warm' | 'urgent' | 'missed';
+type UrgencyLevel = 'fresh' | 'warm' | 'urgent' | 'missed';
 
-export function getUrgencyLevel(createdAt: string, status: string): UrgencyLevel | null {
+function getUrgencyLevel(createdAt: string, status: string): UrgencyLevel | null {
   if (status !== 'new') return null;
   const mins = differenceInMinutes(new Date(), new Date(createdAt));
   if (mins < 5) return 'fresh';

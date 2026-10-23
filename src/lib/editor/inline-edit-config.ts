@@ -5,7 +5,7 @@
 import type { BlockType } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 
-export interface InlineEditableField {
+interface InlineEditableField {
   /** Field path in block data (supports dot notation) */
   field: string;
   /** Type of inline editor to use */

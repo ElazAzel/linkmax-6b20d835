@@ -90,7 +90,7 @@ export function useGallery(initialPages?: GalleryPage[]) {
   };
 }
 
-export function useGalleryStatus(userId: string | undefined) {
+function useGalleryStatus(userId: string | undefined) {
   const { t } = useTranslation();
   const [isInGallery, setIsInGallery] = useState(false);
   const [loading, setLoading] = useState(false);

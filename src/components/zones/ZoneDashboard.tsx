@@ -874,5 +874,3 @@ function CommandMetric({
     </div>
   );
 }
-
-export default ZoneDashboard;

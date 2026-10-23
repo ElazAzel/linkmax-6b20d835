@@ -6,9 +6,9 @@
 import type { BlogPost } from './blog-post-types';
 import { HUB_OVERRIDES, HUB_NEW_POSTS } from './blog-posts-hub';
 
-export type { BlogPost, BlogPostSection } from './blog-post-types';
 
-export const BLOG_POSTS: BlogPost[] = [
+
+const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'kak-sdelat-sayt-vizitku-dlya-mastera-manikyura',
     title: 'Как сделать сайт-визитку для мастера маникюра за 10 минут',

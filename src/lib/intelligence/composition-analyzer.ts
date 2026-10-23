@@ -48,7 +48,7 @@ const CTA_TYPES = new Set<string>(['button', 'messenger', 'form', 'newsletter', 
 const OFFER_TYPES = new Set<string>(['pricing', 'product', 'catalog', 'booking']);
 const TRUST_TYPES = new Set<string>(['testimonial', 'before_after', 'community']);
 
-export function getBlockRole(type: string): BlockRole {
+function getBlockRole(type: string): BlockRole {
   return ROLE_MAP[type] || 'filler';
 }
 

@@ -486,5 +486,3 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
     </div>
   );
 });
-
-export default ZoneContactsScreen;

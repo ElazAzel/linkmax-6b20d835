@@ -114,7 +114,7 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
 
 // ---------- Link ----------
 
-export type LinkProps = Omit<ComponentProps<typeof TSLink>, "to"> & {
+type LinkProps = Omit<ComponentProps<typeof TSLink>, "to"> & {
   to: string;
   replace?: boolean;
   state?: unknown;
@@ -151,8 +151,4 @@ export function Navigate({ to, replace, state }: { to: string; replace?: boolean
 
 // ---------- Outlet ----------
 
-export const Outlet = TSOutlet;
-
-// ---------- NavLink (minimal) ----------
-
-export const NavLink = Link;
+const Outlet = TSOutlet;

@@ -518,7 +518,7 @@ function generateHowToSchema(
 /**
  * Generate combined JSON-LD graph
  */
-export function generateJsonLdGraph(schemas: GEOSchemas): string {
+function generateJsonLdGraph(schemas: GEOSchemas): string {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': schemas.graph,

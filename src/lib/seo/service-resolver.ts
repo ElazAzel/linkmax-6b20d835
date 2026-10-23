@@ -164,7 +164,7 @@ export function resolveServiceBySlug(
 /**
  * Get all active service slugs for sitemap/link generation.
  */
-export function getActiveServiceSlugs(serviceSlugs: ServiceSlugsMap | null | undefined): Array<{ itemId: string; slug: string; title: string }> {
+function getActiveServiceSlugs(serviceSlugs: ServiceSlugsMap | null | undefined): Array<{ itemId: string; slug: string; title: string }> {
   if (!serviceSlugs || typeof serviceSlugs !== 'object') return [];
   return Object.entries(serviceSlugs)
     .filter(([, entry]) => entry && typeof entry === 'object' && entry.state === 'active')

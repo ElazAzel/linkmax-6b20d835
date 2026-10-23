@@ -352,5 +352,3 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
     </noscript>
   );
 }
-
-export default CrawlerFriendlyContent;

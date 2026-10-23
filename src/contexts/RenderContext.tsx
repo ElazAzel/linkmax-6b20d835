@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export type RenderMode = 'editor' | 'public-preview' | 'live';
+type RenderMode = 'editor' | 'public-preview' | 'live';
 
 const RenderContext = createContext<RenderMode>('live');
 

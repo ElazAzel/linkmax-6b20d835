@@ -4,7 +4,7 @@
  * Third-party trademarks: use only to link to the brand. Excluded from the
  * colour ratchet like other brand data. GENERATED — regenerate, do not edit.
  */
-export interface BrandIconData {
+interface BrandIconData {
   title: string;
   /** Brand colour as hex without #. */
   hex: string;

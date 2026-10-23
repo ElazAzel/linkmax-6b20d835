@@ -75,6 +75,6 @@ export function forgetDeviceAccount(userId: string): DeviceAccount[] {
   return next;
 }
 
-export function clearDeviceAccounts(): void {
+function clearDeviceAccounts(): void {
   storage.remove(STORAGE_KEY);
 }

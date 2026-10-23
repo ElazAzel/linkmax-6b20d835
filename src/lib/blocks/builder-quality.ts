@@ -41,7 +41,7 @@ function socialsToPlatforms(socials: ParsedSocial[]): Loose[] {
   }));
 }
 
-export interface BuilderUserInfo {
+interface BuilderUserInfo {
   name: string;
   bio: string;
   goal?: string;
@@ -139,7 +139,7 @@ const UNIQUE_TYPES = new Set([
   'pricing',
 ]);
 
-export function dedupeBlocks(blocks: Block[]): Block[] {
+function dedupeBlocks(blocks: Block[]): Block[] {
   const seen = new Set<string>();
   return blocks.filter((block) => {
     if (!UNIQUE_TYPES.has(block.type)) return true;
@@ -318,7 +318,7 @@ export function refineGeneratedBlocks(blocks: Block[], info: BuilderUserInfo): B
 }
 
 /** Short, i18n-free summary used to describe a block in the wizard result list. */
-export function summarizeBlock(block: Block): string {
+function summarizeBlock(block: Block): string {
   const b = asLoose(block);
 
   switch (block.type) {

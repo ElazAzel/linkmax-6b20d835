@@ -11,7 +11,7 @@ import {
 
 export const THEME_TRANSFER_VERSION = 1;
 
-export interface ThemeTransferPayload {
+interface ThemeTransferPayload {
   version: typeof THEME_TRANSFER_VERSION;
   theme: Partial<PageTheme>;
 }

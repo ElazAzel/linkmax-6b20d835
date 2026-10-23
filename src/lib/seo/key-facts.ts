@@ -10,7 +10,7 @@ import { getI18nText } from '@/lib/i18n-helpers';
 import type { AnswerBlockData } from './answer-block';
 import { getLocale } from '@/lib/utils/format';
 
-export interface KeyFact {
+interface KeyFact {
   /** Fact category for grouping */
   category: 'identity' | 'services' | 'location' | 'contact' | 'features' | 'social';
   /** Fact label */
@@ -220,7 +220,7 @@ export function generateKeyFacts(
 /**
  * Format facts as bullet list for HTML
  */
-export function formatFactsAsBullets(facts: KeyFact[], language: 'ru' | 'en' | 'kk'): string {
+function formatFactsAsBullets(facts: KeyFact[], language: 'ru' | 'en' | 'kk'): string {
   if (facts.length === 0) return '';
 
   const items = facts.map(f => `• ${f.label}: ${f.value}`);
@@ -230,7 +230,7 @@ export function formatFactsAsBullets(facts: KeyFact[], language: 'ru' | 'en' | '
 /**
  * Format facts as HTML list
  */
-export function formatFactsAsHtml(facts: KeyFact[]): string {
+function formatFactsAsHtml(facts: KeyFact[]): string {
   if (facts.length === 0) return '';
 
   const items = facts.map(f => {
@@ -244,7 +244,7 @@ export function formatFactsAsHtml(facts: KeyFact[]): string {
 /**
  * Group facts by category
  */
-export function groupFactsByCategory(facts: KeyFact[]): Record<KeyFact['category'], KeyFact[]> {
+function groupFactsByCategory(facts: KeyFact[]): Record<KeyFact['category'], KeyFact[]> {
   const groups: Record<KeyFact['category'], KeyFact[]> = {
     identity: [],
     services: [],

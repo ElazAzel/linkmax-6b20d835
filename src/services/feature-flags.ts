@@ -251,7 +251,7 @@ function mapFeatureFlag(row: FeatureFlagRow, rules: FeatureFlagRuleRow[]): Featu
   };
 }
 
-export async function fetchFeatureFlags(keys?: string[]): Promise<FeatureFlagDefinition[]> {
+async function fetchFeatureFlags(keys?: string[]): Promise<FeatureFlagDefinition[]> {
   try {
     let flagsQuery = supabase
       .from('feature_flags')
@@ -285,7 +285,7 @@ export async function fetchFeatureFlags(keys?: string[]): Promise<FeatureFlagDef
   }
 }
 
-export async function isFeatureFlagEnabled(
+async function isFeatureFlagEnabled(
   key: string,
   context: FeatureFlagContext = {}
 ): Promise<boolean> {

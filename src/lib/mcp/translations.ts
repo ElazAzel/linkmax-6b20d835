@@ -7,7 +7,7 @@ import { isLocalizedText, isMcpLanguage } from "./languages";
  * the agent (an LLM) writes the translations, and apply_translations stores
  * them as {ru, en, kk, ...} objects the public page already renders.
  */
-export interface TranslationGap {
+interface TranslationGap {
   block_id: string;
   block_type: string;
   path: string;
@@ -15,7 +15,7 @@ export interface TranslationGap {
   missing: string[];
 }
 
-export interface TranslationEntry {
+interface TranslationEntry {
   block_id: string;
   path: string;
   language: string;
@@ -57,7 +57,7 @@ function parse(path: string): Array<{ key: string; index?: number }> {
   });
 }
 
-export function readPath(root: Container, path: string): unknown {
+function readPath(root: Container, path: string): unknown {
   let value: unknown = root;
   for (const { key, index } of parse(path)) {
     if (!value || typeof value !== "object") return undefined;
@@ -68,7 +68,7 @@ export function readPath(root: Container, path: string): unknown {
 }
 
 /** Returns a copy of root with the value at path replaced; containers on the way are copied too. */
-export function writePath(root: Container, path: string, value: unknown): Container {
+function writePath(root: Container, path: string, value: unknown): Container {
   const segments = parse(path);
   const write = (node: unknown, depth: number): unknown => {
     const { key, index } = segments[depth];
@@ -116,7 +116,7 @@ export function findTranslationGaps(snapshot: DraftSnapshot, targets: string[], 
   return gaps;
 }
 
-export interface ApplyResult {
+interface ApplyResult {
   snapshot: DraftSnapshot;
   applied: number;
   rejected: Array<{ entry: TranslationEntry; reason: string }>;

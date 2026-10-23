@@ -67,7 +67,7 @@ const normalizeLanguageCode = (lng: string): LocaleCode => {
   return code as LocaleCode;
 };
 
-export { LanguageContext };
+
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const { i18n, t } = useTranslation();

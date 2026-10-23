@@ -5,7 +5,7 @@
 
 import type { MultilingualString } from '@/lib/i18n-helpers';
 
-export interface TranslatableObject {
+interface TranslatableObject {
   [key: string]: unknown | MultilingualString | TranslatableObject[];
 }
 
@@ -19,4 +19,4 @@ export interface TranslatedBlock {
   [key: string]: unknown;
 }
 
-export type LanguageCode = 'ru' | 'en' | 'kk' | 'kz';
+type LanguageCode = 'ru' | 'en' | 'kk' | 'kz';

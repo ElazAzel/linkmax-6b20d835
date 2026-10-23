@@ -28,7 +28,7 @@ export function getBookingInstant(booking: OfficeBooking): Date {
   }
 }
 
-export function getBookingEndInstant(booking: OfficeBooking): Date {
+function getBookingEndInstant(booking: OfficeBooking): Date {
   const start = getBookingInstant(booking);
   if (booking.slot_end_time) {
     try {

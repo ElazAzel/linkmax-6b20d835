@@ -8,7 +8,7 @@ import type { ZoneContact, ZoneContactNote, ContactNoteType } from '@/types/zone
 import type { Json } from '@/platform/supabase/types';
 
 // ─── Query Keys ───
-export const zoneContactsKeys = {
+const zoneContactsKeys = {
   all: (zoneId: string) => ['zone-contacts', zoneId] as const,
   detail: (zoneId: string, contactId: string) => ['zone-contacts', zoneId, contactId] as const,
   notes: (zoneId: string, contactId: string) => ['zone-contact-notes', zoneId, contactId] as const,

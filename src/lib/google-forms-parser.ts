@@ -21,7 +21,7 @@ export interface GoogleFormField {
   description?: string;
 }
 
-export type GoogleFormFieldType =
+type GoogleFormFieldType =
   | 'short_text'
   | 'long_text'
   | 'single_choice'
@@ -44,7 +44,7 @@ export interface ParsedGoogleForm {
 /**
  * Extract Google Form ID from various URL formats
  */
-export function extractGoogleFormId(url: string): string | null {
+function extractGoogleFormId(url: string): string | null {
   if (!url) return null;
   
   // Handle various Google Forms URL formats:
@@ -137,7 +137,7 @@ export function convertToEventFormFields(googleFields: GoogleFormField[], lang: 
  * For MVP, we provide a manual import option where users can paste
  * the form structure or use a simplified import.
  */
-export async function parseGoogleFormUrl(url: string): Promise<ParsedGoogleForm> {
+async function parseGoogleFormUrl(url: string): Promise<ParsedGoogleForm> {
   const formId = extractGoogleFormId(url);
   
   if (!formId) {

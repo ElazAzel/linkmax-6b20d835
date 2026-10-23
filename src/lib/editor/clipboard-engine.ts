@@ -41,7 +41,7 @@ export function copyBlock(block: Block): ClipboardData {
 /**
  * Copy only the style properties of a block
  */
-export function copyStyle(block: Block): StyleData {
+function copyStyle(block: Block): StyleData {
   const blockAny = block as unknown as Record<string, unknown>;
   
   return {
@@ -62,7 +62,7 @@ export function copyStyle(block: Block): StyleData {
 /**
  * Create a new block from clipboard data at given position
  */
-export function pasteBlock(clipboard: ClipboardData): Block {
+function pasteBlock(clipboard: ClipboardData): Block {
   const newBlock = JSON.parse(JSON.stringify(clipboard.block));
   newBlock.id = `${newBlock.type}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   return newBlock as Block;
@@ -71,7 +71,7 @@ export function pasteBlock(clipboard: ClipboardData): Block {
 /**
  * Apply style from clipboard to target block
  */
-export function pasteStyle(style: StyleData, target: Block): Partial<Block> {
+function pasteStyle(style: StyleData, target: Block): Partial<Block> {
   // Only apply non-undefined style properties
   const updates: Record<string, unknown> = {};
   
@@ -87,7 +87,7 @@ export function pasteStyle(style: StyleData, target: Block): Partial<Block> {
 /**
  * Check if style can be pasted from one block type to another
  */
-export function canPasteStyle(fromType: BlockType, toType: BlockType): boolean {
+function canPasteStyle(fromType: BlockType, toType: BlockType): boolean {
   // Style paste is always allowed - we only copy visual properties
   // that are shared across all block types
   return true;
@@ -99,7 +99,7 @@ export function canPasteStyle(fromType: BlockType, toType: BlockType): boolean {
  */
 const STYLE_FIELDS = ['blockSize', 'backgroundColor', 'textColor', 'borderRadius', 'padding', 'animation'];
 
-export function getTransferableStyleFields(fromType: BlockType, toType: BlockType): string[] {
+function getTransferableStyleFields(fromType: BlockType, toType: BlockType): string[] {
   // All blocks share these common style fields
   return STYLE_FIELDS;
 }
@@ -116,10 +116,10 @@ const CONVERTIBLE_PAIRS: Record<string, string[]> = {
   faq: ['text'],
 };
 
-export function canConvertBlock(fromType: BlockType, toType: BlockType): boolean {
+function canConvertBlock(fromType: BlockType, toType: BlockType): boolean {
   return CONVERTIBLE_PAIRS[fromType]?.includes(toType) ?? false;
 }
 
-export function getConvertibleTypes(blockType: BlockType): BlockType[] {
+function getConvertibleTypes(blockType: BlockType): BlockType[] {
   return (CONVERTIBLE_PAIRS[blockType] ?? []) as BlockType[];
 }

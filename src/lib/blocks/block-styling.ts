@@ -17,9 +17,9 @@ import {
 
 // Single source of truth lives in block-appearance (shared by the public grid
 // and the editor canvas); re-exported here for existing imports.
-export { getFontClass, getFontStyle, getTextEffectClass } from '@/lib/appearance/block-appearance';
 
-export interface BlockStyleResult {
+
+interface BlockStyleResult {
   style: React.CSSProperties;
   className: string;
   textEffectClass: string;

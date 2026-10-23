@@ -53,7 +53,7 @@ export const TOKEN_REWARDS = {
 } as const;
 
 // Referral bonus: every 3 referrals = 1 day premium
-export const REFERRAL_PREMIUM_THRESHOLD = 3;
+const REFERRAL_PREMIUM_THRESHOLD = 3;
 
 export async function getTokenBalance(userId: string): Promise<TokenBalance | null> {
   const { data, error } = await supabase
@@ -418,6 +418,6 @@ export async function getAllTransactions(
   }));
 }
 
-export function canAffordPremium(balance: number): boolean {
+function canAffordPremium(balance: number): boolean {
   return balance >= PREMIUM_COST;
 }

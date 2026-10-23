@@ -13,7 +13,7 @@ interface ProfileSeoInput {
 
 const PLACEHOLDER_NAMES = new Set(['your name', 'ваше имя', 'имя', 'name', 'profile', 'untitled', 'my page', 'моя страница']);
 
-export function isPlaceholderName(name?: string | null): boolean {
+function isPlaceholderName(name?: string | null): boolean {
   return !name || PLACEHOLDER_NAMES.has(name.trim().toLowerCase());
 }
 

@@ -1053,4 +1053,3 @@ export const AdminTranslations = memo(function AdminTranslations() {
     </>
   );
 });
-export default AdminTranslations;

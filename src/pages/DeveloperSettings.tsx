@@ -67,5 +67,3 @@ export const DeveloperSettings = memo(function DeveloperSettings() {
         </div>
     );
 });
-
-export default DeveloperSettings;

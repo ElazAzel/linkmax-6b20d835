@@ -2,7 +2,7 @@ const SLUG_REGEX = /^[a-z0-9-]+$/;
 const MIN_SLUG_LENGTH = 3;
 const MAX_SLUG_LENGTH = 30;
 
-export interface SlugValidationResult {
+interface SlugValidationResult {
   valid: boolean;
   error?: 'invalid_slug';
 }
@@ -27,7 +27,7 @@ const TRANSLIT: Record<string, string> = {
   ә: 'a', ғ: 'g', қ: 'q', ң: 'n', ө: 'o', ұ: 'u', ү: 'u', һ: 'h', і: 'i',
 };
 
-export function transliterate(value: string): string {
+function transliterate(value: string): string {
   return Array.from(value.toLowerCase(), (ch) => TRANSLIT[ch] ?? ch).join('');
 }
 
@@ -57,7 +57,7 @@ export function validateSlug(slug: string): SlugValidationResult {
   return { valid: true };
 }
 
-export const SLUG_LIMITS = {
+const SLUG_LIMITS = {
   min: MIN_SLUG_LENGTH,
   max: MAX_SLUG_LENGTH,
 } as const;

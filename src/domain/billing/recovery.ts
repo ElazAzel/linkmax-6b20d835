@@ -1,28 +1,28 @@
 export const BILLING_RECOVERY_MAX_ATTEMPTS = 3;
-export const BILLING_RECOVERY_RETRY_DELAY_DAYS = [1, 3] as const;
+const BILLING_RECOVERY_RETRY_DELAY_DAYS = [1, 3] as const;
 
-export type BillingRecoveryStatus = 'none' | 'scheduled' | 'notified' | 'recovered' | 'exhausted';
+type BillingRecoveryStatus = 'none' | 'scheduled' | 'notified' | 'recovered' | 'exhausted';
 
-export interface BillingRecoveryStateInput {
+interface BillingRecoveryStateInput {
   existingAttemptCount?: number | null;
   occurredAt: string | Date;
   successful?: boolean;
 }
 
-export interface BillingRecoveryState {
+interface BillingRecoveryState {
   status: BillingRecoveryStatus;
   attemptCount: number;
   nextActionAt: string | null;
 }
 
-export interface BillingRecoveryNotificationCopyInput {
+interface BillingRecoveryNotificationCopyInput {
   attemptCount: number;
   maxAttempts?: number;
   nextActionAt?: string | null;
   manageBillingUrl?: string | null;
 }
 
-export interface BillingRecoveryNotificationCopy {
+interface BillingRecoveryNotificationCopy {
   subject: string;
   telegramText: string;
   html: string;

@@ -421,7 +421,7 @@ export const SECTION_CATEGORY_LABELS: Record<SectionCategory, { key: string; fal
   contact: { key: 'sectionCategories.contact', fallback: 'Контакты' },
 };
 
-export function getPatternsByCategory(category: SectionCategory): SectionPattern[] {
+function getPatternsByCategory(category: SectionCategory): SectionPattern[] {
   return SECTION_PATTERNS.filter((p) => p.category === category);
 }
 

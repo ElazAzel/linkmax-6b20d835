@@ -1,11 +1,11 @@
 import type { Niche } from '@/lib/niches';
 
-export interface NicheLandingFaq {
+interface NicheLandingFaq {
   question: string;
   answer: string;
 }
 
-export interface NicheLandingData {
+interface NicheLandingData {
   key: string;
   niche: Niche;
   galleryNiche: Niche;

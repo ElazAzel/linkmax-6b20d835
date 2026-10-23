@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { ZoneDealField } from '@/types/zones';
 
-export const zoneDealFieldsKeys = {
+const zoneDealFieldsKeys = {
     all: (zoneId: string) => ['zone-deal-fields', zoneId] as const,
 };
 

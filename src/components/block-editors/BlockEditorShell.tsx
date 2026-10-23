@@ -33,7 +33,7 @@ import type { Block, BlockSizePreset } from '@/types/page';
 import { getManifestEntry } from '@/lib/blocks/block-manifest';
 
 // Tab configuration
-export type EditorTab = 'content' | 'style' | 'advanced' | 'size';
+type EditorTab = 'content' | 'style' | 'advanced' | 'size';
 
 interface TabConfig {
     id: EditorTab;
@@ -491,5 +491,3 @@ export const BlockEditorShell = memo(function BlockEditorShell({
         </div>
     );
 });
-
-export default BlockEditorShell;

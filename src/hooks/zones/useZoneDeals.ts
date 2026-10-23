@@ -7,7 +7,7 @@ import type { ZoneDeal, ZoneDealStage, ZoneDealActivity, ZonePipeline } from '@/
 import type { Json } from '@/platform/supabase/types';
 
 // ─── Query Keys ───
-export const zoneDealsKeys = {
+const zoneDealsKeys = {
   stages: (zoneId: string, pipelineId?: string | null) => ['zone-deal-stages', zoneId, pipelineId || 'all'] as const,
   all: (zoneId: string, pipelineId?: string | null) => ['zone-deals', zoneId, pipelineId || 'all'] as const,
   zoneActivities: (zoneId: string) => ['zone-activities', zoneId] as const,

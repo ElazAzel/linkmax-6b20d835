@@ -15,7 +15,7 @@ export interface OffersInventoryItem {
   bookingBlocks: BookingBlock[];
 }
 
-export interface OffersInventory {
+interface OffersInventory {
   items: OffersInventoryItem[];
   bookingBlocks: BookingBlock[];
   hasUnresolvedServices: boolean;

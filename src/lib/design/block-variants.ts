@@ -17,7 +17,7 @@ export type SemanticRole =
   | 'label'
   | 'metric';
 
-export interface BlockVariantDef {
+interface BlockVariantDef {
   id: string;
   labelKey: string;
   labelFallback: string;
@@ -33,7 +33,7 @@ export interface BlockVariantDef {
   naked?: boolean;
 }
 
-export const BLOCK_VARIANTS: BlockVariantDef[] = [
+const BLOCK_VARIANTS: BlockVariantDef[] = [
   {
     id: 'display-oversized',
     labelKey: 'editor.variant.displayOversized',
@@ -122,7 +122,7 @@ export const BLOCK_VARIANTS: BlockVariantDef[] = [
 
 const VARIANT_MAP = new Map(BLOCK_VARIANTS.map((v) => [v.id, v]));
 
-export function getBlockVariant(id?: string | null): BlockVariantDef | undefined {
+function getBlockVariant(id?: string | null): BlockVariantDef | undefined {
   if (!id) return undefined;
   return VARIANT_MAP.get(id);
 }

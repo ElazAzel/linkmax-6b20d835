@@ -17,7 +17,7 @@ export interface RageClickCluster {
   timestamp: number;
 }
 
-export interface FrictionZone {
+interface FrictionZone {
   x: number;
   y: number;
   relX: number;
@@ -27,7 +27,7 @@ export interface FrictionZone {
   averageBurstClicks: number;
 }
 
-export interface RageClickDetectionOptions {
+interface RageClickDetectionOptions {
   radiusPx?: number;
   windowMs?: number;
   minClicks?: number;

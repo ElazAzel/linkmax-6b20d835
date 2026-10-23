@@ -13,7 +13,7 @@ function getKey(key: string, pageId?: string): string {
 
 const MAX_RECENT = 5;
 
-export function getRecentBlockTypes(): string[] {
+function getRecentBlockTypes(): string[] {
   try {
     const raw = window.sessionStorage.getItem(getKey('recent_blocks'));
     return raw ? JSON.parse(raw) : [];
@@ -37,7 +37,7 @@ export function addRecentBlockType(blockType: string): void {
 
 // ── Recent presets (global) ──
 
-export function getRecentPresets(): string[] {
+function getRecentPresets(): string[] {
   try {
     const raw = window.sessionStorage.getItem(getKey('recent_presets'));
     return raw ? JSON.parse(raw) : [];
@@ -61,7 +61,7 @@ export function addRecentPreset(presetId: string): void {
 
 // ── Collapsed blocks (per page) ──
 
-export function getCollapsedBlockIds(pageId: string): string[] {
+function getCollapsedBlockIds(pageId: string): string[] {
   try {
     const raw = window.sessionStorage.getItem(getKey('collapsed', pageId));
     return raw ? JSON.parse(raw) : [];
@@ -70,7 +70,7 @@ export function getCollapsedBlockIds(pageId: string): string[] {
   }
 }
 
-export function setCollapsedBlockIds(pageId: string, ids: string[]): void {
+function setCollapsedBlockIds(pageId: string, ids: string[]): void {
   try {
     window.sessionStorage.setItem(getKey('collapsed', pageId), JSON.stringify(ids));
   } catch {
@@ -80,7 +80,7 @@ export function setCollapsedBlockIds(pageId: string, ids: string[]): void {
 
 // ── Last insert search (global) ──
 
-export function getLastInsertSearch(): string {
+function getLastInsertSearch(): string {
   try {
     return window.sessionStorage.getItem(getKey('last_search')) || '';
   } catch {
@@ -88,7 +88,7 @@ export function getLastInsertSearch(): string {
   }
 }
 
-export function setLastInsertSearch(query: string): void {
+function setLastInsertSearch(query: string): void {
   try {
     window.sessionStorage.setItem(getKey('last_search'), query);
   } catch {

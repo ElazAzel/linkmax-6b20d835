@@ -16,7 +16,7 @@ export function getAppDomain(): string {
 /**
  * Get the base URL of the application
  */
-export function getBaseUrl(): string {
+function getBaseUrl(): string {
   return window.location.origin;
 }
 
@@ -30,7 +30,7 @@ export function getPublicPageUrl(slug: string, pagePath?: string): string {
 /**
  * Generate a preview URL for a page
  */
-export function getPreviewUrl(slug: string): string {
+function getPreviewUrl(slug: string): string {
   return `/${slug}`;
 }
 

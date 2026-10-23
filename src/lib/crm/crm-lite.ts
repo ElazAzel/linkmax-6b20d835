@@ -23,7 +23,7 @@ export const CRM_LITE_STAGE_ORDER: readonly LeadStatus[] = [
 
 export type CrmStageLabels = Record<LeadStatus, string>;
 
-export const DEFAULT_CRM_STAGE_LABELS: Record<'ru' | 'en' | 'kk' | 'uz', CrmStageLabels> = {
+const DEFAULT_CRM_STAGE_LABELS: Record<'ru' | 'en' | 'kk' | 'uz', CrmStageLabels> = {
   ru: {
     new: 'Новые',
     contacted: 'Связались',
@@ -142,7 +142,7 @@ export function subscribeStageLabels(listener: () => void): () => void {
  */
 const TASK_PREFIX_RE = /^\[TASK:(open|done)(?:\|due=([^\]]+))?\]\s*(.*)$/s;
 
-export interface ParsedLeadTask {
+interface ParsedLeadTask {
   id: string;
   done: boolean;
   dueDate?: string;

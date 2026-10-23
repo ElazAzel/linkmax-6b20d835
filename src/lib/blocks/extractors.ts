@@ -3,7 +3,7 @@
 /**
  * Represents structured data extracted from raw user input
  */
-export interface ParsedUserData {
+interface ParsedUserData {
     services: ParsedService[];
     messengers: ParsedMessenger[];
     socials: ParsedSocial[];
@@ -45,7 +45,7 @@ const QUANTITY_UNIT = /^(?:мин|минут|минуты|min|час|часа|ч
  * "$100 session". Numbers followed by a duration or count are skipped; a number
  * with a currency wins, otherwise the largest remaining number.
  */
-export function extractPrice(text: string): { price: number; currency: string; remainder: string } {
+function extractPrice(text: string): { price: number; currency: string; remainder: string } {
     if (!text) return { price: 0, currency: '', remainder: '' };
 
     const tokenRegex = /([$€₸₽])?\s*(\d{1,3}(?:[ \u00a0.,]\d{3})+|\d+)([.,]\d{1,2}(?!\d))?\s*([a-zA-Zа-яА-ЯёЁ]+\.?|[$€₸₽])?/g;

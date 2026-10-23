@@ -4,13 +4,13 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
-export interface ReferralStats {
+interface ReferralStats {
   code: string;
   referralsCount: number;
   bonusDaysEarned: number;
 }
 
-export interface ApplyReferralResult {
+interface ApplyReferralResult {
   success: boolean;
   error?: 'invalid_code' | 'already_referred' | 'self_referral';
   bonusDays?: number;
@@ -19,7 +19,7 @@ export interface ApplyReferralResult {
 /**
  * Generate or get existing referral code for user
  */
-export async function getOrCreateReferralCode(userId: string): Promise<string | null> {
+async function getOrCreateReferralCode(userId: string): Promise<string | null> {
   try {
     const { data, error } = await supabase.rpc('generate_referral_code', {
       p_user_id: userId
@@ -43,7 +43,7 @@ const REFERRAL_BONUS_DAYS = 3;
 /**
  * Get referral stats for user
  */
-export async function getReferralStats(userId: string): Promise<ReferralStats | null> {
+async function getReferralStats(userId: string): Promise<ReferralStats | null> {
   try {
     // Get referral code
     const { data: codeData, error: codeError } = await supabase
@@ -120,7 +120,7 @@ export async function applyReferralCode(
 /**
  * Check if user was referred
  */
-export async function wasUserReferred(userId: string): Promise<boolean> {
+async function wasUserReferred(userId: string): Promise<boolean> {
   try {
     const { data } = await supabase
       .from('referrals')

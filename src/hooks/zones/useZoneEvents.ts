@@ -24,7 +24,7 @@ export interface ZoneEvent {
   registrations_count?: number;
 }
 
-export interface ZoneEventRegistration {
+interface ZoneEventRegistration {
   id: string;
   event_id: string;
   attendee_name: string;
@@ -36,7 +36,7 @@ export interface ZoneEventRegistration {
   created_at: string;
 }
 
-export const zoneEventsKeys = {
+const zoneEventsKeys = {
   all: (zoneId: string) => ['zone-events', zoneId] as const,
   registrations: (eventId: string) => ['zone-event-registrations', eventId] as const,
 };

@@ -33,7 +33,7 @@ export interface AiContactAction {
   display: string;
 }
 
-export interface AiPriceInfo {
+interface AiPriceInfo {
   /** Lowest non-zero price found across pricing items */
   minPrice?: number;
   /** Highest price found across pricing items */
@@ -46,7 +46,7 @@ export interface AiPriceInfo {
   priceRange?: string;
 }
 
-export interface AiCtaExtraction {
+interface AiCtaExtraction {
   /** All actionable contact channels in priority order */
   contacts: AiContactAction[];
   /** Pricing summary if pricing block exists */

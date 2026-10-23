@@ -174,5 +174,3 @@ export function EnhancedSEOHead({
 
   return null;
 }
-
-export default EnhancedSEOHead;

@@ -84,7 +84,7 @@ function hashSeed(seed: string): number {
   return h;
 }
 
-export function pickRecipeForSeed(seed: string): PageRecipe {
+function pickRecipeForSeed(seed: string): PageRecipe {
   if (!seed) return PAGE_RECIPES[0];
   return PAGE_RECIPES[hashSeed(seed) % PAGE_RECIPES.length];
 }
@@ -111,7 +111,7 @@ const INTENT_GROUP: Record<BusinessIntent, string> = {
   community: 'act',
 };
 
-export interface ArtDirectionOptions {
+interface ArtDirectionOptions {
   /** Recipe id; when omitted a recipe is picked deterministically from `seed`. */
   recipeId?: string | null;
   /** Seed for recipe selection (niche, slug, or page id). */
@@ -120,7 +120,7 @@ export interface ArtDirectionOptions {
   preserveExisting?: boolean;
 }
 
-export interface ArtDirectionResult {
+interface ArtDirectionResult {
   blocks: Block[];
   recipe: PageRecipe;
   sectionCount: number;

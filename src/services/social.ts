@@ -42,7 +42,7 @@ export interface PremiumGift {
   };
 }
 
-export interface PageBoost {
+interface PageBoost {
   id: string;
   page_id: string;
   boost_type: string;
@@ -344,7 +344,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
 
 // ==================== PAGE BOOSTS ====================
 
-export async function boostPage(
+async function boostPage(
   pageId: string,
   boostType: 'standard' | 'premium' | 'super' = 'standard',
   durationHours: number = 24
@@ -374,7 +374,7 @@ export async function boostPage(
   return { success: true };
 }
 
-export async function getActiveBoosts(pageId: string): Promise<PageBoost[]> {
+async function getActiveBoosts(pageId: string): Promise<PageBoost[]> {
   const { data, error } = await supabase
     .from('page_boosts')
     .select('*')

@@ -19,7 +19,7 @@ export interface QualityGateResult {
 }
 
 // Minimum requirements for indexation
-export const INDEXABLE_QUALITY_THRESHOLD = 25;
+const INDEXABLE_QUALITY_THRESHOLD = 25;
 const MIN_BLOCKS_FOR_INDEX = 2;
 const MIN_CONTENT_LENGTH = 50;
 const MAX_EXTERNAL_LINKS_NEW_ACCOUNT = 10;
@@ -200,7 +200,7 @@ export function extractProfileFromBlocks(
 
 // ============= Auto-Generated About =============
 
-export function generateAutoAbout(
+function generateAutoAbout(
   profile: ExtractedProfile,
   blocks: Block[],
   language: 'ru' | 'en' | 'kk' = 'ru'
@@ -300,7 +300,7 @@ export function generatePageMeta(
 
 // ============= Schema.org Generation =============
 
-export interface SchemaData {
+interface SchemaData {
   webPage: object;
   mainEntity: object;
   faq?: object;
@@ -309,7 +309,7 @@ export interface SchemaData {
   services?: object[];
 }
 
-export function generateSchemas(
+function generateSchemas(
   profile: ExtractedProfile,
   blocks: Block[],
   slug: string,
@@ -501,7 +501,7 @@ export function generateSourceContext(
 
 // ============= Version Hash Generation =============
 
-export function generateContentHash(blocks: Block[]): string {
+function generateContentHash(blocks: Block[]): string {
   // Simple hash based on block structure
   const content = JSON.stringify(blocks.map(b => ({
     type: b.type,

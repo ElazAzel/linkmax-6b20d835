@@ -76,13 +76,13 @@ export function isPremiumBlock(type: string): type is PremiumBlockType {
   return (PREMIUM_BLOCK_TYPES as readonly string[]).includes(type);
 }
 
-export function isValidBlockType(type: string): type is BlockType {
+function isValidBlockType(type: string): type is BlockType {
   return (ALL_BLOCK_TYPES as readonly string[]).includes(type);
 }
 
 // ============= Block Metadata =============
 
-export interface BlockMetadata {
+interface BlockMetadata {
   type: BlockType;
   category: 'basic' | 'media' | 'interactive' | 'commerce' | 'social' | 'advanced';
   isPremium: boolean;
@@ -138,20 +138,20 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
 /**
  * Get blocks by category
  */
-export function getBlocksByCategory(category: BlockMetadata['category']): BlockMetadata[] {
+function getBlocksByCategory(category: BlockMetadata['category']): BlockMetadata[] {
   return Object.values(BLOCK_METADATA).filter(b => b.category === category);
 }
 
 /**
  * Get all free blocks
  */
-export function getFreeBlocks(): BlockMetadata[] {
+function getFreeBlocks(): BlockMetadata[] {
   return Object.values(BLOCK_METADATA).filter(b => !b.isPremium);
 }
 
 /**
  * Get all premium blocks
  */
-export function getPremiumBlocks(): BlockMetadata[] {
+function getPremiumBlocks(): BlockMetadata[] {
   return Object.values(BLOCK_METADATA).filter(b => b.isPremium);
 }

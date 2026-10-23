@@ -19,7 +19,7 @@ interface PrivacyPolicyModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalProps) {
+function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalProps) {
   const { t, i18n } = useTranslation();
   const language = normalizeLegalLanguage(i18n.language);
 

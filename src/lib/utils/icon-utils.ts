@@ -183,7 +183,7 @@ export function getLucideIcon(
 /**
  * Check if a Lucide icon exists by name in the curated registry.
  */
-export function hasLucideIcon(iconName: string): boolean {
+function hasLucideIcon(iconName: string): boolean {
   if (!iconName) return false;
   const pascalFromKebab = iconName
     .split('-')
@@ -193,21 +193,4 @@ export function hasLucideIcon(iconName: string): boolean {
   return !!(ICON_MAP[iconName] || ICON_MAP[pascalFromKebab] || ICON_MAP[pascalFromCamel]);
 }
 
-export {
-  CheckCircle2,
-  BadgeCheck,
-  ShieldCheck,
-  Verified,
-  Star,
-  Crown,
-  Award,
-  Medal,
-  Trophy,
-  Gem,
-  Diamond,
-  Sparkles,
-  Heart,
-  Flame,
-  Zap,
-  Circle,
-};
+export { CheckCircle2 };

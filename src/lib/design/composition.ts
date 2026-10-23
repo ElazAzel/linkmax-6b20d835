@@ -151,6 +151,6 @@ export function getComposition(id?: string | null): CompositionDef | undefined {
   return COMPOSITIONS[id as CompositionId];
 }
 
-export function isCompositionId(id?: string | null): id is CompositionId {
+function isCompositionId(id?: string | null): id is CompositionId {
   return !!id && id in COMPOSITIONS;
 }

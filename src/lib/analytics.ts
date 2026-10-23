@@ -4,7 +4,7 @@ import { storage } from '@/lib/storage';
 const PIXEL_PROXY_URL = `${import.meta.env.VITE_SUPABASE_URL || ''}/functions/v1/pixel-proxy`;
 
 // Stable client ID for GA4 MP
-export function getOrCreateClientId(): string {
+function getOrCreateClientId(): string {
     const key = 'ga_cid'; // Use a shorter key for storage utility compatibility
     let cid = storage.getRaw(key);
     if (!cid) {
@@ -56,7 +56,7 @@ export function setCurrentPageId(id: string | undefined) {
     _currentPageId = id;
 }
 
-export function getCurrentPageId() {
+function getCurrentPageId() {
     return _currentPageId;
 }
 
@@ -66,7 +66,7 @@ export function getCurrentPageId() {
  * Identify user to third-party pixels with mandatory fields
  * satisfy 'RS SDK - Google Ads' requirements (Email, Phone)
  */
-export function identifyUser(email?: string, phone?: string, userId?: string) {
+function identifyUser(email?: string, phone?: string, userId?: string) {
     if (typeof window === 'undefined') return;
 
     const data: Record<string, string> = {
@@ -108,7 +108,7 @@ export const trackPurchase = (value: number, currency: string = 'USD') => {
     if (_currentPageId) sendServerEvent(_currentPageId, 'Purchase', { value, currency });
 };
 
-export const trackInitiateCheckout = () => {
+const trackInitiateCheckout = () => {
     if (typeof window === 'undefined') return;
     if (window.fbq) window.fbq('track', 'InitiateCheckout');
     if (window.ttq) window.ttq.track('InitiateCheckout');
@@ -133,7 +133,7 @@ export const trackClickLink = (blockTitle?: string, url?: string) => {
     if (window.gtag) window.gtag('event', 'click', { event_category: 'link', event_label: blockTitle, link_url: url });
 };
 
-export const trackSubscribe = (userData?: Record<string, string>) => {
+const trackSubscribe = (userData?: Record<string, string>) => {
     if (typeof window === 'undefined') return;
     if (window.fbq) window.fbq('track', 'Subscribe');
     if (window.ttq) window.ttq.track('Subscribe');
@@ -145,7 +145,7 @@ export const trackSubscribe = (userData?: Record<string, string>) => {
  * Map non-standard "consent management interaction" to standard ViewContent
  * to avoid "RS SDK - TikTok Ads Event name ... is not valid"
  */
-export const trackConsentInteraction = () => {
+const trackConsentInteraction = () => {
     if (typeof window === 'undefined') return;
     // For TikTok, we use ViewContent instead of custom event to stay within standard events
     if (window.ttq) window.ttq.track('ViewContent', { content_name: 'consent_banner' });
@@ -156,7 +156,7 @@ export const trackConsentInteraction = () => {
 /**
  * Map "preview_live_displayed" to standard ViewContent
  */
-export const trackPreviewDisplayed = () => {
+const trackPreviewDisplayed = () => {
     if (typeof window === 'undefined') return;
     if (window.ttq) window.ttq.track('ViewContent', { content_name: 'preview_live' });
     if (_currentPageId) sendServerEvent(_currentPageId, 'PreviewDisplayed');

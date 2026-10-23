@@ -24,7 +24,7 @@ export type BusinessIntent =
   | 'community'
   | 'contact';
 
-export type DataBinding =
+type DataBinding =
   | 'business'
   | 'services'
   | 'products'
@@ -33,7 +33,7 @@ export type DataBinding =
   | 'events'
   | 'contacts';
 
-export interface BlockMeta {
+interface BlockMeta {
   niches?: string[];
   intents?: BusinessIntent[];
   semanticRole?: SemanticRole;
@@ -44,7 +44,7 @@ export interface BlockMeta {
   recommendedWith?: BlockType[];
 }
 
-export const BLOCK_META: Partial<Record<BlockType, BlockMeta>> = {
+const BLOCK_META: Partial<Record<BlockType, BlockMeta>> = {
   profile: {
     intents: ['start', 'trust'],
     semanticRole: 'headline',
@@ -99,7 +99,7 @@ export function getBlockMeta(type: BlockType): BlockMeta {
   return BLOCK_META[type] ?? {};
 }
 
-export function getBlocksForIntent(intent: BusinessIntent): BlockType[] {
+function getBlocksForIntent(intent: BusinessIntent): BlockType[] {
   return (Object.keys(BLOCK_META) as BlockType[]).filter((t) =>
     BLOCK_META[t]?.intents?.includes(intent),
   );

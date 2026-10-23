@@ -92,5 +92,3 @@ export class SectionErrorBoundary extends React.Component<Props, State> {
     return <React.Fragment key={this.state.key}>{this.props.children}</React.Fragment>;
   }
 }
-
-export default SectionErrorBoundary;

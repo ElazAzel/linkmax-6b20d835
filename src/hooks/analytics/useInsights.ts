@@ -21,5 +21,3 @@ export function useInsights(
     [input, t, onApplyInsight],
   );
 }
-
-export type { Insight, InsightAction, InsightsInput };

@@ -226,7 +226,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
-export const RARITY_COLORS: Record<Achievement['rarity'], string> = {
+const RARITY_COLORS: Record<Achievement['rarity'], string> = {
   common: 'from-gray-400 to-gray-600',
   rare: 'from-blue-400 to-blue-600',
   epic: 'from-purple-400 to-purple-600',

@@ -1,4 +1,4 @@
-export interface TranslationValidation {
+interface TranslationValidation {
   valid: boolean;
   errors: { key: string; issue: string }[];
   warnings: { key: string; issue: string }[];

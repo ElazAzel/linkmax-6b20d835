@@ -18,7 +18,7 @@ const sizeMap = {
 // Demo avatar for frame preview
 const DEMO_AVATAR = 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo&backgroundColor=b6e3f4';
 
-export function FramePreview({ frameStyle, size = 'small', selected, onClick, avatarUrl }: FramePreviewProps) {
+function FramePreview({ frameStyle, size = 'small', selected, onClick, avatarUrl }: FramePreviewProps) {
   const frameStyles = getFrameStyles(frameStyle);
   const isGradient = isGradientFrame(frameStyle);
   const isAnimated = isAnimatedFrame(frameStyle);

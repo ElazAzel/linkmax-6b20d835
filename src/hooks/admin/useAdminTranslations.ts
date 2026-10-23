@@ -14,7 +14,7 @@ type TranslationData = Record<string, unknown>;
 const TRANSLATIONS_QUERY_KEY = ['admin_translations'];
 
 // Flatten nested JSON object to dot notation keys
-export function flattenObject(obj: TranslationData, prefix = ''): Record<string, string> {
+function flattenObject(obj: TranslationData, prefix = ''): Record<string, string> {
     const result: Record<string, string> = {};
     if (!obj) return result;
 

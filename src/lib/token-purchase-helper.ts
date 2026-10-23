@@ -10,7 +10,7 @@ const WHATSAPP_NUMBER = '+77001234567'; // Replace with actual number
 /**
  * Check if user has sufficient token balance
  */
-export async function checkTokenBalance(userId: string, requiredAmount: number): Promise<{ 
+async function checkTokenBalance(userId: string, requiredAmount: number): Promise<{
   hasBalance: boolean; 
   currentBalance: number;
 }> {
@@ -45,7 +45,7 @@ export function redirectToTokenPurchase(tokenAmount: number, itemName?: string):
 /**
  * Attempt token purchase with automatic WhatsApp redirect if insufficient balance
  */
-export async function attemptTokenPurchase(
+async function attemptTokenPurchase(
   userId: string | undefined,
   requiredTokens: number,
   itemName?: string,
@@ -80,6 +80,6 @@ export async function attemptTokenPurchase(
 /**
  * Format token price display
  */
-export function formatTokenPrice(tokens: number): string {
+function formatTokenPrice(tokens: number): string {
   return `${tokens.toFixed(2)} Linkkon`;
 }

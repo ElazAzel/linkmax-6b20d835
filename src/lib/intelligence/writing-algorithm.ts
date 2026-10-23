@@ -3,7 +3,7 @@
  * This replaces generic AI prompts with high-converting, niche-specific patterns.
  */
 
-export interface SuggestionPack {
+interface SuggestionPack {
     headings: string[];
     descriptions: string[];
     links: string[];
@@ -311,7 +311,7 @@ function personalize(template: string, context: SuggestionContext): string {
 /**
  * Main entry point for Smart-Writing suggestions.
  */
-export function getWritingSuggestions(niche: string, context: SuggestionContext = {}): SuggestionPack {
+function getWritingSuggestions(niche: string, context: SuggestionContext = {}): SuggestionPack {
     const pack = PATTERNS[niche] || PATTERNS.general;
     
     return {
@@ -327,7 +327,7 @@ export function getWritingSuggestions(niche: string, context: SuggestionContext 
     };
 }
 
-export type SuggestionType = 'heading' | 'description' | 'link' | 'button' | 'faq_question' | 'faq_answer' | 'messenger_message' | 'product_name' | 'product_description';
+type SuggestionType = 'heading' | 'description' | 'link' | 'button' | 'faq_question' | 'faq_answer' | 'messenger_message' | 'product_name' | 'product_description';
 
 /**
  * Get a random single suggestion for quick use (e.g. Magic Wand click).

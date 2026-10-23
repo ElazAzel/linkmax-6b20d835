@@ -4,7 +4,7 @@
  */
 import type { Block } from '@/types/page';
 
-export interface BulkActionResult {
+interface BulkActionResult {
   success: boolean;
   affectedIds: string[];
   newBlocks?: Block[];
@@ -83,7 +83,7 @@ export function bulkDuplicate(
 /**
  * Get block IDs to hide from a selection
  */
-export function getHideableIds(
+function getHideableIds(
   blocks: Block[],
   selectedIds: Set<string>
 ): string[] {
@@ -96,7 +96,7 @@ export function getHideableIds(
 /**
  * Get block IDs to show from a selection
  */
-export function getShowableIds(
+function getShowableIds(
   _blocks: Block[],
   selectedIds: Set<string>
 ): string[] {
@@ -174,7 +174,7 @@ export function bulkMoveDown(
 /**
  * Check if any selected block is protected (profile)
  */
-export function hasProtectedBlocks(blocks: Block[], selectedIds: Set<string>): boolean {
+function hasProtectedBlocks(blocks: Block[], selectedIds: Set<string>): boolean {
   return [...selectedIds].some(id => {
     const block = blocks.find(b => b.id === id);
     return block?.type === 'profile';

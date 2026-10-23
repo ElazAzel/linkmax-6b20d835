@@ -38,7 +38,7 @@ function mapDbProfileToUserProfile(data: Record<string, unknown>): UserProfile {
 
 // ============= Implementation =============
 
-export class SupabaseUserRepository implements IUserRepository {
+class SupabaseUserRepository implements IUserRepository {
   async loadProfile(dto: LoadUserProfileDTO): Promise<Result<UserProfile | null, Error>> {
     return tryCatchAsync(async () => {
       const { userId } = dto;

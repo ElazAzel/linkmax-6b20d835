@@ -9,7 +9,7 @@ import { resolveSmartDesign, type BuilderStyle, type SmartPageTheme } from './sm
 import { extractServicesPipeline, extractDiscount } from '@/lib/blocks/extractors';
 import { applyArtDirection } from '@/lib/design/art-direction';
 
-export interface SmartBuilderUserInfo {
+interface SmartBuilderUserInfo {
   name: string;
   bio: string;
   goal?: OnboardingGoal;
@@ -22,7 +22,7 @@ export interface SmartBuilderUserInfo {
   expertChannel?: 'telegram' | 'email';
 }
 
-export interface SmartPageBuilderInput {
+interface SmartPageBuilderInput {
   userInfo: SmartBuilderUserInfo;
   niche: Niche;
   goal?: OnboardingGoal | null;
@@ -47,7 +47,7 @@ export function preserveBuilderIdentity(blocks: Block[], previous: Block[], keep
   } : block);
 }
 
-export interface SmartPageBuilderResult {
+interface SmartPageBuilderResult {
   profile: { name: string; bio: string };
   blocks: Block[];
   theme: SmartPageTheme;

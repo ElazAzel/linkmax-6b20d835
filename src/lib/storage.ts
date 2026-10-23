@@ -290,7 +290,6 @@ export const session = {
 };
 
 // Export for backward compatibility
-export default storage;
 
 // Type definitions for common storage keys
 export interface StorageKeys {

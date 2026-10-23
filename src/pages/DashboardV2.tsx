@@ -54,7 +54,7 @@ const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/E
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
 const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen').then(m => ({ default: m.TeamManagementScreen })));
 const FinanceScreen = lazy(() => import('@/components/dashboard-v2/screens/FinanceScreen').then(m => ({ default: m.FinanceScreen })));
-const DeveloperSettingsScreen = lazy(() => import('@/pages/DeveloperSettings'));
+const DeveloperSettingsScreen = lazy(() => import('@/pages/DeveloperSettings').then(m => ({ default: m.DeveloperSettings })));
 
 import {
   ZoneDashboardWrapper,

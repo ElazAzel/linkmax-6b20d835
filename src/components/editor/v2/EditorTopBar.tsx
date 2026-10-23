@@ -39,7 +39,7 @@ import { cn } from '@/lib/utils/utils';
 import { PageHealthMeter, type PageHealthMeterProps } from './PageHealthMeter';
 import { OfflineBadge } from '@/pwa/OfflineBadge';
 
-export interface EditorTopBarProps {
+interface EditorTopBarProps {
   /** Title slot — обычно PageSwitcher или текст */
   titleSlot?: React.ReactNode;
   health: PageHealthMeterProps;

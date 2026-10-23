@@ -24,14 +24,14 @@ export function getGoogleFaviconUrl(domain: string, size: number = 64): string {
 /**
  * Get direct favicon URL from domain
  */
-export function getDirectFaviconUrl(domain: string): string {
+function getDirectFaviconUrl(domain: string): string {
   return `https://${domain}/favicon.ico`;
 }
 
 /**
  * Check if an image URL is valid/loadable
  */
-export function checkImageUrl(url: string): Promise<boolean> {
+function checkImageUrl(url: string): Promise<boolean> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve(true);

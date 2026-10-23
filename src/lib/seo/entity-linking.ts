@@ -30,7 +30,7 @@ const SOCIAL_PLATFORMS: Record<string, string> = {
 // Extract organization/company domains
 const COMPANY_DOMAINS = ['company', 'work', 'organization', 'business', 'corp'];
 
-export interface EntityLinks {
+interface EntityLinks {
   sameAs: string[];
   worksFor?: {
     '@type': 'Organization';
@@ -142,7 +142,7 @@ function normalizeUrl(url: string): string {
 /**
  * Generate structured skills/tags from pricing and catalog
  */
-export function extractSkillTags(
+function extractSkillTags(
   blocks: Block[],
   language: 'ru' | 'en' | 'kk' = 'ru'
 ): string[] {

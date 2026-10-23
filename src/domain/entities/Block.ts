@@ -18,7 +18,7 @@ export { isBlockPremium as isPremiumBlockType, getBlockCategory } from '@/lib/bl
 
 // ============= Value Objects =============
 
-export type Currency = 
+type Currency =
   | 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | 'TMT' | 'UZS' 
   | 'USD' | 'EUR' | 'GBP' | 'CNY' | 'JPY' | 'CHF' | 'CAD' | 'AUD';
 

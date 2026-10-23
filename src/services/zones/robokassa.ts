@@ -1,6 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 
-export interface RoboKassaPaymentParams {
+interface RoboKassaPaymentParams {
     type: 'subscription' | 'payment' | 'tokens' | 'zone_upgrade';
     amount: number;
     userId: string;

@@ -580,4 +580,3 @@ export const EventScanner = memo(function EventScanner() {
     </ScreenErrorBoundary>
   );
 });
-export default EventScanner;

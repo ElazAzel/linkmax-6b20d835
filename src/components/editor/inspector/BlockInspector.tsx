@@ -35,7 +35,7 @@ import type { BlockType } from '@/types/blocks/base';
 import type { Block } from '@/types/page';
 import { withUrlSchemes } from '@/lib/blocks/safe-href';
 
-export type BlockInspectorMode = 'docked' | 'sheet';
+type BlockInspectorMode = 'docked' | 'sheet';
 
 interface BlockInspectorProps {
   mode: BlockInspectorMode;

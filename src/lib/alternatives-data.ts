@@ -1,4 +1,4 @@
-export type AlternativeSlug =
+type AlternativeSlug =
   | 'linktree'
   | 'taplink'
   | 'bitrix24'
@@ -11,7 +11,7 @@ export type AlternativeSlug =
   | 'koji'
   | 'wix';
 
-export interface AlternativeProfile {
+interface AlternativeProfile {
   slug: AlternativeSlug;
   competitor: string;
   category: string;

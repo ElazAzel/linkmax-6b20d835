@@ -177,7 +177,7 @@ const NICHE_WEIGHTS: Record<PageNiche, BlockWeight[]> = {
 
 // ============= Scoring Algorithm =============
 
-export interface BlockRecommendation {
+interface BlockRecommendation {
   block: BlockType;
   score: number;
   reason: string;
@@ -194,7 +194,7 @@ interface GetRecommendationsOptions {
 /**
  * Calculate block recommendations based on niche and context
  */
-export function getBlockRecommendations(options: GetRecommendationsOptions): BlockRecommendation[] {
+function getBlockRecommendations(options: GetRecommendationsOptions): BlockRecommendation[] {
   const { pageNiche, existingBlocks, maxResults = 6 } = options;
 
   const weights = NICHE_WEIGHTS[pageNiche] || NICHE_WEIGHTS.general;
@@ -244,7 +244,7 @@ export function getBlockRecommendations(options: GetRecommendationsOptions): Blo
 /**
  * Get recommended blocks for display in Block Picker
  */
-export function getRecommendedBlocks(
+function getRecommendedBlocks(
   niche: Niche | string | undefined,
   existingBlocks: BlockType[]
 ): BlockRecommendation[] {
@@ -259,7 +259,7 @@ export function getRecommendedBlocks(
 /**
  * Check if a block type is in the recommended list
  */
-export function isBlockRecommended(
+function isBlockRecommended(
   blockType: BlockType,
   niche: Niche | string | undefined,
   existingBlocks: BlockType[]

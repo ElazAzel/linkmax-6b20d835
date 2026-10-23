@@ -15,7 +15,7 @@ export type EditorEventType =
   | 'inline_edit_started' | 'inline_edit_saved'
   | 'block_selected';
 
-export interface EditorEvent {
+interface EditorEvent {
   type: EditorEventType;
   timestamp: number;
   blockType?: string;
@@ -186,14 +186,14 @@ export class EditorEventBuffer {
 /** Singleton buffer for the editor session */
 let _buffer: EditorEventBuffer | null = null;
 
-export function getEditorEventBuffer(): EditorEventBuffer {
+function getEditorEventBuffer(): EditorEventBuffer {
   if (!_buffer) {
     _buffer = new EditorEventBuffer();
   }
   return _buffer;
 }
 
-export function resetEditorEventBuffer(): void {
+function resetEditorEventBuffer(): void {
   _buffer?.clear();
   _buffer = null;
 }

@@ -62,7 +62,7 @@ export function resolveProfileComposition<T extends { type: string }>(blocks: T[
   return { profile, socials, content: blocks.filter(block => block !== profile && block !== socials) };
 }
 
-export const getFontClass = (font?: BlockFontFamily): string => {
+const getFontClass = (font?: BlockFontFamily): string => {
   switch (font) {
     case 'sans': return 'font-sans';
     case 'serif': return 'font-serif';

@@ -113,7 +113,7 @@ export function persistQueryCache(client: QueryClient): () => void {
   };
 }
 
-export function clearPersistedQueryCache() {
+function clearPersistedQueryCache() {
   try {
     safeLocalStorage()?.removeItem(STORAGE_KEY);
   } catch {

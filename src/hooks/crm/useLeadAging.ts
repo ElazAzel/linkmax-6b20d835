@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { differenceInHours, differenceInDays } from 'date-fns';
 import type { Lead } from '@/hooks/crm/useLeads';
 
-export interface AgingStats {
+interface AgingStats {
   staleCount: number;      // new + > 4h
   missedCount: number;     // new + > 24h
   needsFollowup: number;  // contacted + > 3 days without interaction

@@ -129,7 +129,7 @@ export async function trackActivationEvent(
 /**
  * Track page_shared with channel info
  */
-export function trackPageShared(pageId: string, channel: string): void {
+function trackPageShared(pageId: string, channel: string): void {
   trackActivationEvent(pageId, 'page_shared', { channel });
 }
 
@@ -151,14 +151,14 @@ export function trackWizardCompleted(pageId: string, niche: string): void {
 /**
  * Track page published
  */
-export function trackPagePublished(pageId: string): void {
+function trackPagePublished(pageId: string): void {
   trackActivationEvent(pageId, 'page_published');
 }
 
 // ──────────── CRM-layer event helpers ────────────
 
 /** User opened lead details */
-export function trackLeadSeen(pageId: string, leadId: string): void {
+function trackLeadSeen(pageId: string, leadId: string): void {
   trackActivationEvent(pageId, 'lead_seen', { leadId });
 }
 
@@ -173,56 +173,56 @@ export function trackLeadStatusChanged(pageId: string, leadId: string, from: str
 }
 
 /** Booking confirmed */
-export function trackBookingConfirmed(pageId: string, bookingId: string): void {
+function trackBookingConfirmed(pageId: string, bookingId: string): void {
   trackActivationEvent(pageId, 'booking_confirmed', { bookingId });
 }
 
 /** First ever lead reply (milestone) */
-export function trackFirstLeadReply(pageId: string): void {
+function trackFirstLeadReply(pageId: string): void {
   trackActivationEvent(pageId, 'first_lead_reply');
 }
 
 // ──────────── Booking funnel event helpers ────────────
 
 /** Booking slot selected by customer */
-export function trackBookingSlotSelected(pageId: string, blockId: string, date: string, time: string): void {
+function trackBookingSlotSelected(pageId: string, blockId: string, date: string, time: string): void {
   trackActivationEvent(pageId, 'booking_slot_selected', { blockId, date, time });
 }
 
 /** Booking form opened */
-export function trackBookingFormOpened(pageId: string, blockId: string): void {
+function trackBookingFormOpened(pageId: string, blockId: string): void {
   trackActivationEvent(pageId, 'booking_form_opened', { blockId });
 }
 
 /** Booking submitted */
-export function trackBookingSubmitted(pageId: string, bookingId: string, hasPrepayment: boolean): void {
+function trackBookingSubmitted(pageId: string, bookingId: string, hasPrepayment: boolean): void {
   trackActivationEvent(pageId, 'booking_submitted', { bookingId, hasPrepayment: String(hasPrepayment) });
 }
 
 /** Prepayment initiated (customer clicked pay button) */
-export function trackBookingPrepaymentInitiated(pageId: string, bookingId: string, method: string): void {
+function trackBookingPrepaymentInitiated(pageId: string, bookingId: string, method: string): void {
   trackActivationEvent(pageId, 'booking_prepayment_initiated', { bookingId, method });
 }
 
 /** Owner confirmed payment */
-export function trackBookingPaymentConfirmed(pageId: string, bookingId: string): void {
+function trackBookingPaymentConfirmed(pageId: string, bookingId: string): void {
   trackActivationEvent(pageId, 'booking_payment_confirmed', { bookingId });
 }
 
 /** Booking cancelled */
-export function trackBookingCancelled(pageId: string, bookingId: string, by: string): void {
+function trackBookingCancelled(pageId: string, bookingId: string, by: string): void {
   trackActivationEvent(pageId, 'booking_cancelled', { bookingId, cancelledBy: by });
 }
 
 // ──────────── Retention event helpers ────────────
 
 /** Owner sent follow-up after service */
-export function trackPostServiceFollowUp(pageId: string, bookingId: string, channel: string): void {
+function trackPostServiceFollowUp(pageId: string, bookingId: string, channel: string): void {
   trackActivationEvent(pageId, 'post_service_followup_sent', { bookingId, channel });
 }
 
 /** Repeat booking detected (same phone/email booked again) */
-export function trackRepeatBookingDetected(pageId: string, bookingId: string, phone?: string): void {
+function trackRepeatBookingDetected(pageId: string, bookingId: string, phone?: string): void {
   trackActivationEvent(pageId, 'repeat_booking_detected', { bookingId, phone: phone || '' });
 }
 
@@ -232,6 +232,6 @@ export function trackCreatorReturnedAfterGap(pageId: string, daysSinceLastVisit:
 }
 
 /** Stale leads alert shown */
-export function trackStaleLeadsAlertShown(pageId: string, count: number): void {
+function trackStaleLeadsAlertShown(pageId: string, count: number): void {
   trackActivationEvent(pageId, 'stale_leads_alert_shown', { count: String(count) });
 }

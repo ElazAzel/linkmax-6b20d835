@@ -126,7 +126,7 @@ export async function recordGrowthEvent(input: {
   return Boolean((data as { success?: boolean } | null)?.success ?? true);
 }
 
-export interface GrowthMetrics {
+interface GrowthMetrics {
   shares: number;
   visits: number;
   signups: number;

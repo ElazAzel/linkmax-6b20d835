@@ -15,7 +15,7 @@ export interface CalendarEvent {
 /**
  * Generate ICS file content for a calendar event
  */
-export function generateICS(event: CalendarEvent): string {
+function generateICS(event: CalendarEvent): string {
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';

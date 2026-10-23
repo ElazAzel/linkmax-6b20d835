@@ -11,7 +11,7 @@ import { logger } from '@/lib/utils/logger';
 import type { Json } from '@/platform/supabase/types';
 import { submitPublicAnalyticsEvent } from '@/lib/analytics/public-ingestion';
 
-export type AuthFunnelEvent =
+type AuthFunnelEvent =
   | 'auth_form_view'
   | 'auth_field_focus'
   | 'auth_submit_attempt'

@@ -101,14 +101,14 @@ export const DEFAULT_SEO: PageSeo = {
   keywords: [],
 };
 
-export const DEFAULT_GRID_CONFIG: GridConfig = {
+const DEFAULT_GRID_CONFIG: GridConfig = {
   columnsDesktop: 3,
   columnsMobile: 2,
   gapSize: 16,
   cellHeight: 100,
 };
 
-export const DEFAULT_I18N_CONFIG: PageI18nConfig = {
+const DEFAULT_I18N_CONFIG: PageI18nConfig = {
   languages: ['ru', 'en', 'kk'],
   defaultLanguage: 'ru',
   languageMode: 'auto',
@@ -174,7 +174,7 @@ export function countBlocks(page: Page, excludeProfile: boolean = false): number
 /**
  * Get block count by type
  */
-export function getBlockCountByType(page: Page): Record<BlockType, number> {
+function getBlockCountByType(page: Page): Record<BlockType, number> {
   const counts = {} as Record<BlockType, number>;
 
   for (const block of page.blocks) {
@@ -187,7 +187,7 @@ export function getBlockCountByType(page: Page): Record<BlockType, number> {
 /**
  * Find block by ID
  */
-export function findBlockById<TBlock extends BaseBlock>(
+function findBlockById<TBlock extends BaseBlock>(
   page: Page<TBlock>,
   blockId: string
 ): TBlock | undefined {
@@ -197,14 +197,14 @@ export function findBlockById<TBlock extends BaseBlock>(
 /**
  * Find block index by ID
  */
-export function findBlockIndexById(page: Page, blockId: string): number {
+function findBlockIndexById(page: Page, blockId: string): number {
   return page.blocks.findIndex(block => block.id === blockId);
 }
 
 /**
  * Check if page can be published
  */
-export function canPublishPage(page: Page): { canPublish: boolean; reason?: string } {
+function canPublishPage(page: Page): { canPublish: boolean; reason?: string } {
   if (page.blocks.length === 0) {
     return { canPublish: false, reason: 'Page must have at least one block' };
   }
@@ -270,7 +270,7 @@ export function reorderBlocks<TBlock extends BaseBlock>(
 /**
  * Reorder blocks by moving a block from one index to another
  */
-export function reorderBlocksByIndex<TBlock extends BaseBlock>(
+function reorderBlocksByIndex<TBlock extends BaseBlock>(
   blocks: TBlock[],
   fromIndex: number,
   toIndex: number

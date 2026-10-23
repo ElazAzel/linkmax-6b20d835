@@ -25,18 +25,18 @@ import {
 } from '@/lib/blocks/block-registry';
 
 // Re-export from registry for backward compatibility
-export { FREE_BLOCK_TYPES, PREMIUM_BLOCK_TYPES, isFreeBlock, isPremiumBlock };
+export { FREE_BLOCK_TYPES, PREMIUM_BLOCK_TYPES };
 export type { FreeBlockType, PremiumBlockType };
 
 // Backward compatibility alias
-export const isFreeSlock = isFreeBlock;
+const isFreeSlock = isFreeBlock;
 
 interface PremiumBlockOverlayProps {
   blockType: string;
   className?: string;
 }
 
-export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
+const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
   blockType,
   className,
 }: PremiumBlockOverlayProps) {
@@ -78,7 +78,7 @@ interface TierBadgeProps {
   size?: 'sm' | 'md';
 }
 
-export const BlockTierBadge = memo(function BlockTierBadge({
+const BlockTierBadge = memo(function BlockTierBadge({
   tier,
   className,
   size = 'sm',
@@ -122,7 +122,7 @@ interface BlockCategoryHeaderProps {
   blockCount?: number;
 }
 
-export const BlockCategoryHeader = memo(function BlockCategoryHeader({
+const BlockCategoryHeader = memo(function BlockCategoryHeader({
   title,
   tier,
   blockCount,
@@ -149,7 +149,7 @@ interface LockedBlockCardProps {
   onClick?: () => void;
 }
 
-export const LockedBlockCard = memo(function LockedBlockCard({
+const LockedBlockCard = memo(function LockedBlockCard({
   blockType,
   label,
   icon,

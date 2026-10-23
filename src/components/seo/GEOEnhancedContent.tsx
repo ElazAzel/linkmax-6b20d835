@@ -317,5 +317,3 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
     </div>
   );
 }
-
-export default GEOEnhancedContent;

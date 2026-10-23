@@ -444,4 +444,3 @@ export const Gallery = memo(function Gallery({ initialPages }: { initialPages?: 
     </>
   );
 });
-export default Gallery;

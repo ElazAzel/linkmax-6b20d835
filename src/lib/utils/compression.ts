@@ -2,7 +2,7 @@ import LZString from 'lz-string';
 import type { PageData } from '@/types/page';
 import { logger } from '@/lib/utils/logger';
 
-export function compressPageData(data: PageData): string {
+function compressPageData(data: PageData): string {
   const json = JSON.stringify(data);
   const compressed = LZString.compressToBase64(json);
   return compressed;
@@ -19,7 +19,7 @@ export function decompressPageData(compressed: string): PageData | null {
   }
 }
 
-export function generateMagicLink(data: PageData): string {
+function generateMagicLink(data: PageData): string {
   const compressed = compressPageData(data);
   const baseUrl = window.location.origin;
   return `${baseUrl}/p/${compressed}`;

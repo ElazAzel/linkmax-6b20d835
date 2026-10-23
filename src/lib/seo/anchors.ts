@@ -5,7 +5,7 @@
 
 import type { Block } from '@/types/page';
 
-export interface PageSection {
+interface PageSection {
   id: string;
   anchor: string;
   type: 'about' | 'expertise' | 'experience' | 'services' | 'projects' | 'contacts' | 'faq' | 'events' | 'pricing' | 'testimonials';
@@ -17,7 +17,7 @@ export interface PageSection {
 }
 
 // Standard section anchors
-export const SECTION_ANCHORS: Record<string, PageSection['type']> = {
+const SECTION_ANCHORS: Record<string, PageSection['type']> = {
   profile: 'about',
   avatar: 'about',
   text: 'about',
@@ -73,7 +73,7 @@ export function generateSectionAnchors(blocks: Block[]): PageSection[] {
 /**
  * Generate "Key Facts" from structured data
  */
-export function generateKeyFacts(
+function generateKeyFacts(
   profile: { name?: string; bio?: string; type: string },
   blocks: Block[],
   language: 'ru' | 'en' | 'kk' = 'ru'

@@ -5,7 +5,7 @@
 export type HubLang = 'ru' | 'en' | 'kk';
 type L10n = Record<HubLang, string>;
 
-export interface HubNiche {
+interface HubNiche {
   slug: string;
   label: L10n;
   /** Plural "who" form used in titles: "Бьюти-мастера" */
@@ -17,7 +17,7 @@ export interface HubNiche {
   hub: boolean;
 }
 
-export interface HubCity {
+interface HubCity {
   slug: string;
   name: L10n;
   /** "в Алматы" */
@@ -27,7 +27,7 @@ export interface HubCity {
   note: { ru: string; en: string };
 }
 
-export const HUB_NICHES: HubNiche[] = [
+const HUB_NICHES: HubNiche[] = [
   { slug: 'services', hub: false, label: { ru: 'Услуги', en: 'Services', kk: 'Қызметтер' }, who: { ru: 'Мастера и специалисты по услугам', en: 'Service professionals', kk: 'Қызмет көрсету мамандары' }, intro: { ru: 'Частные мастера и сервисные компании: описание услуг, цены и прямые контакты для записи.', en: 'Independent professionals and service businesses: service details, prices and direct booking contacts.' }, services: { ru: ['бытовые услуги', 'ремонт', 'обслуживание'], en: ['local services', 'repair', 'maintenance'] } },
   {
     slug: 'beauty', hub: true,
@@ -120,7 +120,7 @@ export const HUB_NICHES_INDEXED = HUB_NICHES.filter((n) => n.hub);
 export const pickLang = (lang: string): HubLang => (lang === 'en' ? 'en' : lang === 'kk' ? 'kk' : 'ru');
 const textLang = (lang: HubLang): 'ru' | 'en' => (lang === 'en' ? 'en' : 'ru');
 
-export interface HubMeta {
+interface HubMeta {
   title: string;
   h1: string;
   description: string;
@@ -187,7 +187,7 @@ export function buildHubMeta(lang: HubLang, niche?: HubNiche, city?: HubCity): H
 }
 
 /** All hub paths for sitemap generation */
-export function allHubPaths(): string[] {
+function allHubPaths(): string[] {
   const out = HUB_NICHES_INDEXED.map((n) => `/experts/${n.slug}`);
   for (const c of HUB_CITIES) {
     out.push(`/experts/city/${c.slug}`);

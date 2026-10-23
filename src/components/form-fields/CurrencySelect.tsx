@@ -11,7 +11,7 @@ interface CurrencySelectProps {
   onValueChange: (value: string) => void;
 }
 
-export const currencies = [
+const currencies = [
   { code: 'KZT', symbol: '₸', labelKey: 'currency.names.KZT', defaultLabel: 'Tenge (Kazakhstan)' },
   { code: 'RUB', symbol: '₽', labelKey: 'currency.names.RUB', defaultLabel: 'Ruble (Russia)' },
   { code: 'BYN', symbol: 'Br', labelKey: 'currency.names.BYN', defaultLabel: 'Ruble (Belarus)' },

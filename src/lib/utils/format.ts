@@ -21,7 +21,7 @@ export function getLocale(lang?: string): string {
 /**
  * Format a date string or Date using the user's locale
  */
-export function formatDate(
+function formatDate(
     dateInput: string | Date | null | undefined,
     lang?: string,
     options?: Intl.DateTimeFormatOptions
@@ -79,7 +79,7 @@ export function formatDateShort(
 /**
  * Format currency (KZT by default)
  */
-export function formatCurrency(
+function formatCurrency(
     amount: number,
     lang?: string,
     currency = 'KZT'

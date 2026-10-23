@@ -4,7 +4,7 @@ const cache = new Map<string, Record<string, string> | null>();
 const inflight = new Map<string, Promise<Record<string, string> | null>>();
 let pausedUntil = 0;
 
-export function isTranslationPaused(): boolean {
+function isTranslationPaused(): boolean {
   return Date.now() < pausedUntil;
 }
 

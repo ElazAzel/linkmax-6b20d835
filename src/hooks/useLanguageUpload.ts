@@ -24,7 +24,7 @@ export interface ValidationResult {
     };
 }
 
-export interface UploadResult {
+interface UploadResult {
     success: boolean;
     languageCode: string;
     validation: ValidationResult;

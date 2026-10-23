@@ -4,7 +4,7 @@ import { enUS, ru, kk } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import { format as formatTZ, fromZonedTime, toZonedTime, formatInTimeZone } from 'date-fns-tz';
 
-export interface TimezoneInfo {
+interface TimezoneInfo {
     name: string;
     offset: string;
     value: string;
