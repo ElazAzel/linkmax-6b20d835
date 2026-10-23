@@ -59,12 +59,12 @@ serve(async (req: Request) => {
       );
     }
 
-    console.log(`Validating Telegram chat ID: ${chatId}`);
+    console.log('Validating Telegram chat ID');
 
     try {
       // Try to get chat info to validate the chat ID
       const result = await getChat(chatId);
-      console.log('Telegram API response:', JSON.stringify(result));
+      console.log('Telegram chat lookup ok:', Boolean(result?.ok));
 
       // Validation is read-only: we never send messages to a caller-chosen chat.
       return new Response(
