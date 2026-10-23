@@ -37,8 +37,10 @@ export function SEOLandingHead({ currentLanguage }: { currentLanguage: string })
     if (!match) return;
     const head = buildLandingHead(currentLanguage.split('-')[0], match.pathname);
     let cleanup: (() => void) | undefined;
-    if (typeof router.updateMatch === 'function') {
-      router.updateMatch(match.id, previous => ({ ...previous, meta: head.meta, links: head.links, headScripts: head.scripts }));
+    type MatchUpdater = (id: string, fn: (previous: Record<string, unknown>) => Record<string, unknown>) => void;
+    const updateMatch = (router as unknown as { updateMatch?: MatchUpdater }).updateMatch;
+    if (typeof updateMatch === 'function') {
+      updateMatch.call(router, match.id, previous => ({ ...previous, meta: head.meta, links: head.links, headScripts: head.scripts }));
     } else {
       cleanup = syncDocumentHead(head);
     }
