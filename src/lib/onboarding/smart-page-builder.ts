@@ -37,14 +37,44 @@ type RevenueMode = 'appointment' | 'lead' | 'commerce' | 'event' | 'brand';
 export function preserveBuilderIdentity(blocks: Block[], previous: Block[], keepText = false): Block[] {
   const old = previous.find(block => block.type === 'profile');
   if (old?.type !== 'profile') return blocks;
-  return blocks.map(block => block.type === 'profile' ? {
-    ...block, id: old.id, avatar: old.avatar || block.avatar,
-    name: keepText ? old.name || block.name : block.name,
-    bio: keepText ? old.bio || block.bio : block.bio,
-    coverImage: keepText || block.coverImage?.startsWith('/builder/covers/') ? old.coverImage || block.coverImage : block.coverImage || old.coverImage,
-    coverVideo: keepText || block.coverImage?.startsWith('/builder/covers/') || !block.coverImage
-      ? old.coverVideo || block.coverVideo : undefined,
-  } : block);
+  return blocks.map(block => {
+    if (block.type !== 'profile') return block;
+    return {
+      ...block,
+      id: old.id,
+      // Identity always stays with the owner: a template must never inject
+      // its demo badge, verification, seller photo, or intro media.
+      avatar: old.avatar,
+      verified: old.verified,
+      verifiedColor: old.verifiedColor,
+      verifiedPosition: old.verifiedPosition,
+      verifiedIcon: old.verifiedIcon,
+      verifiedCustomIcon: old.verifiedCustomIcon,
+      autoVerifyPremium: old.autoVerifyPremium,
+      badges: old.badges,
+      introVideo: old.introVideo,
+      introAudio: old.introAudio,
+      name: keepText ? old.name || block.name : block.name,
+      bio: keepText ? old.bio || block.bio : block.bio,
+      coverImage: keepText || block.coverImage?.startsWith('/builder/covers/') ? old.coverImage || block.coverImage : block.coverImage || old.coverImage,
+      coverVideo: keepText || block.coverImage?.startsWith('/builder/covers/') || !block.coverImage
+        ? old.coverVideo || block.coverVideo : undefined,
+      // Header styling the owner already chose wins; template defaults only fill gaps.
+      avatarFrame: old.avatarFrame ?? block.avatarFrame,
+      avatarShape: old.avatarShape ?? block.avatarShape,
+      avatarSize: old.avatarSize ?? block.avatarSize,
+      avatarPosition: old.avatarPosition ?? block.avatarPosition,
+      avatarIcon: old.avatarIcon ?? block.avatarIcon,
+      statusRing: old.statusRing ?? block.statusRing,
+      shadowStyle: old.shadowStyle ?? block.shadowStyle,
+      nameAnimation: old.nameAnimation ?? block.nameAnimation,
+      coverHeight: old.coverHeight ?? block.coverHeight,
+      coverPattern: old.coverPattern ?? block.coverPattern,
+      coverGradient: old.coverGradient ?? block.coverGradient,
+      coverPosition: old.coverPosition ?? block.coverPosition,
+      coverParallax: old.coverParallax ?? block.coverParallax,
+    };
+  });
 }
 
 interface SmartPageBuilderResult {
