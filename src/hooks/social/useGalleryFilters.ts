@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { GalleryPage } from '@/services/gallery';
-import type { SortOption } from '@/components/gallery/GalleryFilters';
+export type SortOption = 'recent' | 'popular' | 'trending';
 
 export function useGalleryFilters(pages: GalleryPage[]) {
   const [search, setSearch] = useState('');
