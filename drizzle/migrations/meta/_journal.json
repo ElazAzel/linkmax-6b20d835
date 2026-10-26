@@ -99,6 +99,13 @@
       "when": 1792723149861,
       "tag": "0013_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793039881551,
+      "tag": "0014_revoke_event_email_check",
+      "breakpoints": true
     }
   ]
 }
