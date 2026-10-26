@@ -13,6 +13,7 @@ import { PagePreview } from './PagePreview';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { useState } from 'react';
 import { getPublicPageUrl } from '@/lib/utils/url-helpers';
+import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 // Unified interface supporting both old and new usage
 interface GalleryPageCardProps {
@@ -37,7 +38,8 @@ export function GalleryPageCard({
   isLiked = false,
   featured = false
 }: GalleryPageCardProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const title = parseMultilingualField(page.title, i18n.language.split('-')[0] as SupportedLanguage) || page.slug;
   const [internalLikeState, setInternalLikeState] = useState(isLiked);
   const [isLiking, setIsLiking] = useState(false);
 
@@ -102,7 +104,7 @@ export function GalleryPageCard({
       <div className="aspect-[9/16] w-full relative overflow-hidden bg-gradient-to-br from-primary/10 to-violet-500/10 transition-transform duration-500 group-hover:scale-[1.02]">
         <PagePreview
           slug={page.slug}
-          title={page.title}
+          title={title}
           avatarUrl={page.avatar_url}
           previewUrl={page.preview_url}
           className="w-full h-full object-cover"
@@ -134,12 +136,12 @@ export function GalleryPageCard({
           <Avatar className="h-6 w-6 rounded-md ring-1 ring-border/50">
             <AvatarImage src={page.avatar_url || undefined} />
             <AvatarFallback className="rounded-md text-xs font-bold bg-primary/10 text-primary">
-              {page.title?.charAt(0) || 'L'}
+              {title.charAt(0) || 'L'}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <a href={getPublicPageUrl(page.slug)} className="font-bold text-sm truncate hover:underline focus-visible:underline" onClick={event => event.stopPropagation()}>{page.title || t('gallery.untitled', 'Untitled')}</a>
+              <a href={getPublicPageUrl(page.slug)} title={title} className="font-semibold text-sm line-clamp-2 break-words hover:underline focus-visible:underline" onClick={event => event.stopPropagation()}>{title}</a>
               {featured && (
                 <Badge variant="default" className="bg-primary/90 text-xs h-4 px-1">
                   ⭐
@@ -157,14 +159,17 @@ export function GalleryPageCard({
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={handleLike}
-                  className="flex items-center gap-1 hover:text-red-500 transition-colors group/like"
+                  className="min-w-11 gap-1 px-0 hover:text-destructive transition-colors group/like"
+                  aria-label={internalLikeState ? t('gallery.unlike', 'Unlike') : t('gallery.like', 'Like')}
                   disabled={isLiking}
                 >
-                  <Heart className={`h-3.5 w-3.5 transition-colors ${internalLikeState ? 'fill-red-500 text-red-500' : 'group-hover/like:text-red-500'}`} />
-                  <span className={internalLikeState ? 'text-red-500 font-medium' : ''}>{page.gallery_likes || 0}</span>
-                </button>
+                  <Heart className={`h-3.5 w-3.5 transition-colors ${internalLikeState ? 'fill-destructive text-destructive' : 'group-hover/like:text-destructive'}`} />
+                  <span className={internalLikeState ? 'text-destructive font-medium' : ''}>{page.gallery_likes || 0}</span>
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
                 {internalLikeState ? t('gallery.unlike', 'Unlike') : t('gallery.like', 'Like')}
@@ -195,8 +200,8 @@ export function GalleryPageCard({
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 p-0 rounded-lg hover:bg-primary/10 hover:text-primary ml-auto"
+                  size="icon"
+                  className="p-0 rounded-control hover:bg-primary/10 hover:text-primary ml-auto"
                   onClick={handleCopy}
                 >
                   <Copy className="h-3.5 w-3.5" />

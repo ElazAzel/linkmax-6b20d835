@@ -28,10 +28,10 @@ export function PagePreview({ slug, title, avatarUrl, previewUrl, className = ''
               {title?.charAt(0)?.toUpperCase() || slug?.charAt(0)?.toUpperCase() || <User className="h-8 w-8" />}
             </AvatarFallback>
           </Avatar>
-          <span className="text-base font-semibold text-foreground/90 text-center truncate max-w-full">
+          <span className="text-sm sm:text-base font-semibold text-foreground/90 text-center line-clamp-3 break-words max-w-full">
             {title || slug}
           </span>
-          <span className="text-sm text-muted-foreground mt-1">
+          <span className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-full truncate">
             @{slug}
           </span>
         </div>
