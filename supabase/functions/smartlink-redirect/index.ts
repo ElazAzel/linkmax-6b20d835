@@ -83,9 +83,21 @@ Deno.serve(async (req) => {
       },
     });
 
+    // Never redirect visitors straight to a user-chosen external site.
+    // The app's /s/:slug page shows the destination and asks to continue.
+    if (url.searchParams.get('format') === 'json') {
+      return new Response(JSON.stringify({ url: finalUrl }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+      });
+    }
     return new Response(null, {
       status: 302,
-      headers: { ...corsHeaders, Location: finalUrl, 'Cache-Control': 'no-store' },
+      headers: {
+        ...corsHeaders,
+        Location: `https://lnkmx.my/s/${encodeURIComponent(slug)}`,
+        'Cache-Control': 'no-store',
+      },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: (e as Error).message }), {
