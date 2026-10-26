@@ -1,1 +1,0 @@
-REVOKE EXECUTE ON FUNCTION public.check_email_registered_for_event(uuid, text) FROM PUBLIC, anon, authenticated;
