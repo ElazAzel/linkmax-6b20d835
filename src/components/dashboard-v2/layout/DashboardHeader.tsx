@@ -94,15 +94,15 @@ export const DashboardHeader = memo(function DashboardHeader({
         className,
       )}
     >
-      <div className="h-14 md:h-16 flex items-center justify-between gap-3 px-4 md:px-8">
-        <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+      <div className="min-h-14 md:min-h-16 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2 md:px-8">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1 basis-36">
           {leading ?? defaultLeading}
           <div className="flex flex-col min-w-0">
             {title && (
               <h1 className="text-base md:text-lg font-bold font-[var(--font-heading)] text-foreground flex items-center gap-2 truncate">
                 <span className="truncate">{title}</span>
                 {activeTab && (
-                  <span className="opacity-40 text-xs md:text-sm font-normal shrink-0">
+                  <span className="min-w-0 truncate text-muted-foreground text-xs md:text-sm font-normal">
                     / {activeTab}
                   </span>
                 )}
@@ -120,7 +120,7 @@ export const DashboardHeader = memo(function DashboardHeader({
           )}
         </div>
 
-        <div className="flex items-center gap-2 md:gap-3 shrink-0">
+        <div className="ml-auto flex max-w-full flex-wrap items-center justify-end gap-2 md:gap-3">
           {actions}
           {trailing}
         </div>

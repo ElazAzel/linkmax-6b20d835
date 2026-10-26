@@ -5,6 +5,7 @@ import X from 'lucide-react/dist/esm/icons/x';
 
 import { cn } from "@/lib/utils/utils";
 import { describedByFallback, hasChildType } from "@/lib/ui/overlay-a11y";
+import { useTranslation } from 'react-i18next';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -34,6 +35,7 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, style, ...props }, ref) => {
+  const { t } = useTranslation();
   const theme = usePageThemePortalProps(style);
   const hasTitle = hasChildType(children, DialogTitle);
   const descriptionProps = describedByFallback(children, DialogDescription, props['aria-describedby']);
@@ -54,9 +56,9 @@ const DialogContent = React.forwardRef<
       >
         {!hasTitle && <DialogPrimitive.Title className="sr-only">Dialog</DialogPrimitive.Title>}
         {children}
-        <DialogPrimitive.Close className="absolute right-3 top-3 sm:right-4 sm:top-4 rounded-xl p-1.5 opacity-70 ring-offset-background transition-all hover:opacity-100 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+        <DialogPrimitive.Close className="absolute right-2 top-2 sm:right-3 sm:top-3 flex h-11 w-11 items-center justify-center rounded-control opacity-70 ring-offset-background transition-all hover:opacity-100 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
           <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{t('common.close', 'Закрыть')}</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
@@ -69,7 +71,7 @@ const DialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}
+    className={cn("flex min-w-0 flex-col space-y-1.5 pr-10 text-left", className)}
     {...props}
   />
 );
@@ -95,7 +97,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+    className={cn("text-lg font-semibold leading-snug break-words", className)}
     {...props}
   />
 ));
