@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { KxHeader } from '../KxHeader';
 
+vi.mock('@/i18n/config', () => ({ SUPPORTED_LANGUAGES: ['ru', 'en', 'kk', 'uz'] }));
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (_key: string, fallback: string) => fallback, i18n: { language: 'ru', changeLanguage: vi.fn() } }),
 }));
