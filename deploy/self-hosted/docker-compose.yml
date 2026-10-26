@@ -1,0 +1,39 @@
+# LinkMAX self-hosted: web app + reverse proxy.
+# The backend (Postgres, Auth, REST, Storage, Edge Runtime, Kong) comes from the
+# official Supabase docker stack in ./supabase (see docs/SELF_HOSTED_MIGRATION_GUIDE.md),
+# joined via the shared "linkmax" network.
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${API_ORIGIN}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${ANON_KEY}
+        VITE_APP_DOMAIN: ${APP_ORIGIN}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    networks: [linkmax]
+
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      APP_HOST: ${APP_HOST}
+      API_HOST: ${API_HOST}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    networks: [linkmax]
+    depends_on: [web]
+
+networks:
+  linkmax:
+    name: linkmax
+    external: true
+
+volumes:
+  caddy_data:

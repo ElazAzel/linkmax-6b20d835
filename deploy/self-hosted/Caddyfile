@@ -1,0 +1,9 @@
+{$APP_HOST}, www.{$APP_HOST} {
+	encode zstd gzip
+	reverse_proxy web:3000
+}
+
+{$API_HOST} {
+	# Kong from the Supabase stack (container name "supabase-kong")
+	reverse_proxy supabase-kong:8000
+}
