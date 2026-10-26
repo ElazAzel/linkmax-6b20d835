@@ -4,6 +4,7 @@ import Menu from 'lucide-react/dist/esm/icons/menu';
 import X from 'lucide-react/dist/esm/icons/x';
 import { SUPPORTED_LANGUAGES } from '@/i18n/config';
 import { KxMark } from './primitives';
+import { Button } from '@/components/ui/button';
 
 /** Each language named in itself, so anyone finds their own. Static: server and browser must render the same text. */
 const NATIVE_NAMES: Record<string, string> = {
@@ -47,8 +48,25 @@ export function KxHeader({ onLogin, onSignup }: Props) {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        document.getElementById('kx-menu-toggle')?.focus();
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', onResize);
+    };
   }, [open]);
 
   const nav = [
@@ -75,13 +93,16 @@ export function KxHeader({ onLogin, onSignup }: Props) {
 
           <div className="hidden items-center gap-2 md:flex">
             <LanguageSelect value={lang} onChange={switchLang} label={t('landing.kx.nav.language', 'Сменить язык')} className="rounded-full bg-[var(--kx-surface-2)] hover:bg-[#262626]" />
-            <button type="button" onClick={onLogin} className="kx-btn kx-btn-ghost !h-11">{t('landing.kx.nav.login', 'Войти')}</button>
-            <button type="button" onClick={onSignup} className="kx-btn kx-btn-primary !h-11">{t('landing.kx.nav.create', 'Создать страницу')}</button>
+            <Button type="button" variant="ghost" onClick={onLogin} className="kx-btn kx-btn-ghost !h-11">{t('landing.kx.nav.login', 'Войти')}</Button>
+            <Button type="button" onClick={onSignup} className="kx-btn kx-btn-primary !h-11">{t('landing.kx.nav.create', 'Создать страницу')}</Button>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
             <LanguageSelect value={lang} onChange={switchLang} label={t('landing.kx.nav.language', 'Сменить язык')} className="text-[var(--kx-muted)]" />
-            <button
+            <Button
+              id="kx-menu-toggle"
+              variant="ghost"
+              size="icon"
               type="button"
               onClick={() => setOpen((value) => !value)}
               className="grid h-11 w-11 place-items-center rounded-full"
@@ -90,7 +111,7 @@ export function KxHeader({ onLogin, onSignup }: Props) {
               aria-label={open ? t('landing.kx.nav.close', 'Закрыть меню') : t('landing.kx.nav.open', 'Открыть меню')}
             >
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -102,12 +123,12 @@ export function KxHeader({ onLogin, onSignup }: Props) {
           </a>
         ))}
         <div className="mt-auto grid gap-3">
-          <button type="button" onClick={() => { setOpen(false); onSignup(); }} className="kx-btn kx-btn-primary !h-14 w-full" tabIndex={open ? 0 : -1}>
+          <Button type="button" onClick={() => { setOpen(false); onSignup(); }} className="kx-btn kx-btn-primary !h-14 w-full" tabIndex={open ? 0 : -1}>
             {t('landing.kx.nav.create', 'Создать страницу')}
-          </button>
-          <button type="button" onClick={() => { setOpen(false); onLogin(); }} className="kx-btn kx-btn-ghost !h-14 w-full" tabIndex={open ? 0 : -1}>
+          </Button>
+          <Button type="button" variant="ghost" onClick={() => { setOpen(false); onLogin(); }} className="kx-btn kx-btn-ghost !h-14 w-full" tabIndex={open ? 0 : -1}>
             {t('landing.kx.nav.login', 'Войти')}
-          </button>
+          </Button>
         </div>
       </div>
     </>
