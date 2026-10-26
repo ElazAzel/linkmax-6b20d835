@@ -28,6 +28,7 @@ export function buildLandingHead(language: string, path = '/') {
   return {
     meta: [{ title }, { name: 'description', content: description }, { name: 'robots', content: SEARCH_ROBOTS }, { name: 'googlebot', content: SEARCH_ROBOTS },
       { property: 'og:title', content: title }, { property: 'og:description', content: description }, { property: 'og:type', content: 'website' }, { property: 'og:url', content: canonical },
+      { property: 'og:image', content: `${domain}/og-image.png` }, { property: 'og:image:width', content: '1200' }, { property: 'og:image:height', content: '630' }, { name: 'twitter:image', content: `${domain}/og-image.png` },
       { property: 'og:locale', content: ({ ru: 'ru_RU', en: 'en_US', kk: 'kk_KZ', uz: 'uz_UZ' })[lang] || 'ru_RU' },
       { name: 'twitter:card', content: 'summary_large_image' }, { name: 'twitter:title', content: title }, { name: 'twitter:description', content: description },
       { name: 'theme-color', content: '#0a0a0a', media: '(prefers-color-scheme: light)' }, { name: 'theme-color', content: '#0a0a0a', media: '(prefers-color-scheme: dark)' }],
