@@ -286,14 +286,7 @@ export const EventBlock = memo(function EventBlock({
       return;
     }
 
-    // Check for duplicate email if not allowed
-    if (!block.settings?.allowDuplicateEmail) {
-      const isDuplicate = await isEmailRegistered(block.eventId, email.trim());
-      if (isDuplicate) {
-        setEventError(t('event.duplicateRegistration', 'Вы уже зарегистрированы на этот ивент.'));
-        return;
-      }
-    }
+    // Duplicate emails are rejected by the database unique index (23505) on insert.
 
     setIsSubmitting(true);
     try {
