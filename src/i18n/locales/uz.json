@@ -8571,5 +8571,11 @@
       "hide": "Yashirish"
     },
     "poweredBy": "LinkMAX'da yaratilgan"
+  },
+  "smartLink": {
+    "notFound": "Havola topilmadi",
+    "leaveTitle": "Siz boshqa saytga o‘tyapsiz",
+    "leaveHint": "Bu havolani LinkMAX foydalanuvchisi yaratgan. Saytga ishonishingizga ishonch hosil qiling:",
+    "continue": "Davom etish"
   }
 }

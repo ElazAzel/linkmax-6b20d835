@@ -8571,5 +8571,11 @@
       "hide": "Hide"
     },
     "poweredBy": "Made with LinkMAX"
+  },
+  "smartLink": {
+    "notFound": "Link not found",
+    "leaveTitle": "You are leaving LinkMAX",
+    "leaveHint": "This link was created by a LinkMAX user. Make sure you trust the site:",
+    "continue": "Continue"
   }
 }
