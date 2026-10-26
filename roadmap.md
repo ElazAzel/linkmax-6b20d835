@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Visual usability (2026-10-26)
-- [ ] Refine shared forms, dialogs and navigation for narrow screens and long translated labels without changing business logic.
-- [ ] Verify main public pages and authenticated cabinet on mobile and desktop, including menus and form dialogs.
+- [x] Refine shared forms, dialogs, select menus, dashboard headers, gallery labels and site page rows for narrow screens; business logic unchanged.
+- [x] Verify public pages and authenticated cabinet at 393px and desktop, including opening/closing menus and page editing dialogs without saving; 17 relevant tests passed and build OK. Hidden Finance balance layout reviewed in source, not exercised with real transactions.
 
 ## Template header styling (2026-10-26)
 - [x] Restore supplied template and smart-builder header styling while preserving owner identity; 33 regression tests passed, build OK. Authenticated template selection and downloaded draft confirmed large cover, no shadow and preserved owner name/badges; server writes deliberately blocked so existing pages were not changed.
