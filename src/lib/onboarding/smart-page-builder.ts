@@ -59,20 +59,21 @@ export function preserveBuilderIdentity(blocks: Block[], previous: Block[], keep
       coverImage: keepText || block.coverImage?.startsWith('/builder/covers/') ? old.coverImage || block.coverImage : block.coverImage || old.coverImage,
       coverVideo: keepText || block.coverImage?.startsWith('/builder/covers/') || !block.coverImage
         ? old.coverVideo || block.coverVideo : undefined,
-      // Header styling the owner already chose wins; template defaults only fill gaps.
-      avatarFrame: old.avatarFrame ?? block.avatarFrame,
-      avatarShape: old.avatarShape ?? block.avatarShape,
-      avatarSize: old.avatarSize ?? block.avatarSize,
-      avatarPosition: old.avatarPosition ?? block.avatarPosition,
-      avatarIcon: old.avatarIcon ?? block.avatarIcon,
-      statusRing: old.statusRing ?? block.statusRing,
-      shadowStyle: old.shadowStyle ?? block.shadowStyle,
-      nameAnimation: old.nameAnimation ?? block.nameAnimation,
-      coverHeight: old.coverHeight ?? block.coverHeight,
-      coverPattern: old.coverPattern ?? block.coverPattern,
-      coverGradient: old.coverGradient ?? block.coverGradient,
-      coverPosition: old.coverPosition ?? block.coverPosition,
-      coverParallax: old.coverParallax ?? block.coverParallax,
+      // Applying a design replaces its supplied styling, including starter
+      // defaults or a previous template. Omitted fields keep the owner's value.
+      avatarFrame: block.avatarFrame ?? old.avatarFrame,
+      avatarShape: block.avatarShape ?? old.avatarShape,
+      avatarSize: block.avatarSize ?? old.avatarSize,
+      avatarPosition: block.avatarPosition ?? old.avatarPosition,
+      avatarIcon: block.avatarIcon ?? old.avatarIcon,
+      statusRing: block.statusRing ?? old.statusRing,
+      shadowStyle: block.shadowStyle ?? old.shadowStyle,
+      nameAnimation: block.nameAnimation ?? old.nameAnimation,
+      coverHeight: block.coverHeight ?? old.coverHeight,
+      coverPattern: block.coverPattern ?? old.coverPattern,
+      coverGradient: block.coverGradient ?? old.coverGradient,
+      coverPosition: block.coverPosition ?? old.coverPosition,
+      coverParallax: block.coverParallax ?? old.coverParallax,
     };
   });
 }
