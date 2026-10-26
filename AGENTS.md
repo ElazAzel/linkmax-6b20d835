@@ -11,3 +11,4 @@
 - Business tools (sales blocks, CRM, finance, team, zones) are hidden unless `VITE_LINKMAX_BUSINESS=true` or Settings → «Бизнес-инструменты» is on (`src/lib/features.ts`); hide, never delete. Why: the cabinet stays a focused page builder.
 - `/dev/editor?slug=…` (dev builds only) mounts the real EditorScreen on an in-memory copy of a published page. Why: check the editor on a phone width without signing in; nothing is saved.
 - Public paid-block policies and stub queries share `block_requires_payment(content)`; only enabled blocks with positive prices are locked. Why: keep server visibility aligned with the visitor gate without leaking priced content.
+- Template, AI and onboarding header merges use the shared preserveBuilderIdentity helper: supplied design fields win, omitted fields retain existing values, while owner identity fields stay protected. Why: applying a design must replace starter or previous-template styling without importing demo identity.

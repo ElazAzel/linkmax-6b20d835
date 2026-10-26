@@ -1,5 +1,8 @@
 # Roadmap
 
+## Template header styling (2026-10-26)
+- [ ] Restore supplied template and smart-builder header styling while preserving owner identity; verify regression tests and template application.
+
 ## SEO findings (2026-10-22)
 - [x] Verified /for-masters HTTP 200, visible descriptive H1 and beauty-specific explanatory content, workflow and FAQ; stale content finding already addressed by current page.
 - [x] Clarified homepage search title and description in ru/en/kk/uz; shared metadata keys prevent browser overwrite; verified pre-rendered and browser titles/descriptions and self-canonicals on all four pages; 41 existing tests passed. Live changes require publication.
