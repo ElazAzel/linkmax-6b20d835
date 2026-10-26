@@ -5,6 +5,7 @@ import { KxHeader } from '../KxHeader';
 vi.mock('@/i18n/config', () => ({ SUPPORTED_LANGUAGES: ['ru', 'en', 'kk', 'uz'] }));
 
 vi.mock('react-i18next', () => ({
+  initReactI18next: { type: '3rdParty', init: () => undefined },
   useTranslation: () => ({ t: (_key: string, fallback: string) => fallback, i18n: { language: 'ru', changeLanguage: vi.fn() } }),
 }));
 
