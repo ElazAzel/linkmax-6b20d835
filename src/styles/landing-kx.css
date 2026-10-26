@@ -163,7 +163,7 @@
 @keyframes kx-spin { to { rotate: 360deg; } }
 
 /* Mobile menu */
-.kx-menu { position: fixed; inset: 0; z-index: 45; background: rgb(10 10 10 / .96); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; padding: 96px 24px 32px; gap: 8px; transition: opacity .3s, transform .3s; }
+.kx-menu { position: fixed; inset: 0; z-index: 45; background: var(--kx-bg); display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; overscroll-behavior: contain; padding: 144px 24px max(32px, env(safe-area-inset-bottom)); gap: 8px; transition: opacity .3s, transform .3s; }
 .kx-menu[data-open='false'] { opacity: 0; transform: translateY(-8px); pointer-events: none; }
 .kx-menu a.kx-menu-link { font-family: var(--kx-display); font-size: 34px; font-weight: 700; letter-spacing: -0.04em; padding: 6px 0; }
 

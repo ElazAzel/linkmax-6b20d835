@@ -334,15 +334,15 @@ export const SitePagesManager = memo(function SitePagesManager() {
       </CardHeader>
       <CardContent className="space-y-2">
         {homePage && (
-          <div className="flex items-center gap-3 p-2 rounded-lg bg-background">
+          <div className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-background">
             <Home className="w-4 h-4 text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 basis-[calc(100%-2rem)] sm:basis-auto">
               <div className="text-sm font-medium truncate">
                 {homePage.title || homePage.slug}
               </div>
               <div className="text-xs text-muted-foreground truncate">/{homePage.slug}</div>
             </div>
-            <div className="text-[11px] text-muted-foreground font-num whitespace-nowrap">
+            <div className="text-[11px] text-muted-foreground font-num whitespace-nowrap mr-auto sm:mr-0">
               {(pageStats[homePage.id]?.views ?? 0).toLocaleString()} {t('dashboard.sitePages.views', 'просм.')}
               {' · '}
               {(pageStats[homePage.id]?.clicks ?? 0).toLocaleString()} {t('dashboard.sitePages.clicks', 'клик.')}
@@ -381,9 +381,9 @@ export const SitePagesManager = memo(function SitePagesManager() {
           </p>
         )}
         {subPages.map((p) => (
-          <div key={p.id} className="flex items-center gap-3 p-2 rounded-lg bg-background">
+          <div key={p.id} className="flex flex-wrap items-center gap-2 p-3 rounded-lg bg-background">
             <FileText className="w-4 h-4 text-muted-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 basis-[calc(100%-2rem)] sm:basis-auto">
               <div className="text-sm font-medium truncate">{p.title || p.page_path}</div>
               <div className="text-xs text-muted-foreground truncate">
                 /{homePage?.slug}/p/{p.page_path}
