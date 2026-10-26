@@ -88,7 +88,7 @@ export const FinanceScreen = memo(function FinanceScreen() {
 
 
                 {/* Wallet Balance Card */}
-                <Card className="bg-card p-8 bg-card border border-border shadow-md overflow-hidden relative rounded-card">
+                <Card className="bg-card p-5 sm:p-8 border-0 shadow-none overflow-hidden relative rounded-card">
                     <div className="flex items-center gap-3 text-primary mb-6">
                         <div className="p-2 rounded-xl bg-primary/10">
                             <Wallet className="h-5 w-5" />
@@ -97,9 +97,9 @@ export const FinanceScreen = memo(function FinanceScreen() {
                             {t('finance.wallet_balance', 'Ваш баланс')}
                         </span>
                     </div>
-                    <div className="text-6xl font-bold tracking-tighter mb-4 flex items-baseline gap-2">
+                    <div className="text-4xl sm:text-6xl font-bold mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1 break-words">
                         {formatAmount(balance)} 
-                        <span className="text-2xl text-primary/40 font-bold uppercase tracking-[0.06em]">{getCurrencySymbol(currency)}</span>
+                        <span className="text-2xl text-muted-foreground font-semibold">{getCurrencySymbol(currency)}</span>
                     </div>
                     <div className="flex items-center gap-2 group cursor-help">
                         <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
