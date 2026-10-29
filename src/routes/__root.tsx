@@ -23,7 +23,6 @@ import { startClientBootstrap } from "@/lib/client-bootstrap";
 import { CONTENT_SECURITY_POLICY as CSP } from "@/lib/security/content-security-policy";
 import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { siteRobots, requestLanguage } from '@/lib/seo/site-policy';
-import { marketingMetadata } from '@/lib/seo/marketing-metadata';
 import { colors, fonts } from "@/design-system/tokens";
 
 // Cancelled requests are expected: stop them before any crash reporter sees them.
@@ -57,9 +56,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     if (typeof window === 'undefined') await loadLazyLocale(requestLanguage(location.pathname, location.searchStr));
   },
   head: ({ matches }) => {
-    const pathname = matches.at(-1)?.pathname || '/';
-    const search = new URLSearchParams(matches.at(-1)?.search as Record<string, string>).toString();
-    const page = marketingMetadata(pathname, typeof window === 'undefined' ? requestLanguage(pathname, search) : i18n.language);
     return ({
     meta: [
       { charSet: "utf-8" },
@@ -68,40 +64,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover",
       },
       { httpEquiv: "Content-Security-Policy", content: CSP },
-      { title: page?.title || "LinkMAX — страницы, CRM и аналитика для микробизнеса" },
-      {
-        name: "description",
-        content: page?.description ||
-          "Конструктор страниц с AI, мини-CRM и аналитика кликов для микробизнеса. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.",
-      },
       { name: "author", content: "LinkMAX" },
       { name: "robots", content: siteRobots(matches.at(-1)?.pathname || '/') },
       { name: "googlebot", content: siteRobots(matches.at(-1)?.pathname || '/') },
       { property: "og:type", content: "website" },
-      { property: "og:title", content: page?.title || "LinkMAX — конструктор страниц" },
-      {
-        property: "og:description",
-        content: page?.description || "Конструктор страниц, CRM и аналитика для специалистов и компаний.",
-      },
-      { property: "og:image", content: "https://lnkmx.my/og-image.png" },
-      // Profiles bring their own image of unknown size; only the site card is 1200×630.
-      ...(matches.some((m) => (m.routeId as string) === "/$slug/")
-        ? []
-        : [
-            { property: "og:image:width", content: "1200" },
-            { property: "og:image:height", content: "630" },
-          ]),
-      { property: "og:image:alt", content: "LinkMAX - The Micro-Business OS" },
       { property: "og:site_name", content: "LinkMAX" },
-      ...(page ? [{ property: 'og:url', content: page.canonical }] : []),
       { property: "og:locale", content: "ru_RU" },
       { property: "og:locale:alternate", content: "en_US" },
       { property: "og:locale:alternate", content: "kk_KZ" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: page?.title || "LinkMAX — конструктор страниц" },
-      { name: "twitter:description", content: page?.description || "Конструктор страниц, CRM и аналитика." },
-      { name: "twitter:image", content: "https://lnkmx.my/og-image.png" },
-      { name: "twitter:image:alt", content: "LinkMAX - The Micro-Business OS" },
       { name: "twitter:site", content: "@LinkMAX_app" },
       { name: "twitter:creator", content: "@LinkMAX_app" },
       { name: "google-site-verification", content: "Dx08PVLcT8XZVNiN_dAiPQKfgSJKHehjAGV5OPBNxB4" },
@@ -115,7 +86,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "format-detection", content: "telephone=no" },
     ],
     links: [
-      ...(page ? [{ rel: 'canonical', href: page.canonical }] : []),
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: "/fonts/global.css" },
       // Profiles set their own icon (the author) and are single-language: the
