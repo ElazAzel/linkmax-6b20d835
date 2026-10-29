@@ -1,5 +1,9 @@
 # Roadmap
 
+## SEO findings (2026-10-29)
+- [x] Verified stale language and homepage-snippet findings: SSR and browser have specific service/booking/payment copy and correct ru/en/kk/uz language attributes.
+- [x] Public marketing and dynamic content leaves own search/social metadata; removed root canonical/image inheritance and generic comparison text. Verified 21 public URLs, blog-to-article flow, comparison browser head, 43 SEO tests and build OK. Dynamic event/product/subpage loaders have narrow anonymous reads; real populated examples were not available for end-to-end checks. Publish required for live changes.
+
 ## Visual usability (2026-10-26)
 - [x] Refine shared forms, dialogs, select menus, dashboard headers, gallery labels and site page rows for narrow screens; business logic unchanged.
 - [x] Verify public pages and authenticated cabinet at 393px and desktop, including opening/closing menus and page editing dialogs without saving; 17 relevant tests passed and build OK. Hidden Finance balance layout reviewed in source, not exercised with real transactions.

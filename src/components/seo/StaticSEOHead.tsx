@@ -1,8 +1,5 @@
 import { useEffect } from 'react';
 
-const DEFAULT_OG_IMAGE =
-  'https://storage.googleapis.com/gpt-engineer-file-uploads/rsd687zRxRaxAP6X1wwlUq9nqwo1/social-images/social-1764234683859-Generated Image November 27, 2025 - 11_54AM.jpeg';
-
 type AlternateLink = {
   hreflang: string;
   href: string;
@@ -50,7 +47,7 @@ export function StaticSEOHead({
   canonical,
   currentLanguage,
   indexable = true,
-  ogImage = DEFAULT_OG_IMAGE,
+  ogImage,
   ogType = 'website',
   alternates = [],
 }: StaticSEOHeadProps) {
@@ -68,19 +65,19 @@ export function StaticSEOHead({
     });
 
     document.documentElement.lang =
-      currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
+      currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : currentLanguage === 'uz' ? 'uz' : 'ru';
 
     setMetaTag('og:type', ogType, true);
     setMetaTag('og:title', title, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:url', canonical, true);
     setMetaTag('og:site_name', 'lnkmx', true);
-    setMetaTag('og:image', ogImage, true);
+    if (ogImage) setMetaTag('og:image', ogImage, true);
 
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
-    setMetaTag('twitter:image', ogImage);
+    if (ogImage) setMetaTag('twitter:image', ogImage);
     setMetaTag('twitter:site', '@lnkmx_app');
   }, [title, description, canonical, currentLanguage, indexable, ogImage, ogType, alternates]);
 
