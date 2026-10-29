@@ -1,5 +1,9 @@
 # Roadmap
 
+## SEO findings (2026-10-29)
+- [ ] Verify stale language and homepage-snippet findings against current rendered pages.
+- [ ] Give public content routes their own search and social metadata; remove root canonical and image inheritance; verify routes and SEO tests.
+
 ## Visual usability (2026-10-26)
 - [x] Refine shared forms, dialogs, select menus, dashboard headers, gallery labels and site page rows for narrow screens; business logic unchanged.
 - [x] Verify public pages and authenticated cabinet at 393px and desktop, including opening/closing menus and page editing dialogs without saving; 17 relevant tests passed and build OK. Hidden Finance balance layout reviewed in source, not exercised with real transactions.
