@@ -1,7 +1,7 @@
+import { buildMarketingHead } from '@/lib/seo/marketing-metadata';
 import { createFileRoute } from "@tanstack/react-router";
 import Pricing from "@/pages/Pricing";
 import { FIXED_PRICES_KZT } from "@/hooks/useCurrencyRate";
-import i18n from '@/i18n/config';
 
 const PRICING_URL = "https://lnkmx.my/pricing";
 
@@ -49,14 +49,8 @@ function pricingJsonLd() {
 }
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: `${i18n.t('pricing.title')} ${i18n.t('pricing.titleHighlight')} · LinkMAX` },
-      { name: 'description', content: i18n.t('pricing.subtitle') },
-      { property: 'og:title', content: `${i18n.t('pricing.title')} ${i18n.t('pricing.titleHighlight')} · LinkMAX` },
-      { property: 'og:description', content: i18n.t('pricing.subtitle') },
-      { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary' },
-    ],
+  head: ({ match }) => ({
+    ...buildMarketingHead(match),
     scripts: [{ type: "application/ld+json", children: JSON.stringify(pricingJsonLd()) }],
   }),
   component: Pricing,
