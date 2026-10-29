@@ -29,8 +29,12 @@ function text(value: unknown, language: string): string {
   return '';
 }
 
-export async function fetchContentMetadata(kind: 'goods' | 'event' | 'subpage' | 'collab', params: Record<string, string>, language: string): Promise<Content | null> {
+export async function fetchContentMetadata(kind: 'goods' | 'event' | 'subpage' | 'collab' | 'team', params: Record<string, string>, language: string): Promise<Content | null> {
   const eq = (value: string) => encodeURIComponent(value);
+  if (kind === 'team') {
+    const [team] = await publicRead(`teams?select=name,description&slug=eq.${eq(params.slug)}&is_public=eq.true&limit=1`);
+    return team ? { title: text(team.name, language), description: text(team.description, language) } : null;
+  }
   if (kind === 'goods') {
     const [product] = await publicRead('rpc/get_digital_product_public', { _product_id: params.id });
     return product ? { title: text(product.title, language), description: text(product.description, language) } : null;
@@ -71,4 +75,12 @@ export function buildContentHead(content: Content | null | undefined, pathname: 
 
 export function contentLanguage(location: { pathname: string; searchStr: string }) {
   return requestLanguage(location.pathname, location.searchStr);
+}
+
+export function buildUtilityHead(match: { pathname: string; search: unknown }, titleKey: string, descriptionKey: string) {
+  const language = contentLanguage({ pathname: match.pathname, searchStr: new URLSearchParams(match.search as Record<string, string>).toString() });
+  const t = i18n.getFixedT(language);
+  const head = buildContentHead({ title: t(titleKey), description: t(descriptionKey) }, match.pathname);
+  head.meta.push({ name: 'robots', content: 'noindex, nofollow' }, { name: 'googlebot', content: 'noindex, nofollow' });
+  return head;
 }
