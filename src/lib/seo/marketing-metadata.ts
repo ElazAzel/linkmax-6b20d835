@@ -28,7 +28,6 @@ export function marketingMetadata(pathname: string, language = 'ru') {
   const localized: Record<string, [string, string]> = {
     '/pricing': [t('pricing.seo.title'), t('pricing.seo.description')],
     '/alternatives': [t('alternatives.seo.title'), t('alternatives.seo.description')],
-    '/customers': [t('customers.seo.title'), t('customers.seo.description')],
   };
   const fixed: Record<string, [string, string]> = {
     '/blog': ['Блог LinkMAX — заявки, оплаты и сайт-визитка', 'Гайды для специалистов, мастеров, коучей и фрилансеров: как собрать сайт-визитку, принимать заявки и работать с клиентами.'],
