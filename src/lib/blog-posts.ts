@@ -5,6 +5,7 @@
 
 import type { BlogPost } from './blog-post-types';
 import { HUB_OVERRIDES, HUB_NEW_POSTS } from './blog-posts-hub';
+import { SEO_BOOST_NEW_POSTS, applySeoBoost } from './blog-posts-seo-boost';
 
 
 
@@ -765,7 +766,8 @@ const BLOG_POSTS: BlogPost[] = [
 const ALL_POSTS: BlogPost[] = [
   ...BLOG_POSTS.map((p) => HUB_OVERRIDES[p.slug] ?? p),
   ...HUB_NEW_POSTS.filter((n) => !BLOG_POSTS.some((p) => p.slug === n.slug)),
-];
+  ...SEO_BOOST_NEW_POSTS,
+].map(applySeoBoost);
 
 export function getBlogPost(slug: string): BlogPost | undefined {
   return ALL_POSTS.find((p) => p.slug === slug);

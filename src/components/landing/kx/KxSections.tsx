@@ -287,6 +287,17 @@ export function KxFooter() {
       ],
     },
     {
+      title: t('landing.kx.footer.guides', 'Полезное'),
+      links: [
+        { href: '/blog/skolko-stoit-sayt-vizitka-v-kazakhstane', label: t('landing.kx.footer.guidePrice', 'Цена сайта-визитки') },
+        { href: '/blog/telegram-vizitka-dlya-koucha-poshagovo', label: t('landing.kx.footer.guideTelegram', 'Telegram-визитка') },
+        { href: '/blog/kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane', label: t('landing.kx.footer.guideWhatsapp', 'Оплата через WhatsApp') },
+        { href: '/blog/mini-crm-dlya-frilansera-zachem-i-kak', label: t('landing.kx.footer.guideCrm', 'Мини-CRM для фрилансера') },
+        { href: '/blog/taplink-vs-linkmax-sravnenie-2026', label: t('landing.kx.footer.guideTaplink', 'Taplink или LinkMAX') },
+        { href: '/blog/how-to-add-link-in-bio-to-instagram', label: t('landing.kx.footer.guideInstagram', 'Ссылка в bio Instagram') },
+      ],
+    },
+    {
       title: t('landing.kx.footer.info', 'Информация'),
       links: [
         { href: '/privacy', label: t('landing.kx.footer.privacy', 'Конфиденциальность') },
@@ -309,7 +320,7 @@ export function KxFooter() {
           <KxMark className="!text-[28px]" />
           <p className="mt-4 max-w-[22rem] text-[var(--kx-muted)]">{t('landing.kx.footer.about', 'Конструктор страниц для тех, кто работает на себя: мастеров, экспертов, авторов и маленьких студий.')}</p>
         </div>
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {columns.map((column) => (
             <div key={column.title}>
               <p className="text-sm font-semibold">{column.title}</p>
