@@ -320,7 +320,7 @@ export function KxFooter() {
           <KxMark className="!text-[28px]" />
           <p className="mt-4 max-w-[22rem] text-[var(--kx-muted)]">{t('landing.kx.footer.about', 'Конструктор страниц для тех, кто работает на себя: мастеров, экспертов, авторов и маленьких студий.')}</p>
         </div>
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {columns.map((column) => (
             <div key={column.title}>
               <p className="text-sm font-semibold">{column.title}</p>
