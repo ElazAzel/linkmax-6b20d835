@@ -287,6 +287,17 @@ export function KxFooter() {
       ],
     },
     {
+      title: t('landing.kx.footer.guides', 'Полезное'),
+      links: [
+        { href: '/blog/skolko-stoit-sayt-vizitka-v-kazakhstane', label: t('landing.kx.footer.guidePrice', 'Цена сайта-визитки') },
+        { href: '/blog/telegram-vizitka-dlya-koucha-poshagovo', label: t('landing.kx.footer.guideTelegram', 'Telegram-визитка') },
+        { href: '/blog/kak-prinimat-oplatu-cherez-whatsapp-v-kazakhstane', label: t('landing.kx.footer.guideWhatsapp', 'Оплата через WhatsApp') },
+        { href: '/blog/mini-crm-dlya-frilansera-zachem-i-kak', label: t('landing.kx.footer.guideCrm', 'Мини-CRM для фрилансера') },
+        { href: '/blog/taplink-vs-linkmax-sravnenie-2026', label: t('landing.kx.footer.guideTaplink', 'Taplink или LinkMAX') },
+        { href: '/blog/how-to-add-link-in-bio-to-instagram', label: t('landing.kx.footer.guideInstagram', 'Ссылка в bio Instagram') },
+      ],
+    },
+    {
       title: t('landing.kx.footer.info', 'Информация'),
       links: [
         { href: '/privacy', label: t('landing.kx.footer.privacy', 'Конфиденциальность') },
