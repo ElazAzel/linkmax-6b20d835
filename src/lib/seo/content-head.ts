@@ -13,7 +13,7 @@ async function publicRead(path: string, body?: Record<string, string>): Promise<
     method: body ? 'POST' : 'GET',
     headers: { apikey: key, Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}) },
     ...(body ? { body: JSON.stringify(body) } : {}),
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(3000),
   });
   if (!response.ok) throw new Error('Public content unavailable');
   const data: unknown = await response.json();
@@ -29,7 +29,18 @@ function text(value: unknown, language: string): string {
   return '';
 }
 
-export async function fetchContentMetadata(kind: 'goods' | 'event' | 'subpage' | 'collab' | 'team', params: Record<string, string>, language: string): Promise<Content | null> {
+type Kind = 'goods' | 'event' | 'subpage' | 'collab' | 'team';
+
+/** Never throws: metadata is optional, the page component owns not-found and error UI. */
+export async function fetchContentMetadata(kind: Kind, params: Record<string, string>, language: string): Promise<Content | null> {
+  try {
+    return await readContentMetadata(kind, params, language);
+  } catch {
+    return null;
+  }
+}
+
+async function readContentMetadata(kind: Kind, params: Record<string, string>, language: string): Promise<Content | null> {
   const eq = (value: string) => encodeURIComponent(value);
   if (kind === 'team') {
     const [team] = await publicRead(`teams?select=name,description&slug=eq.${eq(params.slug)}&is_public=eq.true&limit=1`);
