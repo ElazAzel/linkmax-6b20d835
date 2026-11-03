@@ -33,7 +33,7 @@ serve(async (req: Request) => {
         const { data: purchase, error } = await supabase
             .from("digital_purchases")
             .select(
-                "id, status, downloads_used, download_limit, expires_at, currency, amount, product_id, digital_products(title, description, file_name, file_size, file_path, is_active)",
+                "id, status, downloads_used, download_limit, expires_at, currency, amount, product_id, digital_products(title, description, file_name, file_size, file_path, is_active, user_id)",
             )
             .eq("access_token", token)
             .maybeSingle();
@@ -78,6 +78,12 @@ serve(async (req: Request) => {
         if (!product?.is_active) return createErrorResponse("Product is no longer available", 410);
         if (expired) return createErrorResponse("Access link has expired", 410);
         if (exhausted) return createErrorResponse("Download limit reached", 429);
+
+        // The file must live in the seller's own storage folder.
+        const filePath = typeof product.file_path === "string" ? product.file_path : "";
+        if (!product.user_id || !filePath.startsWith(`${product.user_id}/`) || filePath.includes("..")) {
+            return createErrorResponse("Product is no longer available", 410);
+        }
 
         // Consume one slot atomically-ish: guard on the value we just read.
         const { data: consumed, error: consumeError } = await supabase
