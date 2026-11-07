@@ -1,12 +1,13 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
-import { getNicheLandingByKey } from '@/lib/niche-landing-data';
 import NicheLanding from "@/pages/NicheLanding";
 
 export const Route = createFileRoute("/for/$landingSlug")({
-  beforeLoad: ({ params, location }) => {
+  beforeLoad: async ({ params, location }) => {
+    const { getNicheLandingByKey } = await import('@/lib/niche-landing-data');
     const landing = getNicheLandingByKey(params.landingSlug);
     if (!landing) throw notFound();
-    if (location.pathname !== landing.canonicalPath) throw redirect({ href: landing.canonicalPath, statusCode: 301 });
+    // Location headers must be ASCII, so Cyrillic canonical paths are percent-encoded.
+    if (location.pathname !== landing.canonicalPath) throw redirect({ href: encodeURI(landing.canonicalPath), statusCode: 301 });
   },
   component: NicheLanding,
 });

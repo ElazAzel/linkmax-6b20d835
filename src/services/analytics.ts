@@ -118,11 +118,10 @@ const TZ_COUNTRY_MAP: Record<string, { code: string; name: string }> = {
 };
 
 let _geoCache: GeoInfo | null = null;
-let _geoFetchPromise: Promise<GeoInfo | null> | null = null;
 
 /**
- * Get geo from timezone (instant, no network) as primary method,
- * then try IP APIs as fallback
+ * Country from the visitor's timezone: instant, no network, no IP sent to a
+ * third party. (The old IP-lookup fallback was blocked by our own CSP.)
  */
 function getGeoFromTimezone(): GeoInfo | null {
   try {
@@ -135,75 +134,9 @@ function getGeoFromTimezone(): GeoInfo | null {
   return null;
 }
 
-/**
- * Fetch geo info — timezone first (instant), then IP API fallback (cached per session)
- */
 async function getGeoInfo(): Promise<GeoInfo | null> {
-  if (_geoCache) return _geoCache;
-
-  // Try timezone first — instant, no network
-  const tzGeo = getGeoFromTimezone();
-  if (tzGeo) {
-    _geoCache = tzGeo;
-    return _geoCache;
-  }
-
-  if (_geoFetchPromise) return _geoFetchPromise;
-
-  _geoFetchPromise = (async () => {
-    const apis: Array<{
-      url: string;
-      headers?: Record<string, string>;
-      parse: (d: any) => GeoInfo;
-    }> = [
-      {
-        url: 'https://ipwho.is/',
-        parse: (d: any) => ({
-          country: d.country || 'Unknown',
-          countryCode: d.country_code || 'XX',
-          city: d.city || undefined,
-          region: d.region || undefined,
-        }),
-      },
-      {
-        url: 'https://freeipapi.com/api/json',
-        parse: (d: any) => ({
-          country: d.countryName || 'Unknown',
-          countryCode: d.countryCode || 'XX',
-          city: d.cityName || undefined,
-          region: d.regionName || undefined,
-        }),
-      },
-    ];
-
-    for (const api of apis) {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 2000);
-        
-        const response = await fetch(api.url, {
-          signal: controller.signal,
-          headers: api.headers,
-        }).catch(() => null);
-
-        clearTimeout(timeout);
-        if (!response || !response.ok) continue;
-        
-        const data = await response.json();
-        const parsed = api.parse(data);
-        
-        if (parsed.countryCode && parsed.countryCode !== 'XX') {
-          _geoCache = parsed;
-          return _geoCache;
-        }
-      } catch {
-        continue;
-      }
-    }
-    return null;
-  })();
-
-  return _geoFetchPromise;
+  if (!_geoCache) _geoCache = getGeoFromTimezone();
+  return _geoCache;
 }
 
 // ============================================

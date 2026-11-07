@@ -23,7 +23,7 @@ import { startClientBootstrap } from "@/lib/client-bootstrap";
 import { CONTENT_SECURITY_POLICY as CSP } from "@/lib/security/content-security-policy";
 import { LINKMAX_UI_V2 } from '@/lib/ui-v2';
 import { siteRobots, requestLanguage } from '@/lib/seo/site-policy';
-import { marketingMetadata } from '@/lib/seo/marketing-metadata';
+import { loadMarketingMetadata, type MarketingMetadata } from '@/lib/seo/marketing-route';
 import { colors, fonts } from "@/design-system/tokens";
 
 // Cancelled requests are expected: stop them before any crash reporter sees them.
@@ -54,12 +54,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // Wait for the active locale chunk so neither SSR nor first paint shows raw keys.
   beforeLoad: async ({ location }) => {
     await i18nReady;
-    if (typeof window === 'undefined') await loadLazyLocale(requestLanguage(location.pathname, location.searchStr));
+    const ssrLanguage = typeof window === 'undefined' ? requestLanguage(location.pathname, location.searchStr) : null;
+    if (ssrLanguage) await loadLazyLocale(ssrLanguage);
+    // Marketing copy is a separate chunk; profiles and the app never load it.
+    const marketing = await loadMarketingMetadata(location.pathname, ssrLanguage ?? i18n.language).catch(() => null);
+    return { marketing };
   },
   head: ({ matches }) => {
-    const pathname = matches.at(-1)?.pathname || '/';
-    const search = new URLSearchParams(matches.at(-1)?.search as Record<string, string>).toString();
-    const page = marketingMetadata(pathname, typeof window === 'undefined' ? requestLanguage(pathname, search) : i18n.language);
+    const page = (matches[0]?.context as { marketing?: MarketingMetadata | null } | undefined)?.marketing ?? null;
     return ({
     meta: [
       { charSet: "utf-8" },
