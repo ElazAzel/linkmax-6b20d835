@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { useLocation, Link } from '@/lib/router-compat';
 import { logger } from '@/lib/utils/logger';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import Home from 'lucide-react/dist/esm/icons/home';
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 
@@ -12,26 +11,20 @@ const NotFound = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    logger.error('404 Error: User attempted to access non-existent route:', location.pathname, { context: 'NotFoundPage' });
+    // A mistyped or crawled URL is not an app error: keep it out of Sentry.
+    logger.info(`404: ${location.pathname}`, { context: 'NotFoundPage' });
   }, [location]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="text-center max-w-md w-full"
-      >
+      <div className="text-center max-w-md w-full">
         <div className="glass rounded-[2.5rem] p-10 shadow-glass-lg border border-white/10 space-y-6">
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
-            className="text-8xl font-black text-primary/20 select-none"
+          <div
+            className="lm-enter text-8xl font-black text-primary/20 select-none"
+            style={{ '--lm-enter-y': '0px', '--lm-enter-scale': 0.6, '--lm-enter-dur': '0.5s', '--lm-enter-delay': '100ms' } as CSSProperties}
           >
             404
-          </motion.div>
+          </div>
           
           <div className="space-y-2">
             <h1 className="text-2xl font-bold tracking-tight">
@@ -57,7 +50,7 @@ const NotFound = () => {
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

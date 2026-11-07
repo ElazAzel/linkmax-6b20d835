@@ -283,7 +283,16 @@ const i18nInitPromise = i18n
 // on the critical path. Fallback locales are warmed up afterwards, in background.
 const detectedLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || 'ru');
 
-const FALLBACK_WARMUP: string[] = ['ru', 'en'];
+// Russian is the source language some heads read directly, so it is always
+// warmed. English is skipped where it can never be reached: Russian is
+// complete (i18n-locale-parity.test) and CIS languages fall back to Russian,
+// so those visitors no longer download the ~250 KB English bundle.
+const RU_FALLBACK_LANGUAGES = new Set(['kk', 'uz', 'uk', 'be']);
+export function fallbackWarmup(lang: string): string[] {
+  if (lang === 'ru') return [];
+  if (lang === 'en' || RU_FALLBACK_LANGUAGES.has(lang)) return ['ru'];
+  return ['ru', 'en'];
+}
 
 export const i18nReady: Promise<void> = i18nInitPromise
   .then(async () => {
@@ -309,7 +318,7 @@ export const i18nReady: Promise<void> = i18nInitPromise
     const activeLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language || detectedLang);
     _ric(() => {
       if (!hydratingSsr) void syncDbLocale(activeLang);
-      FALLBACK_WARMUP.filter((l) => l !== activeLang).forEach((l) => {
+      fallbackWarmup(activeLang).forEach((l) => {
         void loadLazyLocale(l).then(() => { if (!hydratingSsr) return syncDbLocale(l); });
       });
     });

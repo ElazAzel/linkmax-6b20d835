@@ -3,16 +3,11 @@
  * Provides visual feedback while page data is being fetched
  */
 import { memo } from 'react';
-import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export const PublicPageSkeleton = memo(function PublicPageSkeleton() {
   return (
-    <motion.div
-      className="min-h-screen bg-background"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="min-h-screen bg-background">
       <div className="container max-w-2xl mx-auto px-4 py-8">
         {/* Profile skeleton */}
         <div className="flex flex-col items-center gap-4 mb-8">
@@ -53,6 +48,6 @@ export const PublicPageSkeleton = memo(function PublicPageSkeleton() {
           <Skeleton className="h-10 w-28 rounded-xl" />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 });

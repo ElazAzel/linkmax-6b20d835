@@ -5,6 +5,7 @@
 @import './styles/quiet-bento.css';
 @import './styles/public-appearance.css';
 @import './styles/block-tile-motion.css';
+@import './styles/enter-motion.css';
 @import './styles/landing-motion.css';
 @import './styles/landing-kx.css';
 /* LinkMAX interface tokens (html.lm-app) — generated from src/design-system/tokens.ts */

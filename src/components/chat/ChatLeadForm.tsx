@@ -1,14 +1,13 @@
 /**
  * ChatLeadForm - Compact lead capture form for Chatbot (Phase 27)
  */
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CrmService } from '@/services/crm.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChatLeadFormProps {
   pageId: string;
@@ -67,19 +66,15 @@ export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, conversation, 
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-3xl glass-card border-white/20 bg-white/5 shadow-2xl my-4"
+    <div
+      style={{ '--lm-enter-y': '10px' } as CSSProperties}
+      className="lm-enter p-4 rounded-3xl glass-card border-white/20 bg-white/5 shadow-2xl my-4"
     >
-      <AnimatePresence mode="wait">
-        {!sent ? (
-          <motion.form 
+      {!sent ? (
+          <form
             key="form"
-            onSubmit={handleSubmit} 
+            onSubmit={handleSubmit}
             className="space-y-3"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
           >
             <p className="text-[11px] font-black uppercase tracking-widest opacity-60 mb-2 px-1">
               {t('chat.lead.title', 'Оставить заявку')}
@@ -114,22 +109,20 @@ export const ChatLeadForm = ({ pageId, userId, intent, lastQuery, conversation, 
             <p className="text-[9px] text-center opacity-30 px-2 leading-tight">
               {t('chat.lead.disclaimer', 'Нажимая кнопку, вы соглашаетесь на обработку данных')}
             </p>
-          </motion.form>
+          </form>
         ) : (
-          <motion.div 
+          <div
             key="success"
-            className="flex flex-col items-center justify-center py-4 text-center"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            className="lm-enter flex flex-col items-center justify-center py-4 text-center"
+            style={{ '--lm-enter-y': '0px', '--lm-enter-scale': 0.8 } as CSSProperties}
           >
             <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-3">
               <Check className="h-6 w-6 text-emerald-500" />
             </div>
             <p className="text-sm font-black text-emerald-500">{t('chat.lead.success', 'Заявка отправлена!')}</p>
             <p className="text-[11px] opacity-60 mt-1">{t('chat.lead.successMsg', 'С вами скоро свяжутся')}</p>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.div>
+    </div>
   );
 };

@@ -5023,7 +5023,9 @@
   },
   "notFound": {
     "message": "Oops! Page not found",
-    "returnHome": "Return to Home"
+    "returnHome": "Return to Home",
+    "description": "The link is outdated or the address has a typo. Check it or start from the home page.",
+    "goToDashboard": "Dashboard"
   },
   "onboarding": {
     "additionalDetails": "Additional information",

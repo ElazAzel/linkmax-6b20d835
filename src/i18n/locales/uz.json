@@ -5023,7 +5023,9 @@
   },
   "notFound": {
     "message": "Voy! Sahifa topilmadi",
-    "returnHome": "Uyga qaytish"
+    "returnHome": "Uyga qaytish",
+    "description": "Havola eskirgan yoki manzilda xato bor. Manzilni tekshiring yoki bosh sahifadan boshlang.",
+    "goToDashboard": "Kabinetga"
   },
   "onboarding": {
     "additionalDetails": "Qo'shimcha ma'lumot",

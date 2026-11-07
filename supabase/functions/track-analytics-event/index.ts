@@ -18,6 +18,8 @@ const ALLOWED_EVENT_TYPES = new Set([...PAGE_EVENT_TYPES, ...MARKETING_EVENT_TYP
 const RATE_LIMIT_REQUESTS = 120;
 const RATE_LIMIT_WINDOW_SECONDS = 60;
 const MAX_BODY_BYTES = 16 * 1024;
+/** A page view and its block impressions arrive as one batch instead of one request each. */
+const MAX_BATCH_EVENTS = 25;
 
 function jsonResponse(body: Record<string, unknown>, status: number) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -67,18 +69,44 @@ async function hasAuthenticatedUser(supabaseUrl: string, apiKey: string, authori
 }
 
 // deno-lint-ignore no-explicit-any
-async function checkRateLimit(supabase: any, ipAddress: string) {
+async function checkRateLimit(supabase: any, ipAddress: string, weight = 1) {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_SECONDS * 1000).toISOString();
   const endpoint = "track-analytics-event";
   await supabase.from("rate_limits").delete().lt("window_start", windowStart);
   const { data: existing } = await supabase.from("rate_limits").select("id, request_count").eq("ip_address", ipAddress).eq("endpoint", endpoint).gte("window_start", windowStart).maybeSingle();
   if (existing) {
     if (existing.request_count >= RATE_LIMIT_REQUESTS) return false;
-    await supabase.from("rate_limits").update({ request_count: existing.request_count + 1 }).eq("id", existing.id);
+    await supabase.from("rate_limits").update({ request_count: existing.request_count + weight }).eq("id", existing.id);
     return true;
   }
-  await supabase.from("rate_limits").insert({ ip_address: ipAddress, endpoint, request_count: 1, window_start: new Date().toISOString() });
+  await supabase.from("rate_limits").insert({ ip_address: ipAddress, endpoint, request_count: weight, window_start: new Date().toISOString() });
   return true;
+}
+
+type EventRow = { page_id: string | null; block_id: string | null; event_type: string; metadata: Record<string, unknown> };
+type Checked = { row: EventRow; editor: boolean } | { error: string; status: number };
+
+// deno-lint-ignore no-explicit-any
+function checkEvent(payload: any): Checked {
+  if (!payload || typeof payload !== "object") return { error: "Invalid analytics request", status: 400 };
+  const pageId = typeof payload.pageId === "string" ? payload.pageId : null;
+  const blockId = typeof payload.blockId === "string" && UUID_RE.test(payload.blockId) ? payload.blockId : null;
+  const eventType = typeof payload.eventType === "string" ? payload.eventType : "";
+  if (!ALLOWED_EVENT_TYPES.has(eventType) && !isNamespacedEvent(eventType)) return { error: "Unsupported event type", status: 400 };
+  if (pageId && !UUID_RE.test(pageId)) return { error: "Invalid page id", status: 400 };
+  const editor = isAuthenticatedEditorEvent(eventType);
+  if (!pageId && !MARKETING_EVENT_TYPES.has(eventType) && !eventType.startsWith("auth:") && !editor) {
+    return { error: "Page id is required", status: 400 };
+  }
+  return { row: { page_id: pageId, block_id: blockId, event_type: eventType, metadata: sanitizeMetadata(payload.metadata) }, editor };
+}
+
+// deno-lint-ignore no-explicit-any
+async function publishedPageIds(supabase: any, rows: EventRow[]): Promise<Set<string>> {
+  const ids = [...new Set(rows.map((row) => row.page_id).filter((id): id is string => Boolean(id)))];
+  if (!ids.length) return new Set();
+  const { data } = await supabase.from("pages").select("id").in("id", ids).eq("is_published", true);
+  return new Set((data ?? []).map((page: { id: string }) => page.id));
 }
 
 serve(async (req: Request) => {
@@ -92,25 +120,35 @@ serve(async (req: Request) => {
     if (!supabaseUrl || !serviceRoleKey || !publishableKey) return jsonResponse({ error: "Service misconfigured" }, 500);
     const supabase = createClient(supabaseUrl, serviceRoleKey);
     const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
-    if (!await checkRateLimit(supabase, ipAddress)) return jsonResponse({ error: "Too many requests" }, 429);
     const payload = await req.json();
-    const pageId = typeof payload.pageId === "string" ? payload.pageId : null;
-    const blockId = typeof payload.blockId === "string" && UUID_RE.test(payload.blockId) ? payload.blockId : null;
-    const eventType = typeof payload.eventType === "string" ? payload.eventType : "";
-    if (!ALLOWED_EVENT_TYPES.has(eventType) && !isNamespacedEvent(eventType)) return jsonResponse({ error: "Unsupported event type" }, 400);
-    if (isAuthenticatedEditorEvent(eventType) && !await hasAuthenticatedUser(supabaseUrl, publishableKey, req.headers.get("authorization"))) {
+
+    if (Array.isArray(payload?.events)) {
+      // Batch: invalid entries and editor events (they need a session) are dropped,
+      // the rest are stored in one insert. Ten events weigh as one request.
+      const events = payload.events.slice(0, MAX_BATCH_EVENTS);
+      if (!await checkRateLimit(supabase, ipAddress, Math.max(1, Math.ceil(events.length / 10)))) return jsonResponse({ error: "Too many requests" }, 429);
+      const checked = events.map(checkEvent);
+      const rows = checked.flatMap((c: Checked) => ("row" in c && !c.editor ? [c.row] : []));
+      const published = await publishedPageIds(supabase, rows);
+      const accepted = rows.filter((row: EventRow) => !row.page_id || published.has(row.page_id));
+      if (accepted.length) {
+        const { error } = await supabase.from("analytics").insert(accepted);
+        if (error) return jsonResponse({ error: "Could not record events" }, 500);
+      }
+      return jsonResponse({ accepted: accepted.length, rejected: events.length - accepted.length }, 200);
+    }
+
+    if (!await checkRateLimit(supabase, ipAddress)) return jsonResponse({ error: "Too many requests" }, 429);
+    const checked = checkEvent(payload);
+    if ("error" in checked) return jsonResponse({ error: checked.error }, checked.status);
+    if (checked.editor && !await hasAuthenticatedUser(supabaseUrl, publishableKey, req.headers.get("authorization"))) {
       // Analytics is best-effort: drop editor events without a valid session silently.
       return new Response(null, { status: 204, headers: corsHeaders });
     }
-    if (pageId && !UUID_RE.test(pageId)) return jsonResponse({ error: "Invalid page id" }, 400);
-    if (!pageId && !MARKETING_EVENT_TYPES.has(eventType) && !eventType.startsWith("auth:") && !isAuthenticatedEditorEvent(eventType)) {
-      return jsonResponse({ error: "Page id is required" }, 400);
+    if (checked.row.page_id && !(await publishedPageIds(supabase, [checked.row])).has(checked.row.page_id)) {
+      return jsonResponse({ error: "Unknown page" }, 404);
     }
-    if (pageId) {
-      const { data: page } = await supabase.from("pages").select("id").eq("id", pageId).eq("is_published", true).maybeSingle();
-      if (!page) return jsonResponse({ error: "Unknown page" }, 404);
-    }
-    const { error } = await supabase.from("analytics").insert({ page_id: pageId, block_id: blockId, event_type: eventType, metadata: sanitizeMetadata(payload.metadata) });
+    const { error } = await supabase.from("analytics").insert(checked.row);
     if (error) return jsonResponse({ error: "Could not record event" }, 500);
     return new Response(null, { status: 204, headers: corsHeaders });
   } catch (error) {
