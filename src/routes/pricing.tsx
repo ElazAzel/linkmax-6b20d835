@@ -1,4 +1,4 @@
-import { buildMarketingHead } from '@/lib/seo/marketing-metadata';
+import { buildMarketingHead } from '@/lib/seo/marketing-head';
 import { createFileRoute } from "@tanstack/react-router";
 import Pricing from "@/pages/Pricing";
 import { FIXED_PRICES_KZT } from "@/hooks/useCurrencyRate";
