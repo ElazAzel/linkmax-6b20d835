@@ -28,6 +28,10 @@ export async function sendFriendRequest(friendId: string): Promise<{ success: bo
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: 'not_authenticated' };
 
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(friendId)) {
+    return { success: false, error: 'invalid_friend_id' };
+  }
+
   if (user.id === friendId) {
     return { success: false, error: 'cannot_add_self' };
   }
