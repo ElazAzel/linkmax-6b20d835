@@ -34,6 +34,9 @@ vi.mock('@/components/dashboard-v2/widgets/WalletOverviewWidget', () => ({ Walle
 vi.mock('@/components/dashboard-v2/widgets/KaspiQRWidget', () => ({ KaspiQRWidget: () => null }));
 vi.mock('@/components/dashboard-v2/widgets/SearchReadinessCard', () => ({ SearchReadinessCard: () => null }));
 vi.mock('@/components/dashboard-v2/widgets/MetricsGrid', () => ({ MetricsGrid: () => <div>25</div> }));
+vi.mock('@/hooks/dashboard/useDashboardMetrics', () => ({
+  useDashboardMetrics: () => ({ totalViews: 25, totalClicks: 4, totalLeads: 0, conversionRate: 0, interactionRate: 16, loading: false, error: null }),
+}));
 vi.mock('@/components/dashboard-v2/widgets/ConversionFunnelWidget', () => ({ ConversionFunnelWidget: () => <div>funnel</div> }));
 vi.mock('@/components/dashboard-v2/widgets/SourcesWidget', () => ({ SourcesWidget: () => <div>sources</div> }));
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, type CSSProperties } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,6 @@ import Send from 'lucide-react/dist/esm/icons/send';
 import { cn } from '@/lib/utils/utils';
 import { trackEvent, logChatQuery } from '@/services/analytics';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ExpertEngine } from '@/lib/chat/expert-engine';
 import { Block } from '@/types/blocks';
 import { ChatLeadForm } from './ChatLeadForm';
@@ -136,13 +135,10 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMob
   return (
     <>
       {/* Floating Action Button - Liquid Glass */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className={cn('fixed bottom-6 right-6 z-50', hideOnMobile && 'hidden sm:block')}
+      {!isOpen && (
+          <div
+            className={cn('lm-enter fixed bottom-6 right-6 z-50', hideOnMobile && 'hidden sm:block')}
+            style={{ '--lm-enter-y': '0px', '--lm-enter-scale': 0.4, '--lm-enter-dur': '0.3s' } as CSSProperties}
           >
             <Button
               onClick={() => setIsOpen(true)}
@@ -152,19 +148,15 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMob
             >
               <MessageCircle className="h-6 w-6 text-background" />
             </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
 
       {/* Chat Window - Liquid Glass Aesthetic */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+      {isOpen && (
+          <div
+            style={{ '--lm-enter-y': '20px', '--lm-enter-scale': 0.95, '--lm-enter-dur': '0.3s' } as CSSProperties}
             className={cn(
-              "fixed z-50 flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-hairline bg-background transition-all duration-300",
+              "lm-enter fixed z-50 flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-hairline bg-background transition-all duration-300",
               "inset-0 h-[100dvh] w-full rounded-none sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[400px] sm:h-[600px] sm:rounded-3xl"
             )}
           >
@@ -209,12 +201,11 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMob
               )}
 
               {messages.map((message, index) => (
-                <motion.div
+                <div
                   key={message.id || index}
-                  initial={{ opacity: 0, x: message.role === 'user' ? 20 : -20, y: 10 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  style={{ '--lm-enter-y': '10px', '--lm-enter-dur': '0.3s' } as CSSProperties}
                   className={cn(
-                    'flex w-full flex-col',
+                    'lm-enter flex w-full flex-col',
                     message.role === 'user' ? 'items-end' : 'items-start'
                   )}
                 >
@@ -242,21 +233,20 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMob
                       />
                     </div>
                   )}
-                </motion.div>
+                </div>
               ))}
 
               {isTyping && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex justify-start"
+                <div
+                  className="lm-enter flex justify-start"
+                  style={{ '--lm-enter-y': '6px', '--lm-enter-dur': '0.25s' } as CSSProperties}
                 >
                   <div className="bg-white/5 border border-white/5 rounded-2xl rounded-tl-none px-4 py-3 flex gap-1 items-center">
                     <span className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
                     <span className="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
                     <span className="w-1 h-1 bg-primary rounded-full animate-bounce" />
                   </div>
-                </motion.div>
+                </div>
               )}
 
               <div ref={messagesEndRef} className="h-4" />
@@ -303,9 +293,8 @@ export function ChatbotWidget({ pageId, userId, pageSlug, blocks, seo, hideOnMob
                 {t('chat.footer', 'Ответы на основе страницы · LinkMAX')}
               </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }

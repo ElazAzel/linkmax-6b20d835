@@ -1592,6 +1592,23 @@
         "event": "Tadbir",
         "purchase": "Xarid"
       }
+    },
+    "contactInfo": "Aloqa ma'lumotlari",
+    "deleteLead": "Arizani o'chirish",
+    "confirmDelete": "Bu ariza o'chirilsinmi?",
+    "deleteWarning": "Bu amalni ortga qaytarib bo'lmaydi. Arizaga oid vazifalar va muloqot tarixi ham o'chiriladi.",
+    "formFields": {
+      "name": "Ism",
+      "phone": "Telefon",
+      "email": "Email",
+      "message": "Xabar",
+      "comment": "Izoh"
+    },
+    "attributionFields": {
+      "source": "Manba",
+      "medium": "Kanal",
+      "campaign": "Kampaniya",
+      "referrer": "Qayerdan kelgan"
     }
   },
   "currency": {
@@ -1680,7 +1697,17 @@
       "themeDark": "Qorong‘i",
       "businessTools": "Biznes vositalari",
       "businessToolsDesc": "Savdo, band qilish, CRM, moliya va jamoa. O‘chirilganda kabinet oddiy sahifa konstruktori bo‘lib qoladi.",
-      "deviceAccounts": "Ushbu qurilmadagi akkauntlar"
+      "deviceAccounts": "Ushbu qurilmadagi akkauntlar",
+      "newPassword": "Yangi parol",
+      "confirmPassword": "Parolni takrorlang",
+      "updatePassword": "Parolni saqlash",
+      "passwordTooShort": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
+      "passwordMismatch": "Parollar mos kelmadi",
+      "passwordChanged": "Parol o'zgartirildi",
+      "passwordSame": "Yangi parol hozirgisi bilan bir xil",
+      "passwordWeak": "Parol juda oddiy — harf va raqamlar qo'shing",
+      "passwordReauth": "Parolni o'zgartirish uchun hisobingizga qaytadan kiring",
+      "passwordChangeFailed": "Parolni o'zgartirib bo'lmadi. Qaytadan urinib ko'ring"
     },
     "activity": {
       "all": "Hammasi",
@@ -1845,7 +1872,14 @@
       "filterAll": "Hammasi",
       "search": "Etakchilar boʻyicha qidirish...",
       "title": "Etakchilar (CRM)",
-      "updateError": "Yangilash xatosi"
+      "updateError": "Yangilash xatosi",
+      "markAllAs": "Barcha yangilari → {{stage}}",
+      "bulkMoved_one": "{{count}} ta ariza «{{stage}}» bosqichiga o'tkazildi",
+      "bulkMoved_few": "{{count}} ta ariza «{{stage}}» bosqichiga o'tkazildi",
+      "bulkMoved_many": "{{count}} ta ariza «{{stage}}» bosqichiga o'tkazildi",
+      "bulkMoved_other": "{{count}} ta ariza «{{stage}}» bosqichiga o'tkazildi",
+      "undo": "Qaytarish",
+      "bulkUndone": "O'zgarish bekor qilindi"
     },
     "loadError": "Yuklashda xato",
     "loadErrorDesc": "Sahifa maʼlumotlarini yuklab boʻlmadi",
@@ -5023,7 +5057,9 @@
   },
   "notFound": {
     "message": "Voy! Sahifa topilmadi",
-    "returnHome": "Uyga qaytish"
+    "returnHome": "Uyga qaytish",
+    "description": "Havola eskirgan yoki manzilda xato bor. Manzilni tekshiring yoki bosh sahifadan boshlang.",
+    "goToDashboard": "Kabinetga"
   },
   "onboarding": {
     "additionalDetails": "Qo'shimcha ma'lumot",

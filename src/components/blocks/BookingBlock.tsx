@@ -803,7 +803,8 @@ const LegacyBookingBlock = memo(function LegacyBookingBlockComponent({
         </div>
       </div>
 
-      <AnimatePresence mode="wait">
+      {/* initial={false}: the server-rendered first step must be visible before JS runs. */}
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div 
           key={selectedDate ? 'date-selected' : 'calendars'}
           initial={{ opacity: 0, y: 10 }}

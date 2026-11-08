@@ -1,6 +1,5 @@
 import { PageThemeProvider } from '@/lib/appearance/page-theme-provider';
-import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useMemo, lazy, Suspense, type CSSProperties } from 'react';
 import { useParams } from '@/lib/router-compat';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -310,27 +309,26 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
 
   return (
     <PageThemeProvider scope={themeScope}>
-    <AnimatePresence mode="wait">
+    <>
       {(loading || isTranslating) ? (
         <PublicPageSkeleton key="skeleton" />
       ) : !pageData ? (
         <PublicPageError key="error" type="not-found" />
       ) : (
-        <motion.div
+        <div
           key="content"
           className={cn(
             'min-h-screen bg-background text-foreground relative',
             themeScope.className,
+            // Server-rendered pages appear at once; client navigations fade in.
+            !initialPage && pageAnimation.duration > 0 && 'lm-enter',
           )}
           data-testid="public-page-root"
           style={{
             ...themeScope.style,
             ...themeBackgroundStyle,
+            ...(!initialPage ? { '--lm-enter-y': `${pageAnimation.y}px`, '--lm-enter-dur': `${pageAnimation.duration}s` } as CSSProperties : {}),
           }}
-          initial={initialPage ? false : { opacity: 0, y: pageAnimation.y }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: pageAnimation.duration }}
         >
           {/* Background layer — isolated so filter/blur doesn't affect content */}
           <div
@@ -529,9 +527,9 @@ export default function PublicPage({ initialPage = null, headManagedByRoute = fa
             </PageContactsProvider>
           </AnalyticsProvider>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
     </PageThemeProvider>
   );
 }

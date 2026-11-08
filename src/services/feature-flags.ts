@@ -285,24 +285,24 @@ async function fetchFeatureFlags(keys?: string[]): Promise<FeatureFlagDefinition
   }
 }
 
-async function isFeatureFlagEnabled(
-  key: string,
-  context: FeatureFlagContext = {}
-): Promise<boolean> {
-  const [flag] = await fetchFeatureFlags([key]);
-  if (!flag) return false;
-  return evaluateFeatureFlag(flag, context);
+// Flags and the user's flag context barely change within a session, while
+// the dashboard asks for several flags on every mount. Cache both briefly so a
+// visit costs one round of requests instead of one per flag and per mount.
+const FLAG_CACHE_MS = 60 * 1000;
+const flagCache = new Map<string, { at: number; promise: Promise<FeatureFlagDefinition | undefined> }>();
+let userContextCache: { userId: string; at: number; promise: Promise<{ tier: string | null; language: string | null; roles: string[] }> } | null = null;
+
+function cachedFlag(key: string): Promise<FeatureFlagDefinition | undefined> {
+  const hit = flagCache.get(key);
+  if (hit && Date.now() - hit.at < FLAG_CACHE_MS) return hit.promise;
+  const promise = fetchFeatureFlags([key]).then(([flag]) => flag);
+  flagCache.set(key, { at: Date.now(), promise });
+  return promise;
 }
 
-export async function isCurrentUserFeatureFlagEnabled(
-  key: string,
-  context: Omit<FeatureFlagContext, 'userId'> = {}
-): Promise<boolean> {
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user?.id) return false;
-
-  const userId = data.user.id;
-  const [profileResult, rolesResult] = await Promise.all([
+function cachedUserContext(userId: string) {
+  if (userContextCache?.userId === userId && Date.now() - userContextCache.at < FLAG_CACHE_MS) return userContextCache.promise;
+  const promise = Promise.all([
     supabase
       .from('user_profiles')
       .select('premium_tier, telegram_language')
@@ -312,15 +312,33 @@ export async function isCurrentUserFeatureFlagEnabled(
       .from('user_roles')
       .select('role')
       .eq('user_id', userId),
-  ]);
+  ]).then(([profileResult, rolesResult]) => ({
+    tier: profileResult.data?.premium_tier ?? null,
+    language: profileResult.data?.telegram_language ?? null,
+    roles: rolesResult.data?.map((role) => role.role) ?? [],
+  }));
+  userContextCache = { userId, at: Date.now(), promise };
+  return promise;
+}
 
-  const roles = rolesResult.data?.map((role) => role.role) ?? [];
+export async function isCurrentUserFeatureFlagEnabled(
+  key: string,
+  context: Omit<FeatureFlagContext, 'userId'> = {}
+): Promise<boolean> {
+  // The local session is enough to evaluate rollout rules; getUser() would add
+  // a network round trip to the auth server for every flag.
+  const { data } = await supabase.auth.getSession();
+  const userId = data.session?.user?.id;
+  if (!userId) return false;
 
-  return isFeatureFlagEnabled(key, {
+  const [flag, userContext] = await Promise.all([cachedFlag(key), cachedUserContext(userId)]);
+  if (!flag) return false;
+
+  return evaluateFeatureFlag(flag, {
     ...context,
     userId,
-    tier: context.tier ?? profileResult.data?.premium_tier ?? null,
-    language: context.language ?? profileResult.data?.telegram_language ?? null,
-    roles: context.roles ?? roles,
+    tier: context.tier ?? userContext.tier,
+    language: context.language ?? userContext.language,
+    roles: context.roles ?? userContext.roles,
   });
 }

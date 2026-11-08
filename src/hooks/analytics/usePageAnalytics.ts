@@ -468,7 +468,7 @@ export function usePageAnalytics(externalPageId?: string | null, initialPeriod: 
 
       const avgSessionDuration = allDurations.length > 0
         ? Math.round(allDurations.reduce((sum, d) => sum + d, 0) / allDurations.length)
-        : (totalViews > 0 ? 45 : 0); // Default estimate only if there are views
+        : 0; // No measured sessions: show "—", never an invented estimate
 
       // Calculate returning visitors — visitorId with >1 unique sessionId
       const visitorSessions = new Map<string, Set<string>>();

@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useId } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { subDays, startOfDay, endOfDay } from 'date-fns';
+import { subDays } from 'date-fns';
 import { logger } from '@/lib/utils/logger';
 
 interface MetricsSummary {
@@ -14,100 +15,91 @@ interface MetricsSummary {
   error: Error | null;
 }
 
-export function useDashboardMetrics(pageId: string | undefined) {
+const EMPTY = { totalViews: 0, totalClicks: 0, totalLeads: 0, conversionRate: 0, interactionRate: 0 };
+
+const dashboardMetricsQueryKey = (pageId: string, userId: string) => ['dashboardMetrics', pageId, userId] as const;
+
+/**
+ * Block impressions are stored as `view` events with metadata.isBlockImpression;
+ * a page with eight blocks used to count nine "views" per visit. Count page
+ * views only, like the analytics screen does.
+ */
+const PAGE_VIEWS_ONLY = 'metadata->>isBlockImpression.is.null,metadata->>isBlockImpression.neq.true';
+
+async function fetchMetrics(pageId: string, userId: string) {
+  const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
+  const count = (eventType: 'view' | 'click') => {
+    let query = supabase
+      .from('analytics')
+      .select('*', { count: 'exact', head: true })
+      .eq('page_id', pageId)
+      .eq('event_type', eventType)
+      .gte('created_at', thirtyDaysAgo);
+    if (eventType === 'view') query = query.or(PAGE_VIEWS_ONLY);
+    return query;
+  };
+
+  const [viewsResult, clicksResult, leadsResult] = await Promise.all([
+    count('view'),
+    count('click'),
+    // NOTE: 'leads' lacks a page_id column; count the owner's leads.
+    supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gte('created_at', thirtyDaysAgo),
+  ]);
+  if (viewsResult.error) throw viewsResult.error;
+  if (clicksResult.error) throw clicksResult.error;
+  if (leadsResult.error) logger.error('Error fetching leads count', leadsResult.error);
+
+  const views = viewsResult.count || 0;
+  const clicks = clicksResult.count || 0;
+  const totalLeads = leadsResult.count || 0;
+  return {
+    totalViews: views,
+    totalClicks: clicks,
+    totalLeads,
+    conversionRate: views > 0 ? (totalLeads / views) * 100 : 0,
+    interactionRate: views > 0 ? (clicks / views) * 100 : 0,
+  };
+}
+
+/** 30-day totals for the overview. Shared by every widget that shows them. */
+export function useDashboardMetrics(pageId: string | undefined): MetricsSummary {
   const { user } = useAuth();
-  const [metrics, setMetrics] = useState<MetricsSummary>({
-    totalViews: 0,
-    totalClicks: 0,
-    totalLeads: 0,
-    conversionRate: 0,
-    interactionRate: 0,
-    loading: true,
-    error: null,
+  const userId = user?.id;
+  const queryClient = useQueryClient();
+  const channelSuffix = useId();
+
+  const query = useQuery({
+    queryKey: dashboardMetricsQueryKey(pageId ?? '', userId ?? ''),
+    enabled: !!pageId && !!userId,
+    staleTime: 60 * 1000,
+    queryFn: () => fetchMetrics(pageId!, userId!),
   });
 
+  // New leads refresh the shared totals.
   useEffect(() => {
-    if (!pageId || !user) return;
-
-    const fetchMetrics = async () => {
-      setMetrics(prev => ({ ...prev, loading: true }));
-      try {
-        const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
-
-        // 1. Fetch Views & Clicks from analytics (properly typed)
-        const { count: viewsCount, error: viewsError } = await supabase
-          .from('analytics')
-          .select('*', { count: 'exact', head: true })
-          .eq('page_id', pageId)
-          .eq('event_type', 'view')
-          .gte('created_at', thirtyDaysAgo);
-
-        if (viewsError) throw viewsError;
-
-        const { count: clicksCount, error: clicksError } = await supabase
-          .from('analytics')
-          .select('*', { count: 'exact', head: true })
-          .eq('page_id', pageId)
-          .eq('event_type', 'click')
-          .gte('created_at', thirtyDaysAgo);
-
-        if (clicksError) throw clicksError;
-
-        const views = viewsCount || 0;
-        const clicks = clicksCount || 0;
-
-        // 2. Fetch Leads from leads table
-        // NOTE: 'leads' table currently lacks 'page_id' column in schema (verified in types.ts).
-        // Fetching all leads for the user as a fallback.
-        const { count: leadsCount, error: leadsError } = await supabase
-          .from('leads')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id) // Ensure we filter by user_id
-          .gte('created_at', thirtyDaysAgo);
-
-        if (leadsError) {
-          // Log but don't crash if it's a minor error
-          logger.error('Error fetching leads count', leadsError);
-        }
-
-        const totalLeads = leadsCount || 0;
-        const conversionRate = views > 0 ? (totalLeads / views) * 100 : 0;
-        const interactionRate = views > 0 ? (clicks / views) * 100 : 0;
-
-        setMetrics({
-          totalViews: views,
-          totalClicks: clicks,
-          totalLeads,
-          conversionRate,
-          interactionRate,
-          loading: false,
-          error: null,
-        });
-      } catch (err) {
-        logger.error('Error fetching dashboard metrics', err);
-        setMetrics(prev => ({ ...prev, loading: false, error: err as Error }));
-      }
-    };
-
-    fetchMetrics();
-    
-    // Set up real-time subscription for leads only
+    if (!pageId || !userId) return;
     const subscription = supabase
-      .channel('public:leads')
-      .on('postgres_changes', { 
-        event: 'INSERT', 
-        schema: 'public', 
+      .channel(`dashboard-metrics-leads-${channelSuffix}`)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
         table: 'leads',
-        filter: `user_id=eq.${user.id}` // Added security filter
+        filter: `user_id=eq.${userId}`,
       }, () => {
-        fetchMetrics();
+        void queryClient.invalidateQueries({ queryKey: dashboardMetricsQueryKey(pageId, userId) });
       })
       .subscribe();
+    return () => { subscription.unsubscribe(); };
+  }, [pageId, userId, queryClient, channelSuffix]);
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [pageId, user]);
-
-  return metrics;
+  if (query.error) logger.debug('Dashboard metrics failed', { data: query.error });
+  return {
+    ...(query.data ?? EMPTY),
+    loading: !!pageId && !!userId ? query.isLoading : true,
+    error: (query.error as Error | null) ?? null,
+  };
 }

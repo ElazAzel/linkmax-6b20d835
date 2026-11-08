@@ -2,6 +2,7 @@
  * InsightsScreen - Comprehensive analytics dashboard with charts and AI recommendations
  */
 import { memo, useState, useMemo } from 'react';
+import { useBusinessFeatures } from '@/lib/features';
 import { useTranslation } from 'react-i18next';
 import { usePageAnalytics } from '@/hooks/analytics/usePageAnalytics';
 import Eye from 'lucide-react/dist/esm/icons/eye';
@@ -177,6 +178,7 @@ export const InsightsScreen = memo(function InsightsScreen({
     [totalDevices, stats.devices]
   );
 
+  const businessEnabled = useBusinessFeatures();
   // AI Insights (algorithmic heuristics)
   const insights = useInsights(
     {
@@ -189,6 +191,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         topBlocks: stats.topBlocks,
       },
       devicePercentages,
+      businessEnabled,
     },
     onApplyInsight,
   );
@@ -261,10 +264,6 @@ export const InsightsScreen = memo(function InsightsScreen({
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="px-[var(--space-page-px)] pb-5">
-        <GrowthAnalyticsCard pageId={pageId} />
       </div>
 
       <div className="px-[var(--space-page-px)] pb-24 space-y-7">
@@ -765,6 +764,8 @@ export const InsightsScreen = memo(function InsightsScreen({
             </Tabs>
           </>
         )}
+        {/* Referral growth is secondary: after the core numbers, and only once there is traffic. */}
+        {hasData && <GrowthAnalyticsCard pageId={pageId} />}
       </div>
     </div>
   );

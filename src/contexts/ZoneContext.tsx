@@ -29,6 +29,11 @@ export function ZoneProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/** Zone state when rendered inside ZoneProvider, otherwise null. */
+export function useOptionalZoneContext(): ZoneContextValue | null {
+  return useContext(ZoneContext);
+}
+
 export function useZoneContext() {
   const ctx = useContext(ZoneContext);
   if (!ctx) throw new Error('useZoneContext must be used within ZoneProvider');

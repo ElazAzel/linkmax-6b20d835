@@ -162,23 +162,33 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
     const handleChangePassword = useCallback(async () => {
         if (newPassword.length < 6) {
-            toast.error(t('dashboard.accountSettings.passwordTooShort', 'Password must be at least 6 characters'));
+            toast.error(t('dashboard.accountSettings.passwordTooShort', 'Пароль должен быть не короче 6 символов'));
             return;
         }
         if (newPassword !== confirmPassword) {
-            toast.error(t('dashboard.accountSettings.passwordMismatch', 'Passwords do not match'));
+            toast.error(t('dashboard.accountSettings.passwordMismatch', 'Пароли не совпадают'));
             return;
         }
         setPasswordSaving(true);
         try {
             const { error } = await supabase.auth.updateUser({ password: newPassword });
             if (error) throw error;
-            toast.success(t('dashboard.accountSettings.passwordChanged', 'Password changed successfully'));
+            toast.success(t('dashboard.accountSettings.passwordChanged', 'Пароль изменён'));
             setShowChangePassword(false);
             setNewPassword('');
             setConfirmPassword('');
-        } catch (error: any) {
-            toast.error(error.message || t('common.error', 'Error'));
+        } catch (error) {
+            // Supabase answers in English; show our own text for the known codes.
+            const code = (error as { code?: string } | null)?.code;
+            toast.error(
+                code === 'same_password'
+                    ? t('dashboard.accountSettings.passwordSame', 'Новый пароль совпадает с текущим')
+                    : code === 'weak_password'
+                        ? t('dashboard.accountSettings.passwordWeak', 'Пароль слишком простой — добавьте буквы и цифры')
+                        : code === 'reauthentication_needed'
+                            ? t('dashboard.accountSettings.passwordReauth', 'Чтобы сменить пароль, войдите в аккаунт заново')
+                            : t('dashboard.accountSettings.passwordChangeFailed', 'Не удалось сменить пароль. Попробуйте ещё раз'),
+            );
         } finally {
             setPasswordSaving(false);
         }
@@ -491,7 +501,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                     </DialogHeader>
                     <div className="space-y-4 py-2">
                         <div className="space-y-2">
-                            <Label>{t('dashboard.accountSettings.newPassword', 'New password')}</Label>
+                            <Label>{t('dashboard.accountSettings.newPassword', 'Новый пароль')}</Label>
                             <Input
                                 type="password"
                                 value={newPassword}
@@ -501,7 +511,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>{t('dashboard.accountSettings.confirmPassword', 'Confirm password')}</Label>
+                            <Label>{t('dashboard.accountSettings.confirmPassword', 'Повторите пароль')}</Label>
                             <Input
                                 type="password"
                                 value={confirmPassword}
@@ -515,7 +525,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             disabled={passwordSaving || !newPassword}
                             className="w-full rounded-xl"
                         >
-                            {passwordSaving ? t('common.saving', 'Saving...') : t('dashboard.accountSettings.updatePassword', 'Update Password')}
+                            {passwordSaving ? t('common.saving', 'Сохраняем...') : t('dashboard.accountSettings.updatePassword', 'Сохранить пароль')}
                         </Button>
                     </div>
                 </DialogContent>

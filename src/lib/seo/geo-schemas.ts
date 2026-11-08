@@ -44,6 +44,9 @@ interface SchemaContext {
   /** Real page timestamps; without them the schema omits the dates. */
   dateModified?: string;
   dateCreated?: string;
+  /** Owner-set profession and city (page settings); they beat guesses from the bio. */
+  profession?: string | null;
+  city?: string | null;
 }
 
 /**
@@ -260,9 +263,14 @@ function generateMainEntity(
     }
   }
 
-  // Add jobTitle for Person
-  if (entityType === 'Person' && context.answerBlock.niche) {
-    entity.jobTitle = context.answerBlock.niche;
+  // A person's role and home city let search and AI answers say who and where.
+  if (entityType === 'Person') {
+    // "CEO X, DevRel Y" lists several roles: schema.org takes them as an array.
+    const roles = (context.profession ?? '').split(/\s*[,;]\s*/).map((role) => role.trim()).filter(Boolean).slice(0, 5);
+    const jobTitle = roles.length > 1 ? roles : roles[0] || context.answerBlock.niche;
+    if (jobTitle) entity.jobTitle = jobTitle;
+    const city = context.city?.trim() || context.answerBlock.location;
+    if (city) entity.homeLocation = { '@type': 'Place', name: city };
   }
 
   return entity;

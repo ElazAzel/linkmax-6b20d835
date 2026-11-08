@@ -161,6 +161,8 @@ export function computePublicPageSeo(
     pageUrl,
     dateModified: page.updatedAt || undefined,
     dateCreated: page.createdAt,
+    profession: page.profession,
+    city: page.city,
   });
   const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': geoSchemas.graph });
 

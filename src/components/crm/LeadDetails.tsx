@@ -70,6 +70,7 @@ import {
   parseTaskInteraction,
   isTaskInteraction,
 } from '@/lib/crm/crm-lite';
+import { getLeadAttribution, getLeadFields, type LeadField } from '@/lib/crm/lead-form-data';
 
 interface LeadDetailsProps {
   lead: Lead;
@@ -218,12 +219,37 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
     .filter((item): item is NonNullable<typeof item> => item !== null);
   const regularInteractions = interactions.filter(i => !isTaskInteraction(i));
 
+  // The visitor's answers (metadata.form_data) as label/value rows; ids, UTM
+  // tags and "null" placeholders are left out.
+  const sameAsContact = (field: LeadField) => {
+    const same = (a?: string | null, b?: string | null) => !!a && !!b && a.trim().toLowerCase() === b.trim().toLowerCase();
+    if (field.kind === 'name') return same(field.value, lead.name);
+    if (field.kind === 'email') return same(field.value, lead.email);
+    if (field.kind === 'phone') return !!lead.phone && field.value.replace(/\D/g, '') === lead.phone.replace(/\D/g, '');
+    return false;
+  };
+  const formFields = getLeadFields(lead.metadata, {
+    labels: {
+      name: t('crm.formFields.name', 'Имя'),
+      phone: t('crm.formFields.phone', 'Телефон'),
+      email: t('crm.formFields.email', 'Email'),
+      message: t('crm.formFields.message', 'Сообщение'),
+      comment: t('crm.formFields.comment', 'Комментарий'),
+    },
+    yes: t('common.yes', 'Да'),
+    no: t('common.no', 'Нет'),
+  }).filter(field => !sameAsContact(field));
+  const attribution = getLeadAttribution(lead.metadata);
+  const hasAttribution = Object.values(attribution).some(Boolean);
+  const isChatLead = !!lead.metadata?.chat_lead;
+  const sourceKey = lead.source === 'page_view' ? 'pageView' : lead.source;
+
   const Content = (
     <div className="p-3 sm:p-4 space-y-4 sm:space-y-6">
       {/* Contact Info - Compact card */}
       <Card className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         <h4 className="font-medium text-xs sm:text-sm text-muted-foreground">
-          {t('crm.contactInfo', 'Contact Information')}
+          {t('crm.contactInfo', 'Контактная информация')}
         </h4>
         {lead.email && (
           <a
@@ -249,7 +275,7 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className={`${sourceColors[lead.source]} text-xs sm:text-xs`}>
-            {sourceIcons[lead.source]} {t(`crm.source.${lead.source}`, lead.source)}
+            {sourceIcons[lead.source]} {t(`crm.sources.${sourceKey}`, lead.source)}
           </Badge>
         </div>
       </Card>
@@ -258,7 +284,7 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
 
 
       {/* Form Data / Metadata - Compact */}
-      {lead.metadata && Object.keys(lead.metadata).length > 0 && (
+      {(isChatLead || formFields.length > 0 || hasAttribution) && (
         <Card className="p-3 sm:p-4">
           <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 flex items-center gap-2">
             <Tag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -266,7 +292,7 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
           </h4>
 
           {/* Expert Engine Insight - Phase 28 */}
-          {lead.metadata.chat_lead && (
+          {lead.metadata && lead.metadata.chat_lead && (
             <div className="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-2xl space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold uppercase tracking-[0.06em] text-primary">Assistant Insight</span>
@@ -363,51 +389,51 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
             </div>
           )}
 
-          <div className="space-y-1.5 sm:space-y-2">
-            {Object.entries(lead.metadata)
-              .filter(([key]) => !key.startsWith('utm_') && key !== 'referrer')
-              .map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-0.5 p-2 bg-accent/50 rounded-lg">
-                <span className="text-xs font-bold text-muted-foreground uppercase">{key}</span>
-                <span className="text-xs sm:text-sm break-words">{String(value)}</span>
-              </div>
-            ))}
-          </div>
+          {formFields.length > 0 && (
+            <dl className="space-y-1.5 sm:space-y-2" data-testid="lead-details-form-fields">
+              {formFields.map(field => (
+                <div key={field.key} className="flex flex-col gap-0.5 p-2 bg-accent/50 rounded-lg">
+                  <dt className="text-xs font-medium text-muted-foreground">{field.label}</dt>
+                  <dd className="text-sm break-words whitespace-pre-line">{field.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
 
           {/* Attribution Section */}
-          {Object.keys(lead.metadata).some(k => k.startsWith('utm_') || k === 'referrer') && (
-            <div className="mt-4 pt-4 border-t border-border space-y-3">
+          {hasAttribution && (
+            <div className={cn('space-y-3', formFields.length > 0 && 'mt-4 pt-4 border-t border-border')}>
               <h4 className="font-medium text-xs uppercase tracking-[0.06em] text-muted-foreground mb-2 flex items-center gap-2">
                 <Megaphone className="h-3 w-3" />
                 {t('crm.attribution', 'Атрибуция')}
               </h4>
-              
+
               <div className="grid grid-cols-2 gap-2">
-                {lead.metadata.utm_source && (
+                {attribution.source && (
                   <div className="p-2 bg-info/12 rounded-xl border border-info/20">
-                    <span className="text-xs font-bold text-info block mb-0.5 uppercase">Source</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_source}</span>
+                    <span className="text-xs font-bold text-info block mb-0.5">{t('crm.attributionFields.source', 'Источник')}</span>
+                    <span className="text-xs font-bold truncate block">{attribution.source}</span>
                   </div>
                 )}
-                {lead.metadata.utm_medium && (
+                {attribution.medium && (
                   <div className="p-2 bg-primary/12 rounded-xl border border-primary/20">
-                    <span className="text-xs font-bold text-primary block mb-0.5 uppercase">Medium</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_medium}</span>
+                    <span className="text-xs font-bold text-primary block mb-0.5">{t('crm.attributionFields.medium', 'Канал')}</span>
+                    <span className="text-xs font-bold truncate block">{attribution.medium}</span>
                   </div>
                 )}
-                {lead.metadata.utm_campaign && (
+                {attribution.campaign && (
                   <div className="p-2 bg-primary/12 rounded-xl border border-primary/20 col-span-2">
-                    <span className="text-xs font-bold text-primary block mb-0.5 uppercase">Campaign</span>
-                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_campaign}</span>
+                    <span className="text-xs font-bold text-primary block mb-0.5">{t('crm.attributionFields.campaign', 'Кампания')}</span>
+                    <span className="text-xs font-bold truncate block">{attribution.campaign}</span>
                   </div>
                 )}
-                {lead.metadata.referrer && (
+                {attribution.referrer && (
                   <div className="p-2 bg-success/12 rounded-xl border border-success/20 col-span-2">
-                    <span className="text-xs font-bold text-success block mb-0.5 uppercase flex items-center gap-1">
+                    <span className="text-xs font-bold text-success block mb-0.5 flex items-center gap-1">
                       <Globe className="h-2 w-2" />
-                      Referrer
+                      {t('crm.attributionFields.referrer', 'Откуда пришёл')}
                     </span>
-                    <span className="text-xs font-medium truncate block opacity-80 italic">{lead.metadata.referrer}</span>
+                    <span className="text-xs font-medium truncate block opacity-80 italic">{attribution.referrer}</span>
                   </div>
                 )}
               </div>
@@ -619,14 +645,14 @@ export function LeadDetails({ lead, open, onOpenChange, onLeadUpdated, onLeadDel
         <AlertDialogTrigger asChild>
           <Button variant="destructive" className="w-full h-11 text-sm">
             <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
-            {t('crm.deleteLead', 'Delete Lead')}
+            {t('crm.deleteLead', 'Удалить заявку')}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-base sm:text-lg">{t('crm.confirmDelete', 'Delete this lead?')}</AlertDialogTitle>
+            <AlertDialogTitle className="text-base sm:text-lg">{t('crm.confirmDelete', 'Удалить эту заявку?')}</AlertDialogTitle>
             <AlertDialogDescription className="text-xs sm:text-sm">
-              {t('crm.deleteWarning', 'This action cannot be undone. All interactions will also be deleted.')}
+              {t('crm.deleteWarning', 'Это действие нельзя отменить. Задачи и журнал общения по заявке тоже удалятся.')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:gap-0">

@@ -1,5 +1,4 @@
 import { memo, type CSSProperties } from 'react';
-import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils/utils';
 import { Block } from '@/types/page';
@@ -59,20 +58,25 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   const { profile: profileBlock, socials: profileSocials, content: contentBlocks } = resolveProfileComposition(validBlocks);
 
   const noMotion = animation === 'none';
-  const cellVariants = noMotion
-    ? { hidden: { opacity: 1 }, show: { opacity: 1 } }
-    : {
-        hidden: { opacity: 0, y: animation === 'energetic' ? 24 : 12, scale: animation === 'energetic' ? 0.96 : 0.99 },
-        show: {
-          opacity: 1, y: 0, scale: 1,
-          transition: animation === 'energetic'
-            ? { type: 'spring' as const, stiffness: 380, damping: 22 }
-            : { type: 'spring' as const, stiffness: 260, damping: 26 },
-        },
-      };
+  const energetic = animation === 'energetic';
+  // CSS entrance (styles/enter-motion.css); the server render passes 'none'.
+  const enter = (index: number, base = 0, extra?: CSSProperties): { className?: string; style?: CSSProperties; 'data-lm-motion'?: string } =>
+    noMotion
+      ? {}
+      : {
+          className: 'lm-enter',
+          'data-lm-motion': energetic ? 'energetic' : undefined,
+          style: {
+            '--lm-enter-y': energetic ? '24px' : '12px',
+            '--lm-enter-scale': energetic ? 0.96 : 0.99,
+            '--lm-enter-dur': energetic ? '0.5s' : '0.45s',
+            '--lm-enter-delay': `${base + Math.min(index, 12) * (energetic ? 30 : 50)}ms`,
+            ...extra,
+          } as CSSProperties,
+        };
   const renderCell = (
     block: Block,
-    opts?: { index?: number; total?: number; composition?: CompositionDef },
+    opts?: { index?: number; total?: number; composition?: CompositionDef; enterIndex?: number },
   ) => {
     const composition = opts?.composition;
     const variant = resolveBlockVariant(block.type, (block as any).designVariant);
@@ -99,18 +103,18 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     const itemClass = composition?.itemClass?.(opts?.index ?? 0, opts?.total ?? 1) || '';
 
     // Entrance animation lives on the outer element; the card chrome and hover
-    // effects live on the inner one. framer-motion leaves an inline transform
-    // on the animated node, which used to cancel every CSS hover transform.
+    // effects live on the inner one, so hover transforms are never cancelled.
+    const entrance = enter(opts?.enterIndex ?? opts?.index ?? 0, 40);
     return (
-      <motion.div
+      <div
         key={block.id}
         data-lm-cell
         data-lm-wide={isWide ? '' : undefined}
         data-lm-auto={layout.autoHeight ? '' : undefined}
         data-lm-type={block.type}
-        className={cn('relative flex min-w-0 min-h-0', !isTransparent && 'lm-owned-surface', !inComposition && !layout.autoHeight && 'lm-fixed-cell', itemClass)}
-        style={inComposition ? undefined : layout.style}
-        variants={cellVariants}
+        data-lm-motion={entrance['data-lm-motion']}
+        className={cn('relative flex min-w-0 min-h-0', !isTransparent && 'lm-owned-surface', !inComposition && !layout.autoHeight && 'lm-fixed-cell', itemClass, entrance.className)}
+        style={inComposition ? entrance.style : { ...layout.style, ...entrance.style }}
       >
         <div
           className={cn(
@@ -146,7 +150,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             />
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -180,23 +184,16 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
     runs.push({ kind: 'grid', blocks: [block] });
   }
 
-  const staggerVariants = noMotion
-    ? { hidden: { opacity: 1 }, show: { opacity: 1 } }
-    : {
-        hidden: { opacity: 0 },
-        show: { opacity: 1, transition: { staggerChildren: animation === 'energetic' ? 0.03 : 0.05, delayChildren: 0.04 } },
-      };
+  const profileEntrance = enter(0, 0, { '--lm-enter-y': '16px', '--lm-enter-dur': '0.5s' } as CSSProperties);
 
   return (
     <div className={cn('lm-block-stack space-y-4', className)}>
       {/* Profile Block — always full bleed */}
       {profileBlock && (
-        <motion.div
-          className="lm-profile-card w-full"
-          style={{ borderRadius: resolveBlockCellAppearance(profileBlock).style.borderRadius }}
-          initial={noMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: noMotion ? 0 : 0.5, ease: 'easeOut' }}
+        <div
+          className={cn('lm-profile-card w-full', profileEntrance.className)}
+          data-lm-motion={profileEntrance['data-lm-motion']}
+          style={{ borderRadius: resolveBlockCellAppearance(profileBlock).style.borderRadius, ...profileEntrance.style }}
         >
           <BlockRenderer
             block={profileBlock}
@@ -207,22 +204,19 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             ownerTier={ownerTier}
           />
           {profileSocials && <div data-lm-socials><BlockRenderer block={profileSocials} isPreview={isPreview} pageOwnerId={pageOwnerId} pageId={pageId} isOwnerPremium={isOwnerPremium} ownerTier={ownerTier} /></div>}
-        </motion.div>
+        </div>
       )}
 
       {runs.map((run, runIndex) =>
         run.kind === 'grid' ? (
           splitBlockLayoutRuns(run.blocks).map((group, groupIndex) => (
-            <motion.div
+            <div
               key={`grid-${runIndex}-${groupIndex}`}
               data-lm-grid
               className={resolveBlockLayout(group[0]).autoHeight ? 'lm-auto-run' : 'lm-tile-grid'}
-              initial="hidden"
-              animate="show"
-              variants={staggerVariants}
             >
-              {group.map((block) => renderCell(block))}
-            </motion.div>
+              {group.map((block, i) => renderCell(block, { enterIndex: i }))}
+            </div>
           ))
         ) : (
           <section
@@ -230,17 +224,11 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             data-composition={run.composition.id}
             className={cn('relative', run.composition.shellClass)}
           >
-            <motion.div
-              className={run.composition.gridClass}
-              initial="hidden"
-              animate="show"
-              viewport={{ once: true }}
-              variants={staggerVariants}
-            >
+            <div className={run.composition.gridClass}>
               {run.blocks.map((block, i) =>
                 renderCell(block, { index: i, total: run.blocks.length, composition: run.composition }),
               )}
-            </motion.div>
+            </div>
           </section>
         ),
       )}

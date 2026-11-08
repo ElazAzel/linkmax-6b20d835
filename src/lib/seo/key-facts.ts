@@ -6,6 +6,7 @@
  */
 
 import type { Block, PricingBlock, SocialsBlock, BookingBlock, EventBlock } from '@/types/page';
+import { socialDisplayName } from '@/lib/social/platforms';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { AnswerBlockData } from './answer-block';
 import { getLocale } from '@/lib/utils/format';
@@ -200,7 +201,7 @@ export function generateKeyFacts(
     const platformNames = (socialsBlock.platforms || [])
       .filter((p: any) => p != null && typeof p === 'object')
       .slice(0, 4)
-      .map((p: any) => getI18nText(p.name, language) || p.url?.split('/')[2]?.replace('www.', ''))
+      .map((p: any) => socialDisplayName(getI18nText(p.name, language), p.url, p.platform) || p.url?.split('/')[2]?.replace('www.', ''))
       .filter(Boolean)
       .join(', ');
 
