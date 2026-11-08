@@ -278,7 +278,7 @@ export const AI_CTA_LABELS: Record<
 > = {
   ru: {
     contact: 'Как связаться',
-    contactIntro: 'Прямые контакты для записи и заявок',
+    contactIntro: 'Прямые контакты владельца страницы',
     pricing: 'Стоимость услуг',
     pricingFrom: 'от',
     bookingCta: 'Записаться онлайн',
@@ -286,7 +286,7 @@ export const AI_CTA_LABELS: Record<
   },
   en: {
     contact: 'How to contact',
-    contactIntro: 'Direct contact channels for booking and inquiries',
+    contactIntro: 'Direct ways to reach the page owner',
     pricing: 'Pricing',
     pricingFrom: 'from',
     bookingCta: 'Book online',
@@ -294,7 +294,7 @@ export const AI_CTA_LABELS: Record<
   },
   kk: {
     contact: 'Байланыс жолдары',
-    contactIntro: 'Жазылу және өтінім үшін тікелей байланыс',
+    contactIntro: 'Бет иесімен тікелей байланыс',
     pricing: 'Қызмет құны',
     pricingFrom: 'бастап',
     bookingCta: 'Онлайн жазылу',

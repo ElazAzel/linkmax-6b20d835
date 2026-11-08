@@ -41,3 +41,14 @@ describe('normalizePlatformId', () => {
     expect(normalizePlatformId('something')).toBeNull();
   });
 });
+
+describe('socialDisplayName', () => {
+  it('fixes the spelling of bare platform names and keeps custom ones', async () => {
+    const { socialDisplayName } = await import('../platforms');
+    expect(socialDisplayName('Linkedin', 'https://www.linkedin.com/in/elazart/')).toBe('LinkedIn');
+    expect(socialDisplayName('tiktok', 'https://www.tiktok.com/@elazart')).toBe('TikTok');
+    expect(socialDisplayName('', 'https://t.me/Elazart')).toBe('Telegram');
+    expect(socialDisplayName('Мой канал', 'https://t.me/Elazart')).toBe('Мой канал');
+    expect(socialDisplayName('Блог', 'https://example.com')).toBe('Блог');
+  });
+});

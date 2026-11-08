@@ -96,3 +96,16 @@ export function detectSocialPlatform(rawUrl: string | undefined | null): string 
   }
   return null;
 }
+
+/**
+ * Name to show for a social link: the owner's own wording, except that a bare
+ * platform name typed in any case ("Linkedin", "tiktok") gets its official
+ * spelling. Empty names fall back to the platform label.
+ */
+export function socialDisplayName(name: string | undefined | null, url: string | undefined | null, platformId?: string | null): string {
+  const platform = getSocialPlatform(platformId) ?? getSocialPlatform(detectSocialPlatform(url));
+  const own = (name ?? '').trim();
+  if (!platform) return own;
+  if (!own || own.toLowerCase() === platform.label.toLowerCase() || own.toLowerCase() === platform.id) return platform.label;
+  return own;
+}

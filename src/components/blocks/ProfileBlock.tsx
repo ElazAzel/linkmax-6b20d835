@@ -222,6 +222,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
             <img
               src={block.coverImage}
               alt=""
+              // The cover is the largest thing on the first screen (LCP).
+              fetchPriority="high"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ ...getCoverPositionStyle(block.coverPosition), transform: `translate3d(0, ${parallaxY}px, 0) scale(${block.coverParallax ? 1.08 : 1})` }}
             />

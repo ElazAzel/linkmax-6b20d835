@@ -10,6 +10,7 @@
  */
 
 import React from 'react';
+import { socialDisplayName } from '@/lib/social/platforms';
 import { useTranslation } from 'react-i18next';
 import type { Block, FAQBlock, EventBlock, PricingBlock, SocialsBlock, TextBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
@@ -322,7 +323,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
               {(socialsBlock.platforms || []).filter(p => p && p.url).map((platform, i) => (
                 <li key={i}>
                   <a href={getSafeHref(canonicalSocialUrl(platform.url))} rel="noopener noreferrer me" itemProp="sameAs">
-                    {getI18nText(platform.name as Parameters<typeof getI18nText>[0], language) || canonicalSocialUrl(platform.url)}
+                    {socialDisplayName(getI18nText(platform.name as Parameters<typeof getI18nText>[0], language), platform.url, (platform as { platform?: string }).platform) || canonicalSocialUrl(platform.url)}
                   </a>
                 </li>
               ))}
