@@ -1,51 +1,51 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/user/useAuth';
 import { checkPremiumStatus as checkPremiumStatusService } from '@/services/user';
-import { logger } from '@/lib/utils/logger';
 import { normalizeAppPremiumTier, type AppPremiumTier } from '@/domain/billing/tiers';
 
 export type PremiumTier = AppPremiumTier;
 
+const premiumStatusQueryKey = (userId: string) => ['premiumStatus', userId] as const;
+
+/**
+ * The signed-in user's plan. One shared query: about fifteen dashboard
+ * components read it, and each used to fetch the profile on its own.
+ */
 export function usePremiumStatus() {
   const { user } = useAuth();
-  const [isPremium, setIsPremium] = useState(false);
-  const [tier, setTier] = useState<PremiumTier>('identity');
-  const [inTrial, setInTrial] = useState(false);
-  const [trialEndsAt, setTrialEndsAt] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const userId = user?.id;
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!user) {
-      setIsPremium(false);
-      setTier('identity');
-      setInTrial(false);
-      setTrialEndsAt(null);
-      setIsLoading(false);
-      return;
-    }
-
-    checkStatus();
-  }, [user]);
-
-  const checkStatus = async () => {
-    if (!user) return;
-
-    try {
-      const status = await checkPremiumStatusService(user.id);
-      setIsPremium(status.isPremium);
+  const { data, isLoading } = useQuery({
+    queryKey: premiumStatusQueryKey(userId ?? ''),
+    enabled: !!userId,
+    staleTime: 60 * 1000,
+    // Payments finish in another tab: re-check the plan when the user comes back.
+    refetchOnWindowFocus: true,
+    // The service never throws: it falls back to the free plan.
+    queryFn: async () => {
+      const status = await checkPremiumStatusService(userId!);
       const mappedTier = normalizeAppPremiumTier(status.tier);
-      setTier(mappedTier === 'identity' && status.isPremium ? 'pro' : mappedTier);
-      setInTrial(status.inTrial);
-      setTrialEndsAt(status.trialEndsAt);
-    } catch (error) {
-      logger.error('Error checking premium status', error, { context: 'usePremiumStatus' });
-      setIsPremium(false);
-      setTier('identity');
-      setInTrial(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return {
+        isPremium: status.isPremium,
+        tier: (mappedTier === 'identity' && status.isPremium ? 'pro' : mappedTier) as PremiumTier,
+        inTrial: status.inTrial,
+        trialEndsAt: status.trialEndsAt,
+      };
+    },
+  });
 
-  return { isPremium, tier, inTrial, trialEndsAt, isLoading, refresh: checkStatus };
+  const refresh = useCallback(async () => {
+    if (userId) await queryClient.invalidateQueries({ queryKey: premiumStatusQueryKey(userId) });
+  }, [queryClient, userId]);
+
+  return {
+    isPremium: data?.isPremium ?? false,
+    tier: data?.tier ?? ('identity' as PremiumTier),
+    inTrial: data?.inTrial ?? false,
+    trialEndsAt: data?.trialEndsAt ?? null,
+    isLoading: userId ? isLoading : false,
+    refresh,
+  };
 }

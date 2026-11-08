@@ -25,6 +25,8 @@ export interface Insight {
 
 export interface InsightsInput {
   blocks: Block[];
+  /** Pricing blocks are business tools: without them, never suggest adding one. */
+  businessEnabled?: boolean;
   stats: {
     ctr: number;
     views: number;
@@ -43,7 +45,9 @@ export function computeInsights(
   onApplyInsight: (action: InsightAction) => void,
 ): Insight[] {
   const { blocks, stats, devicePercentages } = input;
-  const hasPricing = blocks.some((b) => b.type === 'pricing');
+  // Products, a catalog or a booking menu already show prices.
+  const PRICED_TYPES = new Set(['pricing', 'product', 'catalog', 'booking']);
+  const hasPricing = blocks.some((b) => PRICED_TYPES.has(b.type));
   const hasTestimonials = blocks.some((b) => b.type === 'testimonial');
   const hasContactForm = blocks.some((b) => b.type === 'form');
 
@@ -71,7 +75,7 @@ export function computeInsights(
     });
   }
 
-  if (!hasPricing && blocks.length > 3) {
+  if (!hasPricing && blocks.length > 3 && input.businessEnabled !== false) {
     suggestions.push({
       id: 'add-pricing',
       type: 'add',

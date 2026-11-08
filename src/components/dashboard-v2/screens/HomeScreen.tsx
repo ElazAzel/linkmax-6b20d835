@@ -34,6 +34,7 @@ import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchRea
 import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
 import { useBusinessFeatures } from '@/lib/features';
 import { MetricsGrid } from '@/components/dashboard-v2/widgets/MetricsGrid';
+import { useDashboardMetrics } from '@/hooks/dashboard/useDashboardMetrics';
 import { ConversionFunnelWidget } from '@/components/dashboard-v2/widgets/ConversionFunnelWidget';
 import { SourcesWidget } from '@/components/dashboard-v2/widgets/SourcesWidget';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
@@ -141,7 +142,9 @@ export const HomeScreen = memo(function HomeScreen({
   const { user } = useAuth();
   const gapDetectedRef = useRef(false);
 
-  const viewCount = pageData?.viewCount || 0;
+  // The draft snapshot carries no view counter: read the 30-day page views
+  // (shared with the metrics grid, so no extra request).
+  const { totalViews: viewCount, loading: viewsLoading } = useDashboardMetrics(pageData?.id);
   const [outcomeHomeReady, setOutcomeHomeReady] = useState(false);
   const outcomeExperienceActive = outcomeHomeEnabled && outcomeHomeReady;
 
@@ -234,7 +237,7 @@ export const HomeScreen = memo(function HomeScreen({
     if (!isPublished && hasContent) {
       return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
     }
-    if (isPublished && viewCount === 0) {
+    if (isPublished && !viewsLoading && viewCount === 0) {
       return t('activation.tips.shareForVisitor', 'Поделитесь ссылкой, чтобы начать собирать просмотры');
     }
     if (isPublished && viewCount > 0 && realLeadsCount === 0) {
@@ -244,7 +247,7 @@ export const HomeScreen = memo(function HomeScreen({
       return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
     }
     return t('activation.tips.growTraffic', 'Поделитесь ссылкой в соцсетях, чтобы привлечь больше посетителей');
-  }, [hasContent, isPublished, viewCount, realLeadsCount, t]);
+  }, [hasContent, isPublished, viewCount, viewsLoading, realLeadsCount, t]);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;

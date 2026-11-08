@@ -1592,6 +1592,23 @@
         "event": "Іс-шара",
         "purchase": "Сатып алу"
       }
+    },
+    "contactInfo": "Байланыс ақпараты",
+    "deleteLead": "Өтінімді жою",
+    "confirmDelete": "Бұл өтінімді жоясыз ба?",
+    "deleteWarning": "Бұл әрекетті қайтару мүмкін емес. Өтінімге қатысты тапсырмалар мен байланыс тарихы да жойылады.",
+    "formFields": {
+      "name": "Аты",
+      "phone": "Телефон",
+      "email": "Email",
+      "message": "Хабарлама",
+      "comment": "Пікір"
+    },
+    "attributionFields": {
+      "source": "Дереккөз",
+      "medium": "Арна",
+      "campaign": "Науқан",
+      "referrer": "Қайдан келді"
     }
   },
   "currency": {
@@ -1680,7 +1697,17 @@
       "businessTools": "Бизнес құралдары",
       "businessToolsDesc": "Сату, жазылу, CRM, қаржы және команда. Өшірулі болса — кабинет қарапайым бет құрастырушы болып қалады.",
       "deviceAccounts": "Осы құрылғыдағы аккаунттар",
-      "usernameHint": "Бұл негізгі беттің мекенжайы да: lnkmx.my/{{username}}"
+      "usernameHint": "Бұл негізгі беттің мекенжайы да: lnkmx.my/{{username}}",
+      "newPassword": "Жаңа құпия сөз",
+      "confirmPassword": "Құпия сөзді қайталаңыз",
+      "updatePassword": "Құпия сөзді сақтау",
+      "passwordTooShort": "Құпия сөз кемінде 6 таңбадан тұруы керек",
+      "passwordMismatch": "Құпия сөздер сәйкес келмейді",
+      "passwordChanged": "Құпия сөз өзгертілді",
+      "passwordSame": "Жаңа құпия сөз қазіргісімен бірдей",
+      "passwordWeak": "Құпия сөз тым қарапайым — әріптер мен сандар қосыңыз",
+      "passwordReauth": "Құпия сөзді өзгерту үшін аккаунтқа қайта кіріңіз",
+      "passwordChangeFailed": "Құпия сөзді өзгерту мүмкін болмады. Қайталап көріңіз"
     },
     "activity": {
       "all": "Барлығы",
@@ -1845,7 +1872,14 @@
       "filterAll": "Барлығы",
       "search": "Жетекшілер бойынша іздеу...",
       "title": "Жетекшілер (CRM)",
-      "updateError": "Жаңарту қатесі"
+      "updateError": "Жаңарту қатесі",
+      "markAllAs": "Барлық жаңасы → {{stage}}",
+      "bulkMoved_one": "{{count}} өтінім «{{stage}}» кезеңіне ауыстырылды",
+      "bulkMoved_few": "{{count}} өтінім «{{stage}}» кезеңіне ауыстырылды",
+      "bulkMoved_many": "{{count}} өтінім «{{stage}}» кезеңіне ауыстырылды",
+      "bulkMoved_other": "{{count}} өтінім «{{stage}}» кезеңіне ауыстырылды",
+      "undo": "Қайтару",
+      "bulkUndone": "Өзгеріс қайтарылды"
     },
     "loadError": "Жүктеу қатесі",
     "loadErrorDesc": "Бет деректері жүктелмеді",

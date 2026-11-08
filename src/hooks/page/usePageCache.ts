@@ -55,35 +55,43 @@ function withBlockIds<T extends { blocks?: PageData['blocks'] }>(page: T): T {
   return Array.isArray(page?.blocks) ? { ...page, blocks: ensureBlockIds(page.blocks) } : page;
 }
 
+type UserPageResult = { pageData: PageData | null; chatbotContext?: string | null; draft: PageDraft | null; draftError: ReturnType<typeof draftError> | null };
+
+/** The private draft of one page, with the local copy or published row as fallbacks. */
+async function loadSelectedPage(userId: string, pageId: string): Promise<UserPageResult> {
+  try {
+    const draft = await loadPageDraft(pageId);
+    return { pageData: withBlockIds(draft.snapshot), chatbotContext: draft.chatbot_context, draft, draftError: null };
+  } catch (error) {
+    const problem = draftError(error);
+    if (problem.kind === 'access') throw problem;
+    const local = loadDraft<LocalPageDraft>(pageDraftCacheKey(userId, pageId))?.data;
+    if (local?.pageData?.id === pageId) return { pageData: local.pageData, chatbotContext: local.chatbotContext, draft: null, draftError: problem };
+    const { data, chatbotContext, error: loadError } = await loadUserPage(userId, pageId);
+    if (loadError) throw loadError;
+    // Published content is a read-only seed for a usable local draft.
+    return { pageData: data, chatbotContext, draft: null, draftError: problem };
+  }
+}
+
 // Hook for loading user's page with caching
 export function useUserPage(userId: string | undefined, pageId?: string | null) {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: pageQueryKeys.userPage(userId || '', pageId),
-    queryFn: async () => {
+    queryFn: async (): Promise<UserPageResult | null> => {
       if (!userId) return null;
-      if (pageId) {
-        try {
-          const draft = await loadPageDraft(pageId);
-          return { pageData: withBlockIds(draft.snapshot), chatbotContext: draft.chatbot_context, draft, draftError: null };
-        } catch (error) {
-          const problem = draftError(error);
-          if (problem.kind === 'access') throw problem;
-          const local = loadDraft<LocalPageDraft>(pageDraftCacheKey(userId, pageId))?.data;
-          if (local?.pageData?.id === pageId) return { pageData: local.pageData, chatbotContext: local.chatbotContext, draft: null, draftError: problem };
-        }
-      }
+      if (pageId) return loadSelectedPage(userId, pageId);
       const { data, chatbotContext, error } = await loadUserPage(userId, pageId);
       if (error) throw error;
-            if (!data?.id) return { pageData: data, chatbotContext, draft: null, draftError: null };
-      try {
-        const draft = await loadPageDraft(data.id);
-        return { pageData: withBlockIds({ ...data, ...draft.snapshot }), chatbotContext: draft.chatbot_context, draft, draftError: null };
-      } catch (error) {
-        const problem = draftError(error);
-        if (problem.kind === 'access') throw problem;
-        // Published content is a read-only seed for a usable local draft.
-        return { pageData: data, chatbotContext, draft: null, draftError: problem };
-      }
+      if (!data?.id) return { pageData: data, chatbotContext, draft: null, draftError: null };
+      // The page list usually selects this page by id while this query runs.
+      // Go through that query so both share one draft request.
+      return queryClient.fetchQuery({
+        queryKey: pageQueryKeys.userPage(userId, data.id),
+        queryFn: () => loadSelectedPage(userId, data.id),
+        staleTime: 2 * 60 * 1000,
+      });
     },
     enabled: !!userId,
     staleTime: 2 * 60 * 1000, // 2 minutes
@@ -92,7 +100,7 @@ export function useUserPage(userId: string | undefined, pageId?: string | null) 
   });
 }
 
-type CachedUserPage = { pageData: PageData | null; chatbotContext?: string; draft: PageDraft | null; draftError: unknown };
+type CachedUserPage = UserPageResult;
 export function synchronizeDraftCache(queryClient: QueryClient, userId: string, draft: PageDraft) {
   queryClient.setQueriesData<CachedUserPage>({ queryKey: ['page', 'user', userId] }, old => {
     if (old?.pageData?.id !== draft.page_id) return old;

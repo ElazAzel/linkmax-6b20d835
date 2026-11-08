@@ -12,7 +12,7 @@ import { useHasBusinessZone } from '@/contexts/ZoneContext';
 const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
 import { OFFICE_TABS } from './office-navigation';
-import { BUSINESS_TAB_IDS, OVERVIEW_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
+import { OVERVIEW_TAB_IDS, PAGE_V2_TABS } from './page-v2-navigation';
 import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
@@ -141,7 +141,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const hasBusinessZone = useHasBusinessZone();
   const businessEnabled = useBusinessFeatures();
   const mainItems = businessEnabled ? MAIN_ITEMS : MAIN_ITEMS.filter(item => !isBusinessDashboardTab(item.id));
-  const businessContext = BUSINESS_TAB_IDS.includes(activeTab) || activeTab.startsWith('zone-');
+  // features.ts decides what is a business screen (events and leads are for everyone).
+  const businessContext = isBusinessDashboardTab(activeTab);
   const showBusinessNavigation = businessEnabled && (!LINKMAX_UI_V2 || businessContext);
   const contextSections = !LINKMAX_UI_V2 ? SECTIONS : businessContext
     ? SECTIONS.filter(section => section.id === 'business-tools') : [];

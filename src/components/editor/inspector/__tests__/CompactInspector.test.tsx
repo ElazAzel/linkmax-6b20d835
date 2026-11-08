@@ -4,6 +4,10 @@ import { BlockInspector } from '@/components/editor/inspector/BlockInspector';
 import type { Block } from '@/types/page';
 
 vi.mock('@/hooks/user/useAuth', () => ({ useAuth: () => ({ user: null }) }));
+// Signed-out free plan; the real hook reads a shared React Query cache.
+vi.mock('@/hooks/user/usePremiumStatus', () => ({
+  usePremiumStatus: () => ({ isPremium: false, tier: 'identity', inTrial: false, trialEndsAt: null, isLoading: false, refresh: vi.fn() }),
+}));
 vi.mock('react-i18next', async () => {
   const { default: ru } = await import('@/i18n/locales/ru.json');
   const read = (root: unknown, key: string): unknown => key.split('.').reduce<unknown>((value, part) =>

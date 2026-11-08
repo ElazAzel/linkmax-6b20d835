@@ -1592,6 +1592,23 @@
         "event": "Event",
         "purchase": "Purchase"
       }
+    },
+    "contactInfo": "Contact information",
+    "deleteLead": "Delete lead",
+    "confirmDelete": "Delete this lead?",
+    "deleteWarning": "This can't be undone. The lead's tasks and contact history will be deleted too.",
+    "formFields": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "message": "Message",
+      "comment": "Comment"
+    },
+    "attributionFields": {
+      "source": "Source",
+      "medium": "Medium",
+      "campaign": "Campaign",
+      "referrer": "Referrer"
     }
   },
   "currency": {
@@ -1680,7 +1697,17 @@
       "businessTools": "Business tools",
       "businessToolsDesc": "Sales, booking, CRM, finance and team. Off keeps the cabinet a simple page builder.",
       "deviceAccounts": "Accounts on this device",
-      "usernameHint": "This is also your main page address: lnkmx.my/{{username}}"
+      "usernameHint": "This is also your main page address: lnkmx.my/{{username}}",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat password",
+      "updatePassword": "Save password",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords don't match",
+      "passwordChanged": "Password changed",
+      "passwordSame": "The new password is the same as the current one",
+      "passwordWeak": "This password is too weak — add letters and numbers",
+      "passwordReauth": "Sign in again to change your password",
+      "passwordChangeFailed": "Couldn't change the password. Please try again"
     },
     "activity": {
       "all": "All",
@@ -1845,7 +1872,14 @@
       "filterAll": "All",
       "search": "Search by leads...",
       "title": "Leads (CRM)",
-      "updateError": "Update error"
+      "updateError": "Update error",
+      "markAllAs": "All new → {{stage}}",
+      "bulkMoved_one": "Moved {{count}} lead to “{{stage}}”",
+      "bulkMoved_few": "Moved {{count}} leads to “{{stage}}”",
+      "bulkMoved_many": "Moved {{count}} leads to “{{stage}}”",
+      "bulkMoved_other": "Moved {{count}} leads to “{{stage}}”",
+      "undo": "Undo",
+      "bulkUndone": "Change undone"
     },
     "loadError": "Loading error",
     "loadErrorDesc": "Failed to load page data",

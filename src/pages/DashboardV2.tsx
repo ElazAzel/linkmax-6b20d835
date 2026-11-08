@@ -119,7 +119,7 @@ const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialog
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));
 
 import { pageV2TabHref, getPageV2Tab } from '@/components/dashboard-v2/layout/page-v2-navigation';
-import { isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
+import { BUSINESS_BLOCK_TYPES, isBusinessDashboardTab, useBusinessFeatures } from '@/lib/features';
 import { QuickCreateSheet } from '@/components/dashboard-v2/layout/QuickCreateSheet';
 import { DraftStatusBanner } from '@/components/editor/DraftStatusBanner';
 import { DraftPreviewDialog } from '@/components/editor/DraftPreviewDialog';
@@ -657,7 +657,11 @@ function DashboardV2Inner() {
                     if (action.type === 'add') {
                       const raw = String(action.data?.blockType ?? '');
                       const blockType = raw === 'contact_form' ? 'form' : raw;
-                      if (blockType) dashboard.blockEditor.handleInsertBlock(blockType, blocks.length);
+                      // Hidden business blocks would land on the page unseen.
+                      const allowed = blockType && (businessEnabled || !BUSINESS_BLOCK_TYPES.has(blockType));
+                      const result = allowed ? dashboard.blockEditor.handleInsertBlock(blockType, blocks.length) : null;
+                      // Select it so the editor shows what «Применить» just added.
+                      if (result?.success && result.blockId) setSelectedBlockId(result.blockId);
                     } else if (action.type === 'duplicate' && action.blockId) {
                       dashboard.blockEditor.handleDuplicateBlock(action.blockId);
                     }

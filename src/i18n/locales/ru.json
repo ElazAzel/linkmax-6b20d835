@@ -1592,6 +1592,23 @@
         "event": "Мероприятие",
         "purchase": "Покупка"
       }
+    },
+    "contactInfo": "Контактная информация",
+    "deleteLead": "Удалить заявку",
+    "confirmDelete": "Удалить эту заявку?",
+    "deleteWarning": "Это действие нельзя отменить. Задачи и журнал общения по заявке тоже удалятся.",
+    "formFields": {
+      "name": "Имя",
+      "phone": "Телефон",
+      "email": "Email",
+      "message": "Сообщение",
+      "comment": "Комментарий"
+    },
+    "attributionFields": {
+      "source": "Источник",
+      "medium": "Канал",
+      "campaign": "Кампания",
+      "referrer": "Откуда пришёл"
     }
   },
   "currency": {
@@ -1680,7 +1697,17 @@
       "businessTools": "Бизнес-инструменты",
       "businessToolsDesc": "Продажи, запись, CRM, финансы и команда. Выключено — кабинет остаётся простым конструктором страниц.",
       "deviceAccounts": "Аккаунты на устройстве",
-      "usernameHint": "Это и адрес основной страницы: lnkmx.my/{{username}}"
+      "usernameHint": "Это и адрес основной страницы: lnkmx.my/{{username}}",
+      "newPassword": "Новый пароль",
+      "confirmPassword": "Повторите пароль",
+      "updatePassword": "Сохранить пароль",
+      "passwordTooShort": "Пароль должен быть не короче 6 символов",
+      "passwordMismatch": "Пароли не совпадают",
+      "passwordChanged": "Пароль изменён",
+      "passwordSame": "Новый пароль совпадает с текущим",
+      "passwordWeak": "Пароль слишком простой — добавьте буквы и цифры",
+      "passwordReauth": "Чтобы сменить пароль, войдите в аккаунт заново",
+      "passwordChangeFailed": "Не удалось сменить пароль. Попробуйте ещё раз"
     },
     "activity": {
       "all": "Все",
@@ -1845,7 +1872,14 @@
       "filterAll": "Все",
       "search": "Поиск по заявкам...",
       "title": "Заявки (CRM)",
-      "updateError": "Не удалось обновить"
+      "updateError": "Не удалось обновить",
+      "markAllAs": "Все новые → {{stage}}",
+      "bulkMoved_one": "Перенесли {{count}} заявку в «{{stage}}»",
+      "bulkMoved_few": "Перенесли {{count}} заявки в «{{stage}}»",
+      "bulkMoved_many": "Перенесли {{count}} заявок в «{{stage}}»",
+      "bulkMoved_other": "Перенесли {{count}} заявки в «{{stage}}»",
+      "undo": "Вернуть",
+      "bulkUndone": "Вернули как было"
     },
     "loadError": "Не удалось загрузить",
     "loadErrorDesc": "Не удалось загрузить данные страницы",

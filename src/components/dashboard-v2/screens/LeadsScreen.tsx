@@ -30,14 +30,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DashboardHeader } from '../layout/DashboardHeader';
+import { pageV2TabHref } from '../layout/page-v2-navigation';
 import { LeadDetails } from '@/components/crm/LeadDetails';
 import { StageSettingsDialog } from '@/components/crm/StageSettingsDialog';
 import { useCrmStages } from '@/hooks/crm/useCrmStages';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
+import { useNavigate } from '@/lib/router-compat';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { trackLeadReplied, trackLeadStatusChanged } from '@/lib/activation-events';
+import { getLeadPreview } from '@/lib/crm/lead-form-data';
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
 type ReplyChannel = 'whatsapp' | 'telegram' | 'call' | 'email';
@@ -81,6 +84,7 @@ function getLeadTelegramHref(lead: Lead): string | null {
 
 export const LeadsScreen = memo(function LeadsScreen() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const { getStageLabel } = useCrmStages();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
@@ -147,23 +151,46 @@ export const LeadsScreen = memo(function LeadsScreen() {
         }
     };
 
+    // One tap moves every new lead on; the toast offers an undo instead of a
+    // confirm dialog. Only the ids moved here are restored, and only if they
+    // were not changed again in between.
+    const setStatusForIds = async (ids: string[], from: LeadStatus, to: LeadStatus) => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return false;
+        const { error } = await supabase
+            .from('leads')
+            .update({ status: to, updated_at: new Date().toISOString() })
+            .eq('user_id', user.id)
+            .eq('status', from)
+            .in('id', ids);
+        if (error) throw error;
+        const moved = new Set(ids);
+        setLeads(prev => prev.map(l => moved.has(l.id) && l.status === from ? { ...l, status: to } : l));
+        return true;
+    };
+
     const bulkMarkContacted = async () => {
-        const newLeads = leads.filter(l => l.status === 'new');
-        if (newLeads.length === 0) return;
+        const ids = leads.filter(l => l.status === 'new').map(l => l.id);
+        if (ids.length === 0) return;
+        const stage = getStageLabel('contacted');
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-            const { error } = await supabase
-                .from('leads')
-                .update({ status: 'contacted', updated_at: new Date().toISOString() })
-                .eq('user_id', user.id)
-                .eq('status', 'new');
-            if (error) throw error;
-            setLeads(prev => prev.map(l => l.status === 'new' ? { ...l, status: 'contacted' } : l));
-            toast.success(`${newLeads.length} лидов → В работу`);
+            if (!await setStatusForIds(ids, 'new', 'contacted')) return;
+            toast.success(t('dashboard.leads.bulkMoved', 'Перенесли {{count}} заявок в «{{stage}}»', { count: ids.length, stage }), {
+                action: {
+                    label: t('dashboard.leads.undo', 'Вернуть'),
+                    onClick: () => {
+                        setStatusForIds(ids, 'contacted', 'new')
+                            .then((ok) => { if (ok) toast.success(t('dashboard.leads.bulkUndone', 'Вернули как было')); })
+                            .catch((e) => {
+                                console.error('Bulk undo error', e);
+                                toast.error(t('dashboard.leads.updateError', 'Не удалось обновить'));
+                            });
+                    },
+                },
+            });
         } catch (e) {
             console.error('Bulk update error', e);
-            toast.error('Ошибка обновления');
+            toast.error(t('dashboard.leads.updateError', 'Не удалось обновить'));
         }
     };
 
@@ -282,17 +309,22 @@ export const LeadsScreen = memo(function LeadsScreen() {
             <DashboardHeader
                 title={t('dashboard.leads.title', 'Лиды (CRM)')}
                 actions={
-                    <div className="flex gap-2">
+                    <div className="flex min-w-0 max-w-full gap-2">
                         {stats.new > 0 && (
                             <Button
                                 variant="default"
                                 size="sm"
-                                className="h-10 rounded-xl"
+                                className="h-10 rounded-xl min-w-0 shrink"
                                 onClick={bulkMarkContacted}
+                                data-testid="leads-bulk-contacted"
                             >
-                                <CheckCheck className="h-4 w-4 mr-2" />
-                                <span className="hidden sm:inline">{t('dashboard.leads.markAll', 'Все в работу')}</span>
-                                <span className="sm:hidden">✓ {stats.new}</span>
+                                <CheckCheck className="h-4 w-4 mr-2 shrink-0" />
+                                <span className="truncate max-w-[8.5rem] sm:max-w-none">
+                                    {t('dashboard.leads.markAllAs', 'Все новые → {{stage}}', { stage: getStageLabel('contacted') })}
+                                </span>
+                                <Badge variant="secondary" className="ml-2 h-5 min-w-[20px] px-1 rounded-md text-xs border-none bg-primary-foreground/20 text-primary-foreground">
+                                    {stats.new}
+                                </Badge>
                             </Button>
                         )}
                         <Button
@@ -440,11 +472,10 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                 eyebrow={t('dashboard.leads.emptyEyebrow', 'Готовы принимать заявки?')}
                                 title={t('dashboard.leads.emptyTitle', 'Здесь появятся ваши клиенты')}
                                 description={t('dashboard.leads.emptyDesc', 'Каждая заявка с формы, бронирования или сообщения попадёт сюда. Сделайте 3 шага, чтобы начать получать лиды.')}
+                                // No "publish your page" step: this screen does not know
+                                // whether the page is published, and an unchecked step
+                                // on a live page reads as a bug. Overview tracks it.
                                 checklist={[
-                                    {
-                                        label: t('dashboard.leads.checklist.publish', 'Опубликуйте свою страницу'),
-                                        hint: t('dashboard.leads.checklist.publishHint', 'Без публикации страницу не увидят клиенты'),
-                                    },
                                     {
                                         label: t('dashboard.leads.checklist.form', 'Добавьте форму или кнопку связи'),
                                         hint: t('dashboard.leads.checklist.formHint', 'WhatsApp, Telegram, форма заявки или бронирование'),
@@ -456,12 +487,13 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                 ]}
                                 primaryCta={{
                                     label: t('dashboard.leads.emptyCta', 'Открыть редактор'),
-                                    onClick: () => window.open('/dashboard?tab=editor', '_self'),
+                                    onClick: () => navigate(pageV2TabHref('editor')),
                                     icon: Edit3,
                                 }}
+                                // Sharing lives on Overview (DashboardV2 owns the share sheet).
                                 secondaryCta={{
                                     label: t('dashboard.leads.emptyShareCta', 'Поделиться страницей'),
-                                    onClick: () => window.open('/dashboard?tab=pages', '_self'),
+                                    onClick: () => navigate(pageV2TabHref('home')),
                                     icon: Share2,
                                 }}
                                 footer={t('dashboard.leads.emptyFooter', '💡 Совет: первая заявка обычно приходит в течение 48 часов после публикации')}
@@ -485,6 +517,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
                             const StatusIcon = config.icon;
                             const telegramHref = getLeadTelegramHref(lead);
+                            const preview = getLeadPreview(lead.metadata);
 
                             return (
                                 <Card 
@@ -546,6 +579,11 @@ export const LeadsScreen = memo(function LeadsScreen() {
  
                                     {/* Contact Info */}
                                     <div className="space-y-2 mb-4 px-1">
+                                        {preview && (
+                                            <p className="truncate text-sm text-foreground" title={preview} data-testid={`lead-preview-${lead.id}`}>
+                                                {preview}
+                                            </p>
+                                        )}
                                         {lead.email && (
                                             <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
                                                 <Mail className="h-4 w-4 text-primary/40" />

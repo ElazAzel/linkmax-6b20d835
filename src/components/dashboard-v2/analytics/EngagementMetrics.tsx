@@ -31,6 +31,7 @@ export const EngagementMetrics = memo(function EngagementMetrics({
   const { t } = useTranslation();
 
   const formatDuration = (seconds: number) => {
+    if (seconds <= 0) return '—';
     if (seconds < 60) return `${Math.round(seconds)}с`;
     const mins = Math.floor(seconds / 60);
     const secs = Math.round(seconds % 60);
@@ -55,7 +56,7 @@ export const EngagementMetrics = memo(function EngagementMetrics({
       value: formatDuration(avgSessionDuration),
       description: t('analytics.engagement.sessionDesc', 'На странице'),
       progress: Math.min(100, (avgSessionDuration / 120) * 100), // 2min = 100%
-      color: avgSessionDuration >= 60 ? 'text-success' : 'text-warning',
+      color: avgSessionDuration <= 0 ? 'text-muted-foreground' : avgSessionDuration >= 60 ? 'text-success' : 'text-warning',
       progressColor: avgSessionDuration >= 60 ? 'bg-success' : 'bg-warning',
     },
     {

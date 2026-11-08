@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { useZones } from '@/hooks/zones/useZones';
+import { useOptionalZoneContext } from '@/contexts/ZoneContext';
 
 export type SearchResultType = 'contact' | 'deal' | 'task' | 'page';
 
@@ -48,7 +48,8 @@ async function searchPages(userId: string, q: string) {
 
 export function useGlobalSearch() {
   const { user } = useAuth();
-  const { currentZone } = useZones();
+  // Read the dashboard's zone state instead of fetching zones a second time.
+  const currentZone = useOptionalZoneContext()?.currentZone ?? null;
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

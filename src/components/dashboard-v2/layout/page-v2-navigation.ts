@@ -13,8 +13,6 @@ export const PAGE_V2_TABS = [
   { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
 ];
 
-export const BUSINESS_TAB_IDS = ['business', 'clients', 'calendar', 'offers', 'activity', 'finance', 'monetize', 'events', 'team'];
-
 /** Screens reached from Overview; the Overview tab stays highlighted on them. */
 export const OVERVIEW_TAB_IDS = ['home', 'insights', 'leads'];
 
