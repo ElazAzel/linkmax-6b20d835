@@ -113,6 +113,13 @@
       "when": 1793730931998,
       "tag": "0015_quest_referral_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794137200970,
+      "tag": "0016_daily_reward_verified_actions_only",
+      "breakpoints": true
     }
   ]
 }
