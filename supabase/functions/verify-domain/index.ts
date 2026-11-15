@@ -1,10 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { isPlatformDomain } from '../_shared/domain-target.ts'
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+const PLATFORM_HOST = 'lnkmx.my'
 
 function json(body: unknown, status = 200) {
     return new Response(JSON.stringify(body), {
@@ -57,13 +60,27 @@ serve(async (req) => {
             return json({ error: 'Domain not found for this account' }, 403)
         }
 
-        // 1. Resolve DNS CNAME
+        // 1. Subdomains (www.ivan.ru) point here with a CNAME.
         let isConfigured = false
         try {
             const records = await Deno.resolveDns(normalized, "CNAME")
-            isConfigured = records.some(r => r.toLowerCase().includes("lnkmx.my"))
+            isConfigured = records.some(isPlatformDomain)
         } catch (e: unknown) {
-            console.warn(`DNS Resolution failed:`, e instanceof Error ? e.message : String(e))
+            console.warn(`CNAME lookup failed:`, e instanceof Error ? e.message : String(e))
+        }
+
+        // 2. A root domain (ivan.ru) cannot hold a CNAME: registrars use ALIAS/ANAME
+        //    there, which resolves to the same A records as the platform host.
+        if (!isConfigured) {
+            try {
+                const [domainIps, platformIps] = await Promise.all([
+                    Deno.resolveDns(normalized, "A"),
+                    Deno.resolveDns(PLATFORM_HOST, "A"),
+                ])
+                isConfigured = domainIps.length > 0 && domainIps.some(ip => platformIps.includes(ip))
+            } catch (e: unknown) {
+                console.warn(`A lookup failed:`, e instanceof Error ? e.message : String(e))
+            }
         }
 
         const status = isConfigured ? 'active' : 'configuring'

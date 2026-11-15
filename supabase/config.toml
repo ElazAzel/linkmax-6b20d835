@@ -210,6 +210,9 @@ verify_jwt = true # Internal: i18n language file upload (admin)
 [functions.verify-domain]
 verify_jwt = true # Internal: custom domain verification (authenticated)
 
+[functions.test-webhook]
+verify_jwt = true # Authenticated: sends a sample lead to the owner's webhook; SSRF-guarded and rate-limited in code
+
 [functions.send-email]
 verify_jwt = true # Internal: transactional email sending
 

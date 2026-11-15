@@ -129,6 +129,7 @@
     "lz-string": "^1.5.0",
     "next-themes": "^0.3.0",
     "posthog-js": "^1.395.0",
+    "psl": "1.15.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.0",
     "react-day-picker": "^9.14.0",

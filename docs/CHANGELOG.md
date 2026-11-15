@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+### Page Settings Overhaul
+- **Honest Save Feedback**: Fields that write to the draft show that saving is in progress, with a publish hint on published pages; leaving an untouched field no longer saves or shows a toast.
+- **Five Clear Sections**: Page settings are regrouped into Address and domain, Profile and contacts, Search, Appearance, and Integrations; `PageSettingsTab` is split into `settings/page/*`.
+- **Address Safety**: Changing the address of a published page asks for confirmation and explains that old links and QR codes stop working; the page card gains «Copy link» and «Open page».
+- **Custom Domain Status**: The previously unused `useDomainVerification` hook is wired in; root domains get an ALIAS/ANAME hint instead of an impossible CNAME, and `verify-domain` also accepts matching A records.
+- **Search Readiness**: The SEO score badge now receives its value (`computeQualityScore`).
+- **Webhooks**: URL validation, secret generation, show/hide, and a «Send a test lead» button backed by the new `test-webhook` edge function (authenticated, restricted to validated public IPv4 destinations, rate-limited).
+- **Favicon Upload**: The favicon is uploaded as a file instead of pasting a link.
+- **Delete Page**: A delete block at the bottom of page settings reuses the existing confirmation dialog.
+- **Translations**: 99 keys added or reworded in ru, en, kk, and uz; country names come from `Intl.DisplayNames`.
+
+---
+
 ## [Phase 51] - 2026-07-10
 
 ### Unified LinkMAX Visual System
