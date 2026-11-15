@@ -1,66 +1,42 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { supabase } from '@/platform/supabase/client';
-import { toast } from 'sonner';
 
-export type DomainStatus = 'pending' | 'active' | 'failed' | 'configuring';
+type DomainCheckState = 'active' | 'pending' | 'error';
 
-interface VerificationResult {
-    success: boolean;
-    status: DomainStatus;
-    isConfigured: boolean;
-    error?: string;
-    timestamp?: string;
+interface DomainCheck {
+  state: DomainCheckState;
+  hostname: string;
+  checkedAt: string;
 }
 
 /**
- * useDomainVerification - Hook for triggering and monitoring domain verification
+ * Checks whether the DNS of a custom domain already points to the platform
+ * (edge function `verify-domain`). The caller renders the result; the hook
+ * shows no toasts of its own.
  */
-export function useDomainVerification(hostname?: string | null) {
-    const [isVerifying, setIsVerifying] = useState(false);
-    const [currentStatus, setCurrentStatus] = useState<DomainStatus | null>(null);
+export function useDomainVerification() {
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [check, setCheck] = useState<DomainCheck | null>(null);
 
-    const verifyDomain = async (targetHostname?: string): Promise<VerificationResult> => {
-        const domainToVerify = targetHostname || hostname;
+  const verifyDomain = useCallback(async (hostname: string): Promise<DomainCheck> => {
+    const normalized = hostname.trim().toLowerCase();
+    setIsVerifying(true);
+    let state: DomainCheckState = 'error';
+    try {
+      const { data, error } = await supabase.functions.invoke<{ isConfigured?: boolean }>('verify-domain', {
+        body: { hostname: normalized },
+      });
+      if (!error) state = data?.isConfigured ? 'active' : 'pending';
+    } catch {
+      state = 'error';
+    }
+    const result: DomainCheck = { state, hostname: normalized, checkedAt: new Date().toISOString() };
+    setCheck(result);
+    setIsVerifying(false);
+    return result;
+  }, []);
 
-        if (!domainToVerify) {
-            return { success: false, status: 'pending', isConfigured: false, error: 'No hostname provided' };
-        }
+  const reset = useCallback(() => setCheck(null), []);
 
-        setIsVerifying(true);
-        try {
-            const { data, error } = await supabase.functions.invoke('verify-domain', {
-                body: { hostname: domainToVerify },
-            });
-
-            if (error) throw error;
-
-            const result = data as VerificationResult;
-            setCurrentStatus(result.status);
-
-            if (result.isConfigured) {
-                toast.success('Домен успешно подтвержден!');
-            } else {
-                toast.error('Запись CNAME не найдена. Обновление DNS может занять до 24 часов.');
-            }
-
-            return result;
-        } catch (err) {
-            console.error('Domain verification error:', err);
-            toast.error('Ошибка при проверке домена. Попробуйте позже.');
-            return {
-                success: false,
-                status: 'failed',
-                isConfigured: false,
-                error: err instanceof Error ? err.message : 'Unknown error'
-            };
-        } finally {
-            setIsVerifying(false);
-        }
-    };
-
-    return {
-        verifyDomain,
-        isVerifying,
-        status: currentStatus,
-    };
+  return { verifyDomain, isVerifying, check, reset };
 }

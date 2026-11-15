@@ -73,6 +73,7 @@ import {
   ZoneResourcesScreenWrapper,
 } from '@/components/zones/ZoneWrappers';
 import { ZoneCommandPalette } from '@/components/zones/ZoneCommandPalette';
+import { computeQualityScore } from '@/lib/seo/quality-score';
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -275,6 +276,13 @@ function DashboardV2Inner() {
   const [showTheme, setShowTheme] = useState(false);
   const [showRevenueKit, setShowRevenueKit] = useState(false);
   const [deletePageId, setDeletePageId] = useState<string | null>(null);
+
+  // Settings: search readiness of the open page and which page «Delete» targets.
+  const settingsPageId = multiPage.activePage?.id;
+  const settingsQualityScore = useMemo(
+    () => (currentTab === 'settings' && dashboard.pageData ? computeQualityScore(dashboard.pageData).score : undefined),
+    [currentTab, dashboard.pageData],
+  );
 
   const confirmDeletePage = async () => {
     if (!deletePageId) return;
@@ -747,6 +755,11 @@ function DashboardV2Inner() {
                   pageTitle={multiPage.activePage?.title}
                   pageSlug={multiPage.activePage?.slug}
                   customDomain={multiPage.activePage?.custom_domain ?? undefined}
+                  isPublished={dashboard.pageData?.isPublished}
+                  qualityScore={settingsQualityScore}
+                  onDeletePage={multiPage.pages.length > 1 && settingsPageId
+                    ? () => setDeletePageId(settingsPageId)
+                    : undefined}
                   isPaid={multiPage.activePage?.isPaid}
                   isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
                   seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}

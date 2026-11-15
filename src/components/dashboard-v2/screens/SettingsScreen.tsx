@@ -47,8 +47,11 @@ interface SettingsScreenProps {
   pageTitle?: string;
   pageSlug?: string;
   customDomain?: string;
+  isPublished?: boolean;
   isPaid?: boolean;
   isPrimaryPaid?: boolean;
+  /** Search readiness score (0–100) of the active page. */
+  qualityScore?: number;
   seoTitle?: string;
   seoDescription?: string;
   isIndexable?: boolean;
@@ -65,6 +68,8 @@ interface SettingsScreenProps {
   webhookSecret?: string;
   onUpdateWebhooks?: (data: { webhook_url?: string; webhook_secret?: string }) => void;
   onUpgradePage?: () => void;
+  /** Omit when the active page cannot be deleted (it is the only one). */
+  onDeletePage?: () => void;
 
   // Entity fields
   city?: string;
@@ -178,6 +183,9 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               pageTitle={pageTitle}
               pageSlug={pageSlug}
               customDomain={customDomain}
+              isPublished={props.isPublished}
+              qualityScore={props.qualityScore}
+              onDeletePage={props.onDeletePage}
               isPaid={isPaid}
               isPrimaryPaid={isPrimaryPaid}
               isPremium={props.isPremium}
